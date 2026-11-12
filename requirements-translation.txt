@@ -1,0 +1,7 @@
+# Dépendances de src/translate_reviews.py (en plus de requirements.txt)
+# Version CPU de PyTorch, plus légère :
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch
+transformers>=4.40
+sentencepiece
+sacremoses

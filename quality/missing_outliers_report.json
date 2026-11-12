@@ -1,0 +1,105 @@
+{
+  "missing_before_imputation": {
+    "approval_delay_hours": 141,
+    "product_weight_mean_g": 771,
+    "product_volume_mean_cm3": 771,
+    "payment_total": 0,
+    "payment_installments_max": 0,
+    "distance_km": 1247,
+    "promised_days": 0,
+    "item_price_total": 755,
+    "freight_total": 755
+  },
+  "outliers_iqr3_train_fences": {
+    "item_price_total": {
+      "extreme_above_Q3+3IQR": 4094,
+      "max": 13440.0,
+      "median": 86.9
+    },
+    "freight_total": {
+      "extreme_above_Q3+3IQR": 5524,
+      "max": 1794.96,
+      "median": 17.17
+    },
+    "payment_total": {
+      "extreme_above_Q3+3IQR": 4073,
+      "max": 13664.08,
+      "median": 105.29
+    },
+    "product_weight_mean_g": {
+      "extreme_above_Q3+3IQR": 9465,
+      "max": 40425.0,
+      "median": 700.0
+    },
+    "product_volume_mean_cm3": {
+      "extreme_above_Q3+3IQR": 3292,
+      "max": 296208.0,
+      "median": 6426.0
+    },
+    "approval_delay_hours": {
+      "extreme_above_Q3+3IQR": 4371,
+      "max": 4509.180555555556,
+      "median": 0.3433333333333333
+    },
+    "distance_km": {
+      "extreme_above_Q3+3IQR": 702,
+      "max": 3579.8541741904346,
+      "median": 433.7208024244638
+    }
+  },
+  "nonpositive_promised_days": 0,
+  "log_caps": {
+    "item_price_total": [
+      2.388762789235098,
+      7.2158867997808995
+    ],
+    "freight_total": [
+      2.172476407647025,
+      4.860928052939138
+    ],
+    "payment_total": [
+      3.080532875246456,
+      7.276145726554661
+    ],
+    "product_weight_mean_g": [
+      3.9318256327243257,
+      10.146001451213449
+    ],
+    "product_volume_mean_cm3": [
+      5.8664680569332965,
+      11.967767970348147
+    ],
+    "approval_delay_hours": [
+      0.0,
+      4.688129822049516
+    ],
+    "distance_km": [
+      1.6156942674163006,
+      7.899691104801214
+    ]
+  },
+  "splits": {
+    "train": {
+      "orders": 45425,
+      "late_labelled": 43691,
+      "late_rate": 0.0562,
+      "poor_labelled": 45033,
+      "poor_rate": 0.1457
+    },
+    "valid": {
+      "orders": 21208,
+      "late_labelled": 20627,
+      "late_rate": 0.1288,
+      "poor_labelled": 21021,
+      "poor_rate": 0.1969
+    },
+    "test": {
+      "orders": 32783,
+      "late_labelled": 32150,
+      "late_rate": 0.0442,
+      "poor_labelled": 32595,
+      "poor_rate": 0.1158
+    }
+  },
+  "n_features": 61
+}

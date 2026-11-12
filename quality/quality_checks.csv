@@ -1,0 +1,38 @@
+check,category,observed,expected,passed
+source_file_count,Sources,9,9,True
+source_sha256_unchanged,Sources,identiques,identiques,True
+orders_rows,Grain commande,99441,99441,True
+duplicate_order_id,Grain commande,0,0,True
+item_price_total_matches_raw,Agrégation avant jointure,13591643.7,13591643.7,True
+freight_total_matches_raw,Agrégation avant jointure,2251909.54,2251909.54,True
+payment_total_matches_raw,Agrégation avant jointure,16008872.12,16008872.12,True
+orphan_items_to_orders,Intégrité référentielle,0,0,True
+orphan_items_to_products,Intégrité référentielle,0,0,True
+orphan_items_to_sellers,Intégrité référentielle,0,0,True
+orphan_payments_to_orders,Intégrité référentielle,0,0,True
+orphan_reviews_to_orders,Intégrité référentielle,0,0,True
+orphan_orders_to_customers,Intégrité référentielle,0,0,True
+orders_without_items_labelled_no_items,Couverture,775,775,True
+orders_without_review_kept,Couverture,768,768,True
+selected_review_one_per_order,Avis,98673,98673,True
+written_comment_documents,Avis,40950,40950,True
+all_free_text_documents,Avis,42687,42687,True
+late_eligible_count,Retard,96470,96470,True
+late_order_count,Retard,6534,6534,True
+is_late_missing_when_not_eligible,Retard,0,0,True
+delivery_duration_observed,Durée de livraison,96470,96470,True
+multi_seller_orders,Multi-vendeurs,1278,1278,True
+multi_seller_links_cover_all_orders,Multi-vendeurs,1278,1278,True
+multi_seller_price_share_sums_to_1,Multi-vendeurs,oui,oui,True
+seller_kpis_exclude_multi_seller,Multi-vendeurs,97388,97388,True
+model_base_rows,Fuite d'information,99441,99441,True
+model_base_forbidden_columns,Fuite d'information,aucune,aucune,True
+monthly_kpis_no_missing_month,Périodes,26,26,True
+sparse_months_flagged,Périodes,"2016-09, 2016-11, 2016-12, 2018-09, 2018-10","2016-09, 2016-11, 2016-12, 2018-09, 2018-10",True
+monthly_order_sum,Périodes,99441,99441,True
+flag_carrier_before_approval,Dates (signalées),1359,1359,True
+flag_delivered_before_carrier,Dates (signalées),23,23,True
+flag_delivered_status_missing_date,Dates (signalées),8,8,True
+flag_delivery_date_on_undelivered_status,Dates (signalées),6,6,True
+geo_centroids_outside_brazil,Géolocalisation,0,0,True
+customers_with_geo,Géolocalisation,99162,information,True

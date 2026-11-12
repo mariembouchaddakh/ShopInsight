@@ -1,0 +1,24 @@
+{
+  "source_archive_sha256": null,
+  "raw_files_match_expected_sha256": true,
+  "orders_analysis_rows": 99441,
+  "orders_model_base_rows": 99441,
+  "review_text_documents": 42687,
+  "review_documents_with_message": 40950,
+  "multi_seller_link_rows": 2622,
+  "seller_monthly_rows": 16253,
+  "monthly_kpi_rows": 26,
+  "complete_months": 21,
+  "state_monthly_rows": 565,
+  "category_monthly_rows": 1302,
+  "orders_with_date_issue": 1396,
+  "geolocation": {
+    "raw_points": 1000163,
+    "exact_duplicate_points_removed": 261831,
+    "points_outside_brazil_excluded": 33,
+    "zip_prefixes": 19015,
+    "zip_prefixes_without_valid_point": 5
+  },
+  "quality_checks": "37/37",
+  "quality_checks_passed": true
+}

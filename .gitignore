@@ -1,0 +1,12 @@
+# Données (≈ 200 Mo) : reconstruites par src/prepare_data.py à partir de l'archive Olist
+data/
+*.zip
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+# Système
+.DS_Store
+Thumbs.db

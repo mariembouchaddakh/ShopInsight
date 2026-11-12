@@ -1,0 +1,186 @@
+{
+  "is_late": {
+    "models": {
+      "state_rate_rule": {
+        "valid": null,
+        "test": {
+          "pr_auc": 0.0558,
+          "roc_auc": 0.5616,
+          "brier": 0.044,
+          "precision_top10": 0.0572,
+          "recall_top10": 0.1295,
+          "prevalence": 0.0442,
+          "n": 32150
+        }
+      },
+      "logistic": {
+        "valid": {
+          "pr_auc": 0.2655,
+          "roc_auc": 0.7097,
+          "brier": 0.1524,
+          "precision_top10": 0.3361,
+          "recall_top10": 0.2608,
+          "prevalence": 0.1288,
+          "n": 20627
+        },
+        "test": {
+          "pr_auc": 0.0904,
+          "roc_auc": 0.707,
+          "brier": 0.2736,
+          "precision_top10": 0.1067,
+          "recall_top10": 0.2414,
+          "prevalence": 0.0442,
+          "n": 32150
+        }
+      },
+      "gradient_boosting": {
+        "valid": {
+          "pr_auc": 0.215,
+          "roc_auc": 0.654,
+          "brier": 0.1152,
+          "precision_top10": 0.2687,
+          "recall_top10": 0.2085,
+          "prevalence": 0.1288,
+          "n": 20627
+        },
+        "test": {
+          "pr_auc": 0.1071,
+          "roc_auc": 0.7102,
+          "brier": 0.042,
+          "precision_top10": 0.1204,
+          "recall_top10": 0.2723,
+          "prevalence": 0.0442,
+          "n": 32150
+        }
+      }
+    },
+    "selected_on_valid": "logistic",
+    "top_features_test": [
+      [
+        "promised_days",
+        0.0346
+      ],
+      [
+        "seller_train_orders_log",
+        0.0034
+      ],
+      [
+        "purchase_month_num",
+        0.0033
+      ],
+      [
+        "state_BA",
+        0.0029
+      ],
+      [
+        "te_sellerstate_late",
+        0.0029
+      ],
+      [
+        "state_MG",
+        0.0029
+      ],
+      [
+        "approval_delay_hours_log",
+        0.002
+      ],
+      [
+        "item_count",
+        0.0017
+      ]
+    ],
+    "n_features": 58
+  },
+  "is_poor_review": {
+    "models": {
+      "state_rate_rule": {
+        "valid": null,
+        "test": {
+          "pr_auc": 0.127,
+          "roc_auc": 0.5292,
+          "brier": 0.1045,
+          "precision_top10": 0.1427,
+          "recall_top10": 0.1232,
+          "prevalence": 0.1158,
+          "n": 32595
+        }
+      },
+      "logistic": {
+        "valid": {
+          "pr_auc": 0.3411,
+          "roc_auc": 0.6474,
+          "brier": 0.2075,
+          "precision_top10": 0.4077,
+          "recall_top10": 0.207,
+          "prevalence": 0.1969,
+          "n": 21021
+        },
+        "test": {
+          "pr_auc": 0.2233,
+          "roc_auc": 0.6223,
+          "brier": 0.2406,
+          "precision_top10": 0.2627,
+          "recall_top10": 0.2269,
+          "prevalence": 0.1158,
+          "n": 32595
+        }
+      },
+      "gradient_boosting": {
+        "valid": {
+          "pr_auc": 0.302,
+          "roc_auc": 0.6185,
+          "brier": 0.1547,
+          "precision_top10": 0.3373,
+          "recall_top10": 0.1713,
+          "prevalence": 0.1969,
+          "n": 21021
+        },
+        "test": {
+          "pr_auc": 0.2189,
+          "roc_auc": 0.6157,
+          "brier": 0.1033,
+          "precision_top10": 0.2436,
+          "recall_top10": 0.2104,
+          "prevalence": 0.1158,
+          "n": 32595
+        }
+      }
+    },
+    "selected_on_valid": "logistic",
+    "top_features_test": [
+      [
+        "te_sellerstate_poor",
+        0.0402
+      ],
+      [
+        "seller_count",
+        0.0205
+      ],
+      [
+        "te_seller_poor",
+        0.0141
+      ],
+      [
+        "item_count",
+        0.0067
+      ],
+      [
+        "te_category_poor",
+        0.0067
+      ],
+      [
+        "freight_total_log",
+        0.0041
+      ],
+      [
+        "state_RJ",
+        0.0034
+      ],
+      [
+        "payment_total_log",
+        0.0031
+      ]
+    ],
+    "n_features": 58
+  }
+}

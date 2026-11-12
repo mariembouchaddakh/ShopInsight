@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "orders_unique": true,
+    "late_recomputed_matches": true,
+    "duration_only_for_delivered": true,
+    "no_items_label_matches_raw": true,
+    "unknown_label_only_with_items": true,
+    "multi_seller_flag_matches_raw": true,
+    "multi_seller_links_rows_match_raw": true,
+    "seller_kpis_contain_no_multi_seller_order": true,
+    "jsonl_message_docs_match_raw": true,
+    "jsonl_all_text_docs_match_raw": true,
+    "model_base_has_no_future_columns": true,
+    "monthly_months_contiguous": true,
+    "sparse_flag_matches_raw_counts": true,
+    "period_flag_present_in_all_kpi_tables": true,
+    "date_flags_recomputed_match": true,
+    "geo_centroids_inside_brazil": true
+  },
+  "passed": true,
+  "figures": {
+    "orders": 99441,
+    "late_eligible": 96470,
+    "late_orders": 6534,
+    "multi_seller_orders": 1278,
+    "orders_without_items": 775,
+    "review_documents_all_text": 42687,
+    "review_documents_with_message": 40950,
+    "incomplete_months": [
+      "2016-09",
+      "2016-11",
+      "2016-12",
+      "2018-09",
+      "2018-10"
+    ],
+    "orders_with_date_issue": 1396
+  }
+}

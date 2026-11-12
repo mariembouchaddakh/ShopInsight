@@ -1,0 +1,20 @@
+{
+  "documents": 42687,
+  "unique_segments": 39074,
+  "translated_this_run": 10167,
+  "status": {
+    "traduit": 42617,
+    "vide": 0,
+    "à vérifier": 70
+  },
+  "flags": {
+    "longueur": 49,
+    "repetition": 18,
+    "non_traduit": 7
+  },
+  "every_document_has_original": true,
+  "every_nonempty_text_translated": true,
+  "model": "Helsinki-NLP/opus-mt-ROMANCE-en + Helsinki-NLP/opus-mt-en-fr (pivot anglais)",
+  "minutes": 238.7,
+  "manual_review_sample": "quality/translation_sample_for_review.csv (200 avis, graine 42)"
+}
