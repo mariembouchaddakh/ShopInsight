@@ -1,0 +1,7 @@
+# Dépendances des agents BO1/BO2 (en plus de requirements.txt)
+pandas>=2.2
+numpy
+scipy
+scikit-learn>=1.4
+joblib
+# Optionnel : un serveur LLM compatible OpenAI (ex. vLLM) — aucune bibliothèque cliente requise

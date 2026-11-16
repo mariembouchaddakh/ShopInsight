@@ -1,0 +1,251 @@
+{
+  "bo1": {
+    "n_orders": 60,
+    "checks_passed": {
+      "C1_structure": "60/60",
+      "C2_citations": "60/60",
+      "C3_pas_de_fuite": "60/60",
+      "C4_comparables_passes": "60/60",
+      "C5_chiffres_exacts": "60/60",
+      "C6_pas_de_causalite": "60/60"
+    },
+    "success_rate": 1.0,
+    "failures": [],
+    "triage_utility": [
+      {
+        "month": "2018-04",
+        "target": "late",
+        "recall_top10": 0.4019607843137255,
+        "precision_top10": 0.18114874815905743,
+        "lift_vs_random": 4.024343758121805
+      },
+      {
+        "month": "2018-04",
+        "target": "poor",
+        "recall_top10": 0.22483221476510068,
+        "precision_top10": 0.2921511627906977,
+        "lift_vs_random": 2.249302520680506
+      },
+      {
+        "month": "2018-05",
+        "target": "late",
+        "recall_top10": 0.2595936794582393,
+        "precision_top10": 0.17062314540059348,
+        "lift_vs_random": 2.5994031790261976
+      },
+      {
+        "month": "2018-05",
+        "target": "poor",
+        "recall_top10": 0.2321867321867322,
+        "precision_top10": 0.2767203513909224,
+        "lift_vs_random": 2.324926883492037
+      },
+      {
+        "month": "2018-06",
+        "target": "late",
+        "recall_top10": 0.3380281690140845,
+        "precision_top10": 0.03940886699507389,
+        "lift_vs_random": 3.383612016929161
+      },
+      {
+        "month": "2018-06",
+        "target": "poor",
+        "recall_top10": 0.2326283987915408,
+        "precision_top10": 0.250814332247557,
+        "lift_vs_random": 2.3266628615290745
+      },
+      {
+        "month": "2018-07",
+        "target": "late",
+        "recall_top10": 0.1971153846153846,
+        "precision_top10": 0.06666666666666667,
+        "lift_vs_random": 1.9730769230769232
+      },
+      {
+        "month": "2018-07",
+        "target": "poor",
+        "recall_top10": 0.20317002881844382,
+        "precision_top10": 0.22596153846153846,
+        "lift_vs_random": 2.0339794391487476
+      },
+      {
+        "month": "2018-08",
+        "target": "late",
+        "recall_top10": 0.10687022900763359,
+        "precision_top10": 0.06614173228346457,
+        "lift_vs_random": 1.0688705896495763
+      },
+      {
+        "month": "2018-08",
+        "target": "poor",
+        "recall_top10": 0.2397743300423131,
+        "precision_top10": 0.2623456790123457,
+        "lift_vs_random": 2.3995934109944455
+      }
+    ]
+  },
+  "bo2": {
+    "alert_backtest": {
+      "months": [
+        {
+          "month": "2017-01",
+          "late_rate": 0.0293,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-02",
+          "late_rate": 0.0296,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-03",
+          "late_rate": 0.0456,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-04",
+          "late_rate": 0.0656,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-05",
+          "late_rate": 0.0299,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-06",
+          "late_rate": 0.0303,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-07",
+          "late_rate": 0.0279,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-08",
+          "late_rate": 0.0291,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-09",
+          "late_rate": 0.0439,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-10",
+          "late_rate": 0.0418,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2017-11",
+          "late_rate": 0.124,
+          "delay_event_proxy": true,
+          "delivery_alert": true,
+          "other_alerts": [
+            "vendeur_service"
+          ]
+        },
+        {
+          "month": "2017-12",
+          "late_rate": 0.0746,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-01",
+          "late_rate": 0.057,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-02",
+          "late_rate": 0.1413,
+          "delay_event_proxy": true,
+          "delivery_alert": true,
+          "other_alerts": [
+            "vendeur_service"
+          ]
+        },
+        {
+          "month": "2018-03",
+          "late_rate": 0.1896,
+          "delay_event_proxy": true,
+          "delivery_alert": true,
+          "other_alerts": [
+            "vendeur_service"
+          ]
+        },
+        {
+          "month": "2018-04",
+          "late_rate": 0.045,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-05",
+          "late_rate": 0.0656,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-06",
+          "late_rate": 0.0116,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-07",
+          "late_rate": 0.0338,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        },
+        {
+          "month": "2018-08",
+          "late_rate": 0.0619,
+          "delay_event_proxy": false,
+          "delivery_alert": false,
+          "other_alerts": []
+        }
+      ],
+      "alert_precision": 1.0,
+      "alert_recall": 1.0,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "note": "proxy indépendant : taux de retard du mois ≥ 1,5 × médiane des 3 mois précédents et ≥ 8 %"
+    },
+    "structure": {
+      "scenarios": 9,
+      "passed": 9,
+      "problems": []
+    },
+    "f1_per_aspect": "en attente : annotez annotation_template.csv (−1 critique, 0 neutre, 1 positif, vide = non mentionné) et renommez-le annotated_reviews.csv"
+  }
+}
