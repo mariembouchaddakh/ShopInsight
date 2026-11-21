@@ -1,6 +1,16 @@
 # ShopInsight
 
-Projet REHEARSE (CRISP-DM) sur le jeu de données e-commerce brésilien Olist : préparation des données, traduction locale des avis en français et premiers modèles.
+Projet REHEARSE (CRISP-DM) sur le jeu de données e-commerce brésilien Olist : préparation des données, traduction locale des avis en français, premiers modèles et deux agents (BO1 diagnostic préventif, BO2 voix du client).
+
+## État d'avancement
+
+| Phase CRISP-DM | Contenu | État |
+|---|---|---|
+| 1. Compréhension métier | 5 objectifs métier (BO), 15 objectifs data science (DSO) | fait |
+| 2. Compréhension des données | exploration, qualité, relations entre variables | fait |
+| 3. Préparation | nettoyage, valeurs manquantes, valeurs aberrantes, encodage, découpage chronologique, traduction des 42 687 avis | fait |
+| 4. Modélisation | modèles de référence DS1.1 / DS1.2 ; agents DS1.3 (BO1) et DS2.3 (BO2) | en cours |
+| 5–6. Évaluation, déploiement | annotation des avis (F1 par aspect), agents BO3–BO5, tableau de bord | à faire |
 
 > **Données non incluses.** Le dossier `data/` (≈ 200 Mo) n'est pas versionné. Téléchargez l'archive Olist sur Kaggle
 > ([Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)),
@@ -34,10 +44,15 @@ data/
   bronze/    inventaire, empreintes SHA-256 et profil des sources
   silver/    tables nettoyées et jointes pour l'analyse et les modèles
   gold/      KPI prêts pour dashboards et agent de reporting
-quality/     contrôles exécutés et rapport de qualité
-docs/        dictionnaire détaillé des tables préparées
-src/         pipeline reproductible (prepare_data.py) et validation indépendante (validate_outputs.py)
+  model/     variables des modèles (train / valid / test) et modèles des agents (artifacts/)
+quality/     contrôles exécutés, rapport de qualité, résultats des modèles et des agents
+docs/        dictionnaire des tables préparées, documentation des agents
+src/         pipeline reproductible (prepare_data.py), validation (validate_outputs.py), traduction,
+             variables et modèles de référence, agents (src/agents/)
+tests/       tests unitaires des agents (jeu synthétique)
 ```
+
+Le notebook `REHEARSE_Data_Preparation.ipynb` refait la préparation pas à pas, avec explications et graphiques.
 
 ## Jeux préparés principaux
 
@@ -84,12 +99,24 @@ python src/validate_outputs.py --project-dir .
 
 Le pipeline vérifie que les 9 fichiers bruts ont les empreintes SHA-256 de la version Olist d'origine.
 
+Variables pour les modèles et modèles de référence (DS1.1 retard, DS1.2 note 1-2) :
+
+```powershell
+python src/build_model_features.py --project-dir .   # 61 variables, découpage chronologique
+python src/train_baselines.py --project-dir .        # quality/baseline_results.json
+```
+
+- Uniquement des informations connues à l'approbation de la commande (plus la date de livraison promise, affichée à l'achat).
+- Découpage chronologique : train oct. 2016 – déc. 2017, valid janv. – mars 2018, test avr. – août 2018.
+- Résultats sur le test (PR-AUC) : retard 0,090 (régression logistique) à 0,107 (gradient boosting) pour un taux de base de 4,4 % ; note 1-2 0,223 pour un taux de base de 11,6 %. Signal réel mais faible.
+
 ## Traduction des avis en français
 
 `src/translate_reviews.py` traduit localement les avis portugais vers le français. Aucun avis n'est envoyé à un service en ligne ; seuls les modèles sont téléchargés une fois (environ 600 Mo).
 
 - Modèles : `Helsinki-NLP/opus-mt-ROMANCE-en` puis `Helsinki-NLP/opus-mt-en-fr` (pivot par l'anglais).
-- Les 52 516 textes (messages et titres) ne comptent que 39 075 phrases uniques : chacune n'est traduite qu'une fois.
+- Les 52 516 textes (messages et titres) ne comptent que 39 074 phrases uniques : chacune n'est traduite qu'une fois.
+- **Traduction terminée** (novembre 2026, environ 4 h sur CPU) : 42 687 avis, dont 42 617 « traduit » et 70 « à vérifier » (0,2 %).
 - Le cache `data/silver/translation_cache_fr.jsonl` permet de relancer le script après une interruption sans perdre le travail fait.
 - Sortie : `data/silver/reviews_text_fr.jsonl.gz`, avec pour chaque avis `text_original_pt`, `text_fr`, `title_original_pt`, `title_fr`, `translation_status` (`traduit` / `vide` / `à vérifier`) et `translation_flags`. Le fichier `reviews_text.jsonl.gz` n'est pas modifié.
 - Contrôle : `quality/translation_report.json`, et `quality/translation_sample_for_review.csv` contenant 200 avis tirés au hasard à vérifier à la main (colonne « correct »).
@@ -102,7 +129,40 @@ python src/translate_reviews.py --project-dir . --limit 200   # test rapide
 python src/translate_reviews.py --project-dir .               # traduction complète
 ```
 
+## Agents BO1 et BO2
+
+Deux agents réalisent les DSO agentiques DS1.3 et DS2.3. Chaque rapport sépare les **faits observés**, les **estimations du modèle** et les **expériences d'autres clients**, et chaque ligne cite ses preuves (`ord:`, `rev:`, `kpi:`, `mdl:`). Un LLM (serveur compatible OpenAI, par ex. vLLM) est optionnel ; sans lui, tout fonctionne.
+
+- **BO1 — diagnostic préventif** (`src/agents/bo1_agent.py`) : pour une commande, risque de retard et de note 1-2 (percentile et taux réellement observé dans la tranche, pas de probabilité brute), facteurs associés, 8 commandes comparables terminées avant l'achat, taux récents de la région, de la catégorie et du vendeur calculés uniquement avec les issues connues à la date d'achat, actions suggérées. Peut aussi classer les commandes d'un mois.
+- **BO2 — voix du client** (`src/agents/bo2_agent.py`, `bo2_nlp.py`) : pour un mois, un État, une catégorie ou une question en français, aspects critiqués et appréciés (9 aspects), plaintes émergentes (référence : médiane des 12 mois précédents, correction de Benjamini-Hochberg), termes nouveaux, avis représentatifs traduits, équipe à mobiliser.
+
+```powershell
+pip install -r requirements-agents.txt
+python src/train_agent_models.py --project-dir .        # après build_model_features.py
+python src/run_agents.py bo1 --project-dir . --order <order_id>
+python src/run_agents.py bo1 --project-dir . --triage 2018-06
+python src/run_agents.py bo2 --project-dir . --month 2018-03
+python src/run_agents.py bo2 --project-dir . --ask "Y a-t-il de nouvelles plaintes en juillet 2018 ?"
+python src/evaluate_agents.py --project-dir .           # quality/agent_evaluation.json
+python -m unittest tests/test_agents.py
+```
+
+**Résultats sur les vraies données Olist** (`quality/agent_evaluation.json`) :
+
+- BO1 : 6 contrôles (structure, citations, pas de fuite, comparables passés, chiffres exacts, pas de langage causal) réussis sur 60 commandes test sur 60. Sur avril – août 2018, le top 10 % des scores contient 24 % des retards et 23 % des notes 1-2 (10 % attendus au hasard) ; le gain pour le retard baisse en fin de période (août 2018 ≈ hasard).
+- BO2 : alertes « livraison » de janv. 2017 à août 2018 : 3 alertes, 3 justes (nov. 2017, fév. 2018, mars 2018), aucun mois manqué ; 9 scénarios structurels sur 9.
+- L'analyse par aspect (mots-clés + note) n'est pas encore évaluée : annoter `quality/annotation_template.csv`, le renommer `annotated_reviews.csv` et relancer `evaluate_agents.py` pour obtenir le F1 par aspect.
+
+Détails, choix de conception et limites : `docs/agents_BO1_BO2.md`.
+
 ## Historique des versions
+
+**V3 (novembre 2026)** : modélisation et agents.
+
+- Traduction française complète des 42 687 avis.
+- 61 variables pour les modèles, découpage chronologique, modèles de référence DS1.1 et DS1.2.
+- Notebook de préparation exécuté pas à pas.
+- Agents BO1 (DS1.3) et BO2 (DS2.3), évalués sur les vraies données.
 
 **V2 (octobre 2026)** : application des étapes de nettoyage prévues dans la présentation et non encore réalisées.
 
@@ -117,7 +177,7 @@ python src/translate_reviews.py --project-dir .               # traduction compl
 
 ## Limites
 
-Olist est historique et statique. Le reporting mensuel peut être démontré en révélant progressivement les mois d'achat, mais il ne s'agit pas d'un flux temps réel. Les commentaires sont en portugais ; leur traduction française est produite par `src/translate_reviews.py` (voir plus haut). C'est une traduction automatique : l'échantillon de 200 avis doit être relu avant de s'appuyer dessus pour l'analyse de sentiment. Les thèmes et sentiments nécessitent un échantillon annoté pour une évaluation valide. Le classeur `REHEARSE_Phase2_Summary.xlsx` provient de la V1 : ses chiffres principaux restent valables, mais il n'intègre pas les nouveaux indicateurs.
+Olist est historique et statique. Le reporting mensuel peut être démontré en révélant progressivement les mois d'achat, mais il ne s'agit pas d'un flux temps réel. Les commentaires sont en portugais ; leur traduction française est automatique : l'échantillon de 200 avis doit être relu, et dans environ 6,6 % des commentaires sur plusieurs lignes une phrase peut manquer. Les thèmes et sentiments nécessitent un échantillon annoté pour une évaluation valide. Le signal des modèles BO1 est faible : il sert à prioriser une surveillance, pas à prédire un cas individuel. Aucune cause de retard n'est enregistrée dans Olist : les facteurs donnés par les agents sont des associations. Le classeur `REHEARSE_Phase2_Summary.xlsx` provient de la V1 : ses chiffres principaux restent valables, mais il n'intègre pas les nouveaux indicateurs.
 
 Source : Brazilian E-Commerce Public Dataset by Olist, Kaggle. Licence affichée par la source : CC BY-NC-SA 4.0.
 
