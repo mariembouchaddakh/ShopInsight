@@ -160,6 +160,8 @@ def aggregate_items(items: pd.DataFrame, products: pd.DataFrame) -> pd.DataFrame
         freight_total=("freight_value", "sum"),
         product_weight_mean_g=("product_weight_g", "mean"),
         product_volume_mean_cm3=("product_volume_cm3", "mean"),
+        # Date limite de remise au transporteur (engagement du vendeur, connue à l'approbation) : la plus tardive des lignes.
+        shipping_limit_max=("shipping_limit_date", "max"),
     ).reset_index()
     category = grouped["category_name"].agg(mode_or_unknown).rename("primary_category").reset_index()
     sellers = grouped["seller_id"].agg(lambda s: str(s.iloc[0]) if s.nunique() == 1 else pd.NA).rename("single_seller_id").reset_index()
@@ -249,6 +251,7 @@ def build_order_tables(
     payment_agg: pd.DataFrame,
     selected_reviews: pd.DataFrame,
     geo_zip: pd.DataFrame,
+    sellers: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     customer_fields = [
         "customer_id",
@@ -281,6 +284,10 @@ def build_order_tables(
     analysis["primary_category"] = analysis["primary_category"].where(analysis["has_items"], NO_ITEMS_LABEL)
     analysis["primary_category"] = analysis["primary_category"].fillna(UNKNOWN_CATEGORY_LABEL)
     analysis["is_multi_seller"] = analysis["seller_count"].gt(1)
+    # État du vendeur (commandes mono-vendeur uniquement) : utilisé par BO3 pour les groupes de pairs.
+    if sellers is not None:
+        seller_state = sellers[["seller_id", "seller_state"]].rename(columns={"seller_id": "single_seller_id"})
+        analysis = analysis.merge(seller_state, on="single_seller_id", how="left", validate="many_to_one")
 
     # Coordonnées du client à partir du centroïde de son préfixe postal (connu à l'achat).
     customer_geo = geo_zip.loc[
@@ -345,6 +352,17 @@ def build_order_tables(
     eligible = analysis["late_label_eligible"]
     analysis.loc[eligible, "is_late"] = analysis.loc[eligible, "late_days"].gt(0).astype("int64")
     analysis["poor_review_label_eligible"] = analysis["review_score"].notna()
+    # Remise tardive au transporteur (BO3) : jour de remise réel > jour limite d'expédition fixé au vendeur.
+    # C'est le signal le plus imputable au vendeur (le retard de livraison mêle vendeur et transporteur).
+    analysis["handover_label_eligible"] = (
+        analysis["order_delivered_carrier_date"].notna() & analysis["shipping_limit_max"].notna()
+    )
+    analysis["handover_delay_days"] = (
+        analysis["order_delivered_carrier_date"].dt.normalize() - analysis["shipping_limit_max"].dt.normalize()
+    ).dt.days.where(analysis["handover_label_eligible"])
+    analysis["is_late_handover"] = pd.Series(pd.NA, index=analysis.index, dtype="Int64")
+    h_eligible = analysis["handover_label_eligible"]
+    analysis.loc[h_eligible, "is_late_handover"] = analysis.loc[h_eligible, "handover_delay_days"].gt(0).astype("int64")
     analysis["is_poor_review"] = analysis["is_poor_review"].astype("Int64")
     analysis["has_written_comment"] = analysis["has_written_comment"].fillna(False).astype(bool)
 
@@ -644,6 +662,12 @@ def build_quality_report(ctx: dict[str, object]) -> tuple[pd.DataFrame, str]:
         row("flag_delivery_date_on_undelivered_status", "Dates (signalées)", int(a["flag_delivery_date_on_undelivered_status"].sum()), 6, int(a["flag_delivery_date_on_undelivered_status"].sum()) == 6),
         row("geo_centroids_outside_brazil", "Géolocalisation", int((geo["is_within_brazil"] & ~(geo["latitude"].between(BRAZIL_BBOX["lat_min"], BRAZIL_BBOX["lat_max"]) & geo["longitude"].between(BRAZIL_BBOX["lng_min"], BRAZIL_BBOX["lng_max"]))).sum()), 0, (geo.loc[geo["is_within_brazil"], "latitude"].between(BRAZIL_BBOX["lat_min"], BRAZIL_BBOX["lat_max"]).all())),
         row("customers_with_geo", "Géolocalisation", int(a["customer_has_geo"].sum()), "information", True),
+        row("late_handover_label_only_when_eligible", "Remise au transporteur",
+            f"{int(a['is_late_handover'].notna().sum())} étiquetées / {int(a['handover_label_eligible'].sum())} éligibles", "égalité",
+            int(a["is_late_handover"].notna().sum()) == int(a["handover_label_eligible"].sum())),
+        row("shipping_limit_matches_raw", "Remise au transporteur",
+            int(a["shipping_limit_max"].notna().sum()), int(it["order_id"].nunique()),
+            int(a["shipping_limit_max"].notna().sum()) == int(it["order_id"].nunique())),
     ]
     table = pd.DataFrame(checks, columns=["check", "category", "observed", "expected", "passed"])
     status = "RÉUSSI" if bool(table["passed"].all()) else "ÉCHEC"
@@ -742,7 +766,7 @@ def prepare(source_zip: Path | None, project_dir: Path, raw_source_dir: Path | N
     item_agg = aggregate_items(items, products)
     payment_agg = aggregate_payments(payments)
     selected_reviews = select_reviews(reviews)
-    analysis, model_base = build_order_tables(orders, customers, item_agg, payment_agg, selected_reviews, geo_zip)
+    analysis, model_base = build_order_tables(orders, customers, item_agg, payment_agg, selected_reviews, geo_zip, sellers)
     multi_links = build_multi_seller_links(items, products, analysis)
 
     analysis_for_kpi = analysis.assign(date_issue=analysis["flag_any_date_issue"].astype(int))

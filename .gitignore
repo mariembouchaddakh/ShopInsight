@@ -7,6 +7,10 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 venv/
+# Secrets locaux (clés d'API)
+.env
+.env.*
+!.env.example
 # Système
 .DS_Store
 Thumbs.db

@@ -1,0 +1,5 @@
+{
+  "a": "baidu/ernie-5.5-flash-preview:free",
+  "b": "nvidia/nemotron-3.5-super-vl:free",
+  "judge": "inclusionai/ling-3.2-flash:free"
+}

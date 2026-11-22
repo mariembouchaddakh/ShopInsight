@@ -1,0 +1,644 @@
+{
+  "months": [
+    "2018-06",
+    "2018-05",
+    "2018-04"
+  ],
+  "selection_rules": "Cas de référence pour évaluer l'analyse IA (≈ 20 vendeurs réels, choix DÉTERMINISTE, aucune évaluation humaine fabriquée).\n\n    python -m backend.app.llm.reference_cases --project-dir .\n\nSix situations (décisions TEST 2018-06, puis 2018-05, 2018-04 si besoin) choisies par règles fixes sur les sorties de BO3 :\n  persistent     alerte de niveau ce mois ET le mois précédent\n  recent         alerte de niveau ce mois, aucune alerte sur ce vendeur les 3 mois précédents\n  weak_trend     alerte de tendance seulement (signal faible)\n  mixed          avis 1-2 en alerte avec critiques partagées entre plusieurs aspects\n  insufficient   vendeur actif mais volume insuffisant pour toute alerte\n  strong         points forts sur au moins 2 indicateurs et aucune alerte\nSorties : docs/reference_cases/cases.json, cases.md, review_form.csv (à remplir par l'équipe), rubric.md.\n",
+  "cases": [
+    {
+      "case_id": "RC01",
+      "category": "persistent",
+      "category_label": "Sous-performance persistante",
+      "seller_id": "7d13fca15225358621be4086e1eb0964",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 473 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : watches_gifts 90 % ; destinations : SP 36 %, autre 34 %, RJ 17 % ; prix médian 144.0 R$, délai promis moyen 26.5 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 8.5 % sur les 90 derniers jours (n = 318 issues connues sur 343 commandes ; IC 95 % 5.9 % – 12.1 %) ; 13.9 % sur 12 mois (n = 445).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 20.6 % (n = 68) → 2018-04 21.8 % (n = 156) → 2018-05 8.3 % (n = 361) → 2018-06 8.5 % (n = 318).",
+        "Avis 1-2 étoiles : 12.5 % sur les 90 derniers jours (n = 313 issues connues sur 343 commandes ; IC 95 % 9.2 % – 16.6 %) ; 18.9 % sur 12 mois (n = 440).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 29.8 % (n = 57) → 2018-04 29.4 % (n = 146) → 2018-05 14.6 % (n = 350) → 2018-06 12.5 % (n = 313).",
+        "Remise tardive au transporteur : 10.0 % sur les 90 derniers jours (n = 340 issues connues sur 343 commandes ; IC 95 % 7.2 % – 13.7 %) ; 10.2 % sur 12 mois (n = 470)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — remise tardive au transporteur : 10.0 % sur 90 jours (n = 340) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 10.0 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "priorité haute sur l'indicateur en alerte depuis plusieurs mois ; contact du vendeur ; actions liées à l'indicateur (préparation / remise si remise tardive)",
+      "deterministic_narrative": "Vendeur 7d13fca1, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 10.0 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC02",
+      "category": "persistent",
+      "category_label": "Sous-performance persistante",
+      "seller_id": "06a2c3af7b3aee5d69171b0e14f0ee87",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État MA : 253 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : health_beauty 100 % ; destinations : autre 49 %, SP 29 %, RJ 12 % ; prix médian 66.99 R$, délai promis moyen 30.4 jours ; segment descriptif : grand volume, autres régions.",
+      "deterministic_evidence": [
+        "Retard de livraison : 19.1 % sur les 90 derniers jours (n = 157 issues connues sur 192 commandes ; IC 95 % 13.7 % – 26.0 %) ; 22.5 % sur 12 mois (n = 218).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 16.1 % (n = 31) → 2018-04 34.5 % (n = 55) → 2018-05 23.7 % (n = 114) → 2018-06 19.1 % (n = 157).",
+        "Avis 1-2 étoiles : 18.5 % sur les 90 derniers jours (n = 146 issues connues sur 192 commandes ; IC 95 % 13.0 % – 25.6 %) ; 19.4 % sur 12 mois (n = 206).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 16.1 % (n = 31) → 2018-04 22.0 % (n = 50) → 2018-05 17.0 % (n = 100) → 2018-06 18.5 % (n = 146).",
+        "Remise tardive au transporteur : 20.9 % sur les 90 derniers jours (n = 191 issues connues sur 192 commandes ; IC 95 % 15.8 % – 27.3 %) ; 24.2 % sur 12 mois (n = 252)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — retard de livraison : 19.1 % sur 90 jours (n = 157) contre 7.9 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 20.9 % sur 90 jours (n = 191) contre 5.2 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 20.9 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés.",
+        "Les retards de livraison coïncident avec des remises tardives au transporteur : traiter d'abord la préparation des commandes chez le vendeur."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "priorité haute sur l'indicateur en alerte depuis plusieurs mois ; contact du vendeur ; actions liées à l'indicateur (préparation / remise si remise tardive)",
+      "deterministic_narrative": "Vendeur 06a2c3af, fin 2018-06 : alerte sur retard de livraison (niveau : 19.1 % contre 7.9 % pour la marketplace) ; remise tardive au transporteur (niveau : 20.9 % contre 5.2 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC03",
+      "category": "persistent",
+      "category_label": "Sous-performance persistante",
+      "seller_id": "7c67e1448b00f6e969d365cea6b010ab",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 745 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 91 % ; destinations : SP 41 %, autre 32 %, RJ 18 % ; prix médian 159.94 R$, délai promis moyen 34.1 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 8.9 % sur les 90 derniers jours (n = 124 issues connues sur 152 commandes ; IC 95 % 5.0 % – 15.2 %) ; 10.4 % sur 12 mois (n = 712).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 6.0 % (n = 183) → 2018-04 6.4 % (n = 202) → 2018-05 5.0 % (n = 201) → 2018-06 8.9 % (n = 124).",
+        "Avis 1-2 étoiles : 20.8 % sur les 90 derniers jours (n = 125 issues connues sur 152 commandes ; IC 95 % 14.6 % – 28.7 %) ; 26.9 % sur 12 mois (n = 714).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 31.9 % (n = 166) → 2018-04 28.5 % (n = 186) → 2018-05 24.2 % (n = 198) → 2018-06 20.8 % (n = 125).",
+        "Remise tardive au transporteur : 15.3 % sur les 90 derniers jours (n = 131 issues connues sur 152 commandes ; IC 95 % 10.1 % – 22.4 %) ; 20.8 % sur 12 mois (n = 723)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 15.3 % sur 90 jours (n = 131) contre 5.1 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 15.3 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "priorité haute sur l'indicateur en alerte depuis plusieurs mois ; contact du vendeur ; actions liées à l'indicateur (préparation / remise si remise tardive)",
+      "deterministic_narrative": "Vendeur 7c67e144, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 15.3 % contre 5.1 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC04",
+      "category": "persistent",
+      "category_label": "Sous-performance persistante",
+      "seller_id": "2eb70248d66e0e3ef83659f71b244378",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 141 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : computers_accessories 43 %, watches_gifts 40 %, autre 11 % ; destinations : SP 53 %, autre 26 %, MG 11 % ; prix médian 124.9 R$, délai promis moyen 27.5 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 13.3 % sur les 90 derniers jours (n = 105 issues connues sur 127 commandes ; IC 95 % 8.1 % – 21.1 %) ; 17.0 % sur 12 mois (n = 118).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 33.3 % (n = 9) → 2018-04 30.0 % (n = 20) → 2018-05 20.4 % (n = 54) → 2018-06 13.3 % (n = 105).",
+        "Avis 1-2 étoiles : 57.0 % sur les 90 derniers jours (n = 114 issues connues sur 127 commandes ; IC 95 % 47.9 % – 65.7 %) ; 55.5 % sur 12 mois (n = 128).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 33.3 % (n = 6) → 2018-04 55.6 % (n = 18) → 2018-05 60.4 % (n = 53) → 2018-06 57.0 % (n = 114).",
+        "Remise tardive au transporteur : 37.7 % sur les 90 derniers jours (n = 114 issues connues sur 127 commandes ; IC 95 % 29.4 % – 46.9 %) ; 37.0 % sur 12 mois (n = 127)."
+      ],
+      "expected_observations": [
+        "Retard de livraison — détection tendance (par rapport à son propre passé) : volume insuffisant (118 issues connues sur 12 mois (minimum 30), 105 sur 90 jours (minimum 10), 13 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — avis 1-2 étoiles : 57.0 % sur 90 jours (n = 114) contre 14.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "Avis 1-2 étoiles — détection tendance (par rapport à son propre passé) : volume insuffisant (128 issues connues sur 12 mois (minimum 30), 114 sur 90 jours (minimum 10), 14 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 37.7 % sur 90 jours (n = 114) contre 5.2 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "Remise tardive au transporteur — détection tendance (par rapport à son propre passé) : volume insuffisant (127 issues connues sur 12 mois (minimum 30), 114 sur 90 jours (minimum 10), 13 dans son historique propre (minimum 15)) ; pas d'alerte possible."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 37.7 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés.",
+        "Critiques partagées entre la livraison (24 avis) et le produit ou la préparation (39 avis) : traiter les délais (remise au transporteur, agent BO1) et contrôler préparation et fiches produit (agent BO2)."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "priorité haute sur l'indicateur en alerte depuis plusieurs mois ; contact du vendeur ; actions liées à l'indicateur (préparation / remise si remise tardive)",
+      "deterministic_narrative": "Vendeur 2eb70248, fin 2018-06 : alerte sur avis 1-2 étoiles (niveau : 57.0 % contre 14.3 % pour la marketplace) ; remise tardive au transporteur (niveau : 37.7 % contre 5.2 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC05",
+      "category": "recent",
+      "category_label": "Dégradation récente",
+      "seller_id": "dd7ddc04e1b6c2c614352b383efe2d36",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 92 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 100 % ; destinations : SP 54 %, autre 23 %, MG 13 % ; prix médian 48.37 R$, délai promis moyen 22.7 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 8.0 % sur les 90 derniers jours (n = 25 issues connues sur 29 commandes ; IC 95 % 2.2 % – 25.0 %) ; 14.9 % sur 12 mois (n = 87).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 20.0 % (n = 10) → 2018-04 11.5 % (n = 26) → 2018-05 8.8 % (n = 34) → 2018-06 8.0 % (n = 25).",
+        "Avis 1-2 étoiles : 8.0 % sur les 90 derniers jours (n = 25 issues connues sur 29 commandes ; IC 95 % 2.2 % – 25.0 %) ; 14.8 % sur 12 mois (n = 88).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 0.0 % (n = 7) → 2018-04 12.5 % (n = 24) → 2018-05 9.4 % (n = 32) → 2018-06 8.0 % (n = 25).",
+        "Remise tardive au transporteur : 26.9 % sur les 90 derniers jours (n = 26 issues connues sur 29 commandes ; IC 95 % 13.7 % – 46.1 %) ; 25.8 % sur 12 mois (n = 89)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — remise tardive au transporteur : 26.9 % sur 90 jours (n = 26) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 26.9 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "vérifier si le signal se confirme ; contact préventif ; surveiller le mois suivant",
+      "deterministic_narrative": "Vendeur dd7ddc04, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 26.9 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC06",
+      "category": "recent",
+      "category_label": "Dégradation récente",
+      "seller_id": "54965bbe3e4f07ae045b90b0b8541f52",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État PR : 73 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : bed_bath_table 100 % ; destinations : SP 37 %, autre 33 %, MG 15 % ; prix médian 119.9 R$, délai promis moyen 28.9 jours ; segment descriptif : grand volume, Sul.",
+      "deterministic_evidence": [
+        "Retard de livraison : 0.0 % sur les 90 derniers jours (n = 18 issues connues sur 24 commandes ; IC 95 % 0.0 % – 17.6 %) ; 34.9 % sur 12 mois (n = 63).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-01 53.7 % (n = 41) → 2018-06 0.0 % (n = 18).",
+        "Avis 1-2 étoiles : 28.6 % sur les 90 derniers jours (n = 14 issues connues sur 24 commandes ; IC 95 % 11.7 % – 54.6 %) ; 48.3 % sur 12 mois (n = 60).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-01 59.5 % (n = 42) → 2018-06 28.6 % (n = 14).",
+        "Remise tardive au transporteur : 38.1 % sur les 90 derniers jours (n = 21 issues connues sur 24 commandes ; IC 95 % 20.8 % – 59.1 %) ; 51.5 % sur 12 mois (n = 68)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — remise tardive au transporteur : 38.1 % sur 90 jours (n = 21) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 38.1 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "vérifier si le signal se confirme ; contact préventif ; surveiller le mois suivant",
+      "deterministic_narrative": "Vendeur 54965bbe, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 38.1 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC07",
+      "category": "recent",
+      "category_label": "Dégradation récente",
+      "seller_id": "213b25e6f54661939f11710a6fddb871",
+      "month": "2018-05",
+      "seller_context": "Vendeur de l’État SP : 54 commandes mono-vendeur achetées sur les 12 mois avant le 2018-06-01 ; catégories : autre 100 % ; destinations : SP 46 %, autre 32 %, MG 13 % ; prix médian 79.85 R$, délai promis moyen 24.8 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 11.1 % sur les 90 derniers jours (n = 27 issues connues sur 43 commandes ; IC 95 % 3.9 % – 28.1 %) ; 13.5 % sur 12 mois (n = 37).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-02 16.7 % (n = 6) → 2018-03 42.9 % (n = 7) → 2018-04 12.5 % (n = 16) → 2018-05 11.1 % (n = 27).",
+        "Avis 1-2 étoiles : 28.6 % sur les 90 derniers jours (n = 28 issues connues sur 43 commandes ; IC 95 % 15.2 % – 47.1 %) ; 28.9 % sur 12 mois (n = 38).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-02 16.7 % (n = 6) → 2018-03 50.0 % (n = 8) → 2018-04 26.7 % (n = 15) → 2018-05 28.6 % (n = 28).",
+        "Remise tardive au transporteur : 29.4 % sur les 90 derniers jours (n = 34 issues connues sur 43 commandes ; IC 95 % 16.8 % – 46.2 %) ; 28.9 % sur 12 mois (n = 45)."
+      ],
+      "expected_observations": [
+        "Retard de livraison — détection tendance (par rapport à son propre passé) : volume insuffisant (37 issues connues sur 12 mois (minimum 30), 27 sur 90 jours (minimum 10), 10 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection tendance (par rapport à son propre passé) : volume insuffisant (38 issues connues sur 12 mois (minimum 30), 28 sur 90 jours (minimum 10), 10 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — remise tardive au transporteur : 29.4 % sur 90 jours (n = 34) contre 5.4 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "Remise tardive au transporteur — détection tendance (par rapport à son propre passé) : volume insuffisant (45 issues connues sur 12 mois (minimum 30), 34 sur 90 jours (minimum 10), 11 dans son historique propre (minimum 15)) ; pas d'alerte possible."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 29.4 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "vérifier si le signal se confirme ; contact préventif ; surveiller le mois suivant",
+      "deterministic_narrative": "Vendeur 213b25e6, fin 2018-05 : alerte sur remise tardive au transporteur (niveau : 29.4 % contre 5.4 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC08",
+      "category": "recent",
+      "category_label": "Dégradation récente",
+      "seller_id": "6560211a19b47992c3666cc44a7e94c0",
+      "month": "2018-04",
+      "seller_context": "Vendeur de l’État SP : 1087 commandes mono-vendeur achetées sur les 12 mois avant le 2018-05-01 ; catégories : watches_gifts 77 %, autre 22 % ; destinations : SP 43 %, autre 36 %, MG 11 % ; prix médian 49.99 R$, délai promis moyen 21.8 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 9.5 % sur les 90 derniers jours (n = 190 issues connues sur 241 commandes ; IC 95 % 6.1 % – 14.5 %) ; 6.0 % sur 12 mois (n = 1017).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-01 6.2 % (n = 340) → 2018-02 5.7 % (n = 263) → 2018-03 5.6 % (n = 215) → 2018-04 9.5 % (n = 190).",
+        "Avis 1-2 étoiles : 22.9 % sur les 90 derniers jours (n = 188 issues connues sur 241 commandes ; IC 95 % 17.4 % – 29.4 %) ; 17.3 % sur 12 mois (n = 1024).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-01 15.2 % (n = 328) → 2018-02 14.7 % (n = 251) → 2018-03 16.7 % (n = 215) → 2018-04 22.9 % (n = 188).",
+        "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 235 issues connues sur 241 commandes ; IC 95 % 0.0 % – 1.6 %) ; 0.4 % sur 12 mois (n = 1080)."
+      ],
+      "expected_observations": [
+        "ALERTE tendance (par rapport à son propre passé) — retard de livraison : 9.5 % sur 90 jours (n = 190) contre 5.3 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace) ; détecteur : test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg.",
+        "ALERTE niveau (par rapport à la marketplace), sévérité faible — avis 1-2 étoiles : 22.9 % sur 90 jours (n = 188) contre 14.7 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "Point fort — remise tardive au transporteur : 0.4 % sur 12 mois (n = 1080) contre 5.7 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "(Logistique) Retards de livraison sans remise tardive signalée : examiner transporteurs et destinations de ce vendeur ; utiliser l'agent BO1 pour surveiller ses commandes en cours.",
+        "Critiques partagées entre la livraison (54 avis) et le produit ou la préparation (34 avis) : traiter les délais (remise au transporteur, agent BO1) et contrôler préparation et fiches produit (agent BO2)."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "vérifier si le signal se confirme ; contact préventif ; surveiller le mois suivant",
+      "deterministic_narrative": "Vendeur 6560211a, fin 2018-04 : alerte sur retard de livraison (tendance : 9.5 % contre 8.1 % pour la marketplace) ; avis 1-2 étoiles (niveau : 22.9 % contre 14.7 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC09",
+      "category": "weak_trend",
+      "category_label": "Signal de tendance faible",
+      "seller_id": "4869f7a5dfa277a7dca6462dcf3b52b2",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 955 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : watches_gifts 87 % ; destinations : SP 40 %, autre 32 %, RJ 18 % ; prix médian 179.0 R$, délai promis moyen 27.0 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 3.7 % sur les 90 derniers jours (n = 270 issues connues sur 302 commandes ; IC 95 % 2.0 % – 6.7 %) ; 12.3 % sur 12 mois (n = 918).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 22.3 % (n = 197) → 2018-04 26.3 % (n = 251) → 2018-05 11.3 % (n = 292) → 2018-06 3.7 % (n = 270).",
+        "Avis 1-2 étoiles : 9.9 % sur les 90 derniers jours (n = 262 issues connues sur 302 commandes ; IC 95 % 6.9 % – 14.1 %) ; 13.9 % sur 12 mois (n = 908).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 21.8 % (n = 188) → 2018-04 24.2 % (n = 240) → 2018-05 14.3 % (n = 287) → 2018-06 9.9 % (n = 262).",
+        "Remise tardive au transporteur : 6.1 % sur les 90 derniers jours (n = 297 issues connues sur 302 commandes ; IC 95 % 3.9 % – 9.4 %) ; 2.8 % sur 12 mois (n = 950)."
+      ],
+      "expected_observations": [
+        "ALERTE tendance (par rapport à son propre passé) — remise tardive au transporteur : 6.1 % sur 90 jours (n = 297) contre 1.5 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace) ; détecteur : test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg.",
+        "Point fort — remise tardive au transporteur : 2.8 % sur 12 mois (n = 950) contre 5.3 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 6.1 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "présenter l'alerte de tendance comme un signal faible ; recouper avec le niveau ; pas d'action lourde",
+      "deterministic_narrative": "Vendeur 4869f7a5, fin 2018-06 : alerte sur remise tardive au transporteur (tendance : 6.1 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC10",
+      "category": "weak_trend",
+      "category_label": "Signal de tendance faible",
+      "seller_id": "aafe36600ce604f205b86b5084d3d767",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SC : 95 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 97 % ; destinations : autre 47 %, SP 36 % ; prix médian 59.9 R$, délai promis moyen 25.7 jours ; segment descriptif : grand volume, Sul.",
+      "deterministic_evidence": [
+        "Retard de livraison : 4.8 % sur les 90 derniers jours (n = 21 issues connues sur 27 commandes ; IC 95 % 0.9 % – 22.7 %) ; 5.6 % sur 12 mois (n = 89).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 16.7 % (n = 12) → 2018-04 12.5 % (n = 16) → 2018-05 6.2 % (n = 16) → 2018-06 4.8 % (n = 21).",
+        "Avis 1-2 étoiles : 14.3 % sur les 90 derniers jours (n = 21 issues connues sur 27 commandes ; IC 95 % 5.0 % – 34.6 %) ; 9.0 % sur 12 mois (n = 89).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 30.0 % (n = 10) → 2018-04 21.4 % (n = 14) → 2018-05 12.5 % (n = 16) → 2018-06 14.3 % (n = 21).",
+        "Remise tardive au transporteur : 19.2 % sur les 90 derniers jours (n = 26 issues connues sur 27 commandes ; IC 95 % 8.5 % – 37.9 %) ; 5.3 % sur 12 mois (n = 94)."
+      ],
+      "expected_observations": [
+        "ALERTE tendance (par rapport à son propre passé) — remise tardive au transporteur : 19.2 % sur 90 jours (n = 26) contre 1.2 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace) ; détecteur : test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 19.2 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "présenter l'alerte de tendance comme un signal faible ; recouper avec le niveau ; pas d'action lourde",
+      "deterministic_narrative": "Vendeur aafe3660, fin 2018-06 : alerte sur remise tardive au transporteur (tendance : 19.2 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC11",
+      "category": "weak_trend",
+      "category_label": "Signal de tendance faible",
+      "seller_id": "f8db351d8c4c4c22c6835c19a46f01b0",
+      "month": "2018-05",
+      "seller_context": "Vendeur de l’État SP : 399 commandes mono-vendeur achetées sur les 12 mois avant le 2018-06-01 ; catégories : housewares 29 %, autre 28 %, sports_leisure 11 % ; destinations : SP 42 %, autre 34 %, RJ 13 % ; prix médian 49.9 R$, délai promis moyen 22.1 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 7.2 % sur les 90 derniers jours (n = 97 issues connues sur 109 commandes ; IC 95 % 3.5 % – 14.1 %) ; 4.4 % sur 12 mois (n = 384).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-02 4.5 % (n = 44) → 2018-03 6.7 % (n = 60) → 2018-04 10.4 % (n = 67) → 2018-05 7.2 % (n = 97).",
+        "Avis 1-2 étoiles : 19.4 % sur les 90 derniers jours (n = 93 issues connues sur 109 commandes ; IC 95 % 12.6 % – 28.5 %) ; 9.4 % sur 12 mois (n = 382).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-02 12.8 % (n = 39) → 2018-03 8.6 % (n = 58) → 2018-04 14.8 % (n = 61) → 2018-05 19.4 % (n = 93).",
+        "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 106 issues connues sur 109 commandes ; IC 95 % 0.0 % – 3.5 %) ; 0.0 % sur 12 mois (n = 396)."
+      ],
+      "expected_observations": [
+        "ALERTE tendance (par rapport à son propre passé) — avis 1-2 étoiles : 19.4 % sur 90 jours (n = 93) contre 6.8 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace) ; détecteur : test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg.",
+        "Point fort — remise tardive au transporteur : 0.0 % sur 12 mois (n = 396) contre 5.5 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "Critiques partagées entre la livraison (13 avis) et le produit ou la préparation (9 avis) : traiter les délais (remise au transporteur, agent BO1) et contrôler préparation et fiches produit (agent BO2)."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "présenter l'alerte de tendance comme un signal faible ; recouper avec le niveau ; pas d'action lourde",
+      "deterministic_narrative": "Vendeur f8db351d, fin 2018-05 : alerte sur avis 1-2 étoiles (tendance : 19.4 % contre 14.6 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC12",
+      "category": "mixed",
+      "category_label": "Plaintes mixtes",
+      "seller_id": "c31eff8334d6b3047ed34bebd4d62c36",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 90 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 83 %, furniture_decor 17 % ; destinations : SP 52 %, autre 29 %, RJ 14 % ; prix médian 99.99 R$, délai promis moyen 23.7 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 10.2 % sur les 90 derniers jours (n = 59 issues connues sur 65 commandes ; IC 95 % 4.7 % – 20.5 %) ; 9.5 % sur 12 mois (n = 84).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 4.5 % (n = 22) → 2018-04 0.0 % (n = 21) → 2018-05 5.4 % (n = 37) → 2018-06 10.2 % (n = 59).",
+        "Avis 1-2 étoiles : 12.7 % sur les 90 derniers jours (n = 55 issues connues sur 65 commandes ; IC 95 % 6.3 % – 24.0 %) ; 17.5 % sur 12 mois (n = 80).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 31.8 % (n = 22) → 2018-04 21.1 % (n = 19) → 2018-05 11.1 % (n = 36) → 2018-06 12.7 % (n = 55).",
+        "Remise tardive au transporteur : 20.3 % sur les 90 derniers jours (n = 64 issues connues sur 65 commandes ; IC 95 % 12.3 % – 31.7 %) ; 20.2 % sur 12 mois (n = 89)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité moyenne — remise tardive au transporteur : 20.3 % sur 90 jours (n = 64) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 20.3 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "distinguer livraison et produit ; orienter vers logistique ET catalogue / préparation",
+      "deterministic_narrative": "Vendeur c31eff83, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 20.3 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC13",
+      "category": "mixed",
+      "category_label": "Plaintes mixtes",
+      "seller_id": "92eb0f42c21942b6552362b9b114707d",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 152 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : telephony 90 % ; destinations : SP 49 %, autre 36 % ; prix médian 13.87 R$, délai promis moyen 22.4 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 5.7 % sur les 90 derniers jours (n = 35 issues connues sur 40 commandes ; IC 95 % 1.6 % – 18.6 %) ; 8.9 % sur 12 mois (n = 146).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 9.8 % (n = 82) → 2018-04 21.6 % (n = 51) → 2018-05 13.5 % (n = 37) → 2018-06 5.7 % (n = 35).",
+        "Avis 1-2 étoiles : 15.2 % sur les 90 derniers jours (n = 33 issues connues sur 40 commandes ; IC 95 % 6.7 % – 30.9 %) ; 19.6 % sur 12 mois (n = 143).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 20.5 % (n = 78) → 2018-04 26.5 % (n = 49) → 2018-05 24.3 % (n = 37) → 2018-06 15.2 % (n = 33).",
+        "Remise tardive au transporteur : 32.5 % sur les 90 derniers jours (n = 40 issues connues sur 40 commandes ; IC 95 % 20.1 % – 48.0 %) ; 19.1 % sur 12 mois (n = 152)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 32.5 % sur 90 jours (n = 40) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 32.5 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "distinguer livraison et produit ; orienter vers logistique ET catalogue / préparation",
+      "deterministic_narrative": "Vendeur 92eb0f42, fin 2018-06 : alerte sur remise tardive au transporteur (niveau : 32.5 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC14",
+      "category": "mixed",
+      "category_label": "Plaintes mixtes",
+      "seller_id": "7178f9f4dd81dcef02f62acdf8151e01",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SC : 189 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 52 %, health_beauty 28 %, computers_accessories 14 % ; destinations : SP 39 %, autre 35 %, MG 13 % ; prix médian 84.9 R$, délai promis moyen 33.8 jours ; segment descriptif : grand volume, Sul.",
+      "deterministic_evidence": [
+        "Retard de livraison : 27.3 % sur les 90 derniers jours (n = 11 issues connues sur 13 commandes ; IC 95 % 9.8 % – 56.6 %) ; 3.2 % sur 12 mois (n = 187).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 2.0 % (n = 49) → 2018-04 0.0 % (n = 39) → 2018-05 8.7 % (n = 23) → 2018-06 27.3 % (n = 11).",
+        "Avis 1-2 étoiles : 16.7 % sur les 90 derniers jours (n = 12 issues connues sur 13 commandes ; IC 95 % 4.7 % – 44.8 %) ; 15.5 % sur 12 mois (n = 187).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 2.1 % (n = 47) → 2018-04 2.7 % (n = 37) → 2018-05 4.5 % (n = 22) → 2018-06 16.7 % (n = 12).",
+        "Remise tardive au transporteur : 54.5 % sur les 90 derniers jours (n = 11 issues connues sur 13 commandes ; IC 95 % 28.0 % – 78.7 %) ; 6.4 % sur 12 mois (n = 187)."
+      ],
+      "expected_observations": [
+        "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 54.5 % sur 90 jours (n = 11) contre 5.3 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+        "ALERTE tendance (par rapport à son propre passé) — remise tardive au transporteur : 54.5 % sur 90 jours (n = 11) contre 3.6 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace) ; détecteur : test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg."
+      ],
+      "supported_hypotheses": [
+        "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation : 54.5 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "distinguer livraison et produit ; orienter vers logistique ET catalogue / préparation",
+      "deterministic_narrative": "Vendeur 7178f9f4, fin 2018-06 : alerte sur remise tardive au transporteur (niveau et tendance : 54.5 % contre 5.3 % pour la marketplace)."
+    },
+    {
+      "case_id": "RC15",
+      "category": "insufficient",
+      "category_label": "Preuves insuffisantes",
+      "seller_id": "d9bd94811c3338dceb4181f3dbc0c73e",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 29 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 90 %, health_beauty 10 % ; destinations : SP 66 %, autre 21 % ; prix médian 80.38 R$, délai promis moyen 18.7 jours ; segment descriptif : volume moyen, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 0.0 % sur les 90 derniers jours (n = 25 issues connues sur 29 commandes ; IC 95 % 0.0 % – 13.3 %) ; 0.0 % sur 12 mois (n = 25).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-05 0.0 % (n = 4) → 2018-06 0.0 % (n = 25).",
+        "Avis 1-2 étoiles : 0.0 % sur les 90 derniers jours (n = 23 issues connues sur 29 commandes ; IC 95 % 0.0 % – 14.3 %) ; 0.0 % sur 12 mois (n = 23).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-05 0.0 % (n = 4) → 2018-06 0.0 % (n = 23).",
+        "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 29 issues connues sur 29 commandes ; IC 95 % 0.0 % – 11.7 %) ; 0.0 % sur 12 mois (n = 29)."
+      ],
+      "expected_observations": [
+        "Retard de livraison — détection niveau (par rapport à la marketplace) : volume insuffisant (25 issues connues sur 12 mois (minimum 30), 25 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Retard de livraison — détection tendance (par rapport à son propre passé) : volume insuffisant (25 issues connues sur 12 mois (minimum 30), 25 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection niveau (par rapport à la marketplace) : volume insuffisant (23 issues connues sur 12 mois (minimum 30), 23 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection tendance (par rapport à son propre passé) : volume insuffisant (23 issues connues sur 12 mois (minimum 30), 23 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection niveau (par rapport à la marketplace) : volume insuffisant (29 issues connues sur 12 mois (minimum 30), 29 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection tendance (par rapport à son propre passé) : volume insuffisant (29 issues connues sur 12 mois (minimum 30), 29 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible."
+      ],
+      "supported_hypotheses": [
+        "Volume insuffisant pour une alerte : suivre ce vendeur au niveau de son groupe de pairs."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "dire qu'aucune conclusion n'est possible ; recommander un suivi au niveau global, pas de sanction",
+      "deterministic_narrative": "Vendeur d9bd9481, fin 2018-06 : aucune alerte ; retard de livraison 0.0 % contre 7.9 % pour la marketplace."
+    },
+    {
+      "case_id": "RC16",
+      "category": "insufficient",
+      "category_label": "Preuves insuffisantes",
+      "seller_id": "951e8cef368f09bb3f3d03c00ca4702c",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 29 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : bed_bath_table 79 %, autre 21 % ; destinations : SP 66 %, autre 21 %, RJ 14 % ; prix médian 58.99 R$, délai promis moyen 22.3 jours ; segment descriptif : volume moyen, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 8.0 % sur les 90 derniers jours (n = 25 issues connues sur 29 commandes ; IC 95 % 2.2 % – 25.0 %) ; 8.0 % sur 12 mois (n = 25).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-05 0.0 % (n = 10) → 2018-06 8.0 % (n = 25).",
+        "Avis 1-2 étoiles : 8.3 % sur les 90 derniers jours (n = 24 issues connues sur 29 commandes ; IC 95 % 2.3 % – 25.9 %) ; 8.3 % sur 12 mois (n = 24).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-05 0.0 % (n = 9) → 2018-06 8.3 % (n = 24).",
+        "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 28 issues connues sur 29 commandes ; IC 95 % 0.0 % – 12.1 %) ; 0.0 % sur 12 mois (n = 28)."
+      ],
+      "expected_observations": [
+        "Retard de livraison — détection niveau (par rapport à la marketplace) : volume insuffisant (25 issues connues sur 12 mois (minimum 30), 25 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Retard de livraison — détection tendance (par rapport à son propre passé) : volume insuffisant (25 issues connues sur 12 mois (minimum 30), 25 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection niveau (par rapport à la marketplace) : volume insuffisant (24 issues connues sur 12 mois (minimum 30), 24 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection tendance (par rapport à son propre passé) : volume insuffisant (24 issues connues sur 12 mois (minimum 30), 24 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection niveau (par rapport à la marketplace) : volume insuffisant (28 issues connues sur 12 mois (minimum 30), 28 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection tendance (par rapport à son propre passé) : volume insuffisant (28 issues connues sur 12 mois (minimum 30), 28 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible."
+      ],
+      "supported_hypotheses": [
+        "Volume insuffisant pour une alerte : suivre ce vendeur au niveau de son groupe de pairs."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "dire qu'aucune conclusion n'est possible ; recommander un suivi au niveau global, pas de sanction",
+      "deterministic_narrative": "Vendeur 951e8cef, fin 2018-06 : aucune alerte ; retard de livraison 8.0 % contre 7.9 % pour la marketplace."
+    },
+    {
+      "case_id": "RC17",
+      "category": "insufficient",
+      "category_label": "Preuves insuffisantes",
+      "seller_id": "23c38debaffe4a25a30fdbd9b586a13f",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 29 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : garden_tools 76 %, autre 17 % ; destinations : SP 55 %, autre 24 %, MG 17 % ; prix médian 127.27 R$, délai promis moyen 21.1 jours ; segment descriptif : volume moyen, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 15.4 % sur les 90 derniers jours (n = 26 issues connues sur 29 commandes ; IC 95 % 6.2 % – 33.5 %) ; 15.4 % sur 12 mois (n = 26).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-04 0.0 % (n = 8) → 2018-05 16.7 % (n = 24) → 2018-06 15.4 % (n = 26).",
+        "Avis 1-2 étoiles : 3.9 % sur les 90 derniers jours (n = 26 issues connues sur 29 commandes ; IC 95 % 0.7 % – 18.9 %) ; 3.9 % sur 12 mois (n = 26).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-04 0.0 % (n = 6) → 2018-05 4.3 % (n = 23) → 2018-06 3.9 % (n = 26).",
+        "Remise tardive au transporteur : 3.7 % sur les 90 derniers jours (n = 27 issues connues sur 29 commandes ; IC 95 % 0.7 % – 18.3 %) ; 3.7 % sur 12 mois (n = 27)."
+      ],
+      "expected_observations": [
+        "Retard de livraison — détection niveau (par rapport à la marketplace) : volume insuffisant (26 issues connues sur 12 mois (minimum 30), 26 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Retard de livraison — détection tendance (par rapport à son propre passé) : volume insuffisant (26 issues connues sur 12 mois (minimum 30), 26 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection niveau (par rapport à la marketplace) : volume insuffisant (26 issues connues sur 12 mois (minimum 30), 26 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Avis 1-2 étoiles — détection tendance (par rapport à son propre passé) : volume insuffisant (26 issues connues sur 12 mois (minimum 30), 26 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection niveau (par rapport à la marketplace) : volume insuffisant (27 issues connues sur 12 mois (minimum 30), 27 sur 90 jours (minimum 10)) ; pas d'alerte possible.",
+        "Remise tardive au transporteur — détection tendance (par rapport à son propre passé) : volume insuffisant (27 issues connues sur 12 mois (minimum 30), 27 sur 90 jours (minimum 10), 0 dans son historique propre (minimum 15)) ; pas d'alerte possible."
+      ],
+      "supported_hypotheses": [
+        "Volume insuffisant pour une alerte : suivre ce vendeur au niveau de son groupe de pairs."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "dire qu'aucune conclusion n'est possible ; recommander un suivi au niveau global, pas de sanction",
+      "deterministic_narrative": "Vendeur 23c38deb, fin 2018-06 : aucune alerte ; retard de livraison 15.4 % contre 7.9 % pour la marketplace."
+    },
+    {
+      "case_id": "RC18",
+      "category": "strong",
+      "category_label": "Bonne performance",
+      "seller_id": "da8622b14eb17ae2831f4ac5b9dab84a",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 1026 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : bed_bath_table 82 %, health_beauty 18 % ; destinations : SP 55 %, autre 21 %, RJ 13 % ; prix médian 99.9 R$, délai promis moyen 22.1 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 3.8 % sur les 90 derniers jours (n = 267 issues connues sur 275 commandes ; IC 95 % 2.1 % – 6.8 %) ; 7.2 % sur 12 mois (n = 1018).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 7.4 % (n = 312) → 2018-04 10.8 % (n = 287) → 2018-05 8.1 % (n = 272) → 2018-06 3.8 % (n = 267).",
+        "Avis 1-2 étoiles : 6.2 % sur les 90 derniers jours (n = 257 issues connues sur 275 commandes ; IC 95 % 3.9 % – 9.9 %) ; 11.2 % sur 12 mois (n = 1006).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 10.4 % (n = 298) → 2018-04 13.4 % (n = 276) → 2018-05 11.6 % (n = 267) → 2018-06 6.2 % (n = 257).",
+        "Remise tardive au transporteur : 0.4 % sur les 90 derniers jours (n = 272 issues connues sur 275 commandes ; IC 95 % 0.1 % – 2.1 %) ; 0.9 % sur 12 mois (n = 1023)."
+      ],
+      "expected_observations": [
+        "Point fort — avis 1-2 étoiles : 11.2 % sur 12 mois (n = 1006) contre 14.5 % pour la marketplace, écart significatif.",
+        "Point fort — remise tardive au transporteur : 0.9 % sur 12 mois (n = 1023) contre 5.4 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "Aucune alerte : surveillance standard ; réévaluer à la prochaine décision mensuelle."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "souligner les points forts observés sans en tirer de cause ; pas d'action corrective inventée",
+      "deterministic_narrative": "Vendeur da8622b1, fin 2018-06 : aucune alerte ; retard de livraison 3.8 % contre 7.9 % pour la marketplace."
+    },
+    {
+      "case_id": "RC19",
+      "category": "strong",
+      "category_label": "Bonne performance",
+      "seller_id": "7a67c85e85bb2ce8582c35f2203ad736",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État SP : 738 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : cool_stuff 91 % ; destinations : autre 43 %, SP 32 %, RJ 13 % ; prix médian 119.99 R$, délai promis moyen 23.0 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 5.4 % sur les 90 derniers jours (n = 111 issues connues sur 122 commandes ; IC 95 % 2.5 % – 11.3 %) ; 6.0 % sur 12 mois (n = 721).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 12.2 % (n = 172) → 2018-04 12.3 % (n = 170) → 2018-05 9.5 % (n = 137) → 2018-06 5.4 % (n = 111).",
+        "Avis 1-2 étoiles : 9.8 % sur les 90 derniers jours (n = 112 issues connues sur 122 commandes ; IC 95 % 5.6 % – 16.7 %) ; 10.0 % sur 12 mois (n = 721).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 15.4 % (n = 169) → 2018-04 15.2 % (n = 164) → 2018-05 12.6 % (n = 135) → 2018-06 9.8 % (n = 112).",
+        "Remise tardive au transporteur : 0.9 % sur les 90 derniers jours (n = 118 issues connues sur 122 commandes ; IC 95 % 0.1 % – 4.6 %) ; 0.9 % sur 12 mois (n = 734)."
+      ],
+      "expected_observations": [
+        "Point fort — avis 1-2 étoiles : 10.0 % sur 12 mois (n = 721) contre 14.5 % pour la marketplace, écart significatif.",
+        "Point fort — remise tardive au transporteur : 0.9 % sur 12 mois (n = 734) contre 5.3 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "Aucune alerte : surveillance standard ; réévaluer à la prochaine décision mensuelle."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "souligner les points forts observés sans en tirer de cause ; pas d'action corrective inventée",
+      "deterministic_narrative": "Vendeur 7a67c85e, fin 2018-06 : aucune alerte ; retard de livraison 5.4 % contre 8.0 % pour la marketplace."
+    },
+    {
+      "case_id": "RC20",
+      "category": "strong",
+      "category_label": "Bonne performance",
+      "seller_id": "7299e27ed73d2ad986de7f7c77d919fa",
+      "month": "2018-06",
+      "seller_context": "Vendeur de l’État MG : 206 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 65 %, toys 29 % ; destinations : SP 38 %, autre 29 %, MG 18 % ; prix médian 69.99 R$, délai promis moyen 24.5 jours ; segment descriptif : grand volume, Sudeste.",
+      "deterministic_evidence": [
+        "Retard de livraison : 9.1 % sur les 90 derniers jours (n = 55 issues connues sur 66 commandes ; IC 95 % 4.0 % – 19.6 %) ; 4.2 % sur 12 mois (n = 193).",
+        "Évolution (retard de livraison, taux sur 90 jours à chaque fin de mois) : 2018-03 0.0 % (n = 16) → 2018-04 0.0 % (n = 16) → 2018-05 3.6 % (n = 28) → 2018-06 9.1 % (n = 55).",
+        "Avis 1-2 étoiles : 8.3 % sur les 90 derniers jours (n = 48 issues connues sur 66 commandes ; IC 95 % 3.3 % – 19.6 %) ; 5.3 % sur 12 mois (n = 188).",
+        "Évolution (avis 1-2 étoiles, taux sur 90 jours à chaque fin de mois) : 2018-03 0.0 % (n = 16) → 2018-04 0.0 % (n = 14) → 2018-05 7.4 % (n = 27) → 2018-06 8.3 % (n = 48).",
+        "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 65 issues connues sur 66 commandes ; IC 95 % 0.0 % – 5.6 %) ; 0.0 % sur 12 mois (n = 204)."
+      ],
+      "expected_observations": [
+        "Point fort — avis 1-2 étoiles : 5.3 % sur 12 mois (n = 188) contre 14.5 % pour la marketplace, écart significatif.",
+        "Point fort — remise tardive au transporteur : 0.0 % sur 12 mois (n = 204) contre 5.3 % pour la marketplace, écart significatif."
+      ],
+      "supported_hypotheses": [
+        "Aucune alerte : surveillance standard ; réévaluer à la prochaine décision mensuelle."
+      ],
+      "unsupported_explanations": [
+        "toute cause présentée comme certaine (Olist n'enregistre pas les causes)",
+        "tout chiffre absent des preuves ou recalculé",
+        "toute affirmation sur la publicité, les campagnes, les promotions ou le marketing du vendeur",
+        "toute pratique attribuée aux concurrents ou aux « meilleurs vendeurs » sans preuve",
+        "toute prédiction sur l'avenir du vendeur présentée comme certaine"
+      ],
+      "expected_recommendation": "souligner les points forts observés sans en tirer de cause ; pas d'action corrective inventée",
+      "deterministic_narrative": "Vendeur 7299e27e, fin 2018-06 : aucune alerte ; retard de livraison 9.1 % contre 7.9 % pour la marketplace."
+    }
+  ]
+}

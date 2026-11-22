@@ -36,3 +36,5 @@ flag_delivered_status_missing_date,Dates (signalées),8,8,True
 flag_delivery_date_on_undelivered_status,Dates (signalées),6,6,True
 geo_centroids_outside_brazil,Géolocalisation,0,0,True
 customers_with_geo,Géolocalisation,99162,information,True
+late_handover_label_only_when_eligible,Remise au transporteur,97657 étiquetées / 97657 éligibles,égalité,True
+shipping_limit_matches_raw,Remise au transporteur,98666,98666,True

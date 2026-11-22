@@ -1,0 +1,258 @@
+{
+  "case_id": "RC02",
+  "category": "persistent",
+  "slot": "b",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "analysis": {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Vendeur de l'État MA, 253 commandes mono-vendeur sur 12 mois, catégorie health_beauty à 100 %, prix médian 66,99 R$, délai promis moyen 30,4 jours.",
+          "type": "fait",
+          "preuves": [
+            "sel:06a2c3af:2018-06"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 19,1 % sur 90 jours (n = 157) contre 7,9 % pour la marketplace ; ratio ×2,43 ; au-dessus de la limite haute à 99,8 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:late",
+            "alr:06a2c3af:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 20,9 % sur 90 jours (n = 191) contre 5,2 % pour la marketplace ; ratio ×4,00 ; au-dessus de la limite haute à 99,8 % ; alerte sévérité élevée.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:handover",
+            "alr:06a2c3af:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 18,5 % sur 90 jours (n = 146) contre 14,4 % pour la marketplace ; pas d'alerte niveau ; dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:poor",
+            "alr:06a2c3af:2018-06:poor"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Remise tardive au transporteur à 20,9 % sur 90 jours, bien au-dessus de la marketplace à 5,2 % ; alerte sévérité élevée, déjà en alerte 3 mois auparavant.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:handover",
+            "alr:06a2c3af:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison à 19,1 % sur 90 jours, bien au-dessus de la marketplace à 7,9 % ; alerte sévérité moyenne, déjà en alerte 2 mois auparavant.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:late",
+            "alr:06a2c3af:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Évolution du retard de livraison : 16,1 % en 2018-03, 34,5 % en 2018-04, 23,7 % en 2018-05, 19,1 % en 2018-06 ; pic en avril puis baisse partielle.",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:06a2c3af:2018-06"
+          ]
+        },
+        {
+          "texte": "Évolution de la remise tardive au transporteur : 17,4 % en 2018-03, 28,0 % en 2018-04, 41,5 % en 2018-05, 20,9 % en 2018-06 ; pic en mai puis baisse partielle.",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:06a2c3af:2018-06"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Avis 1-2 étoiles à 18,5 % sur 90 jours, sans alerte niveau par rapport à la marketplace (14,4 %) et dans l'intervalle attendu (observé 27 contre attendu 27,8).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:poor",
+            "mdl:expected:06a2c3af:2018-06:poor",
+            "alr:06a2c3af:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte tendance pour le retard de livraison (19,1 % contre historique 25,4 %) ni pour la remise tardive au transporteur (20,9 % contre historique 27,2 %).",
+          "type": "fait",
+          "preuves": [
+            "alr:06a2c3af:2018-06:late",
+            "alr:06a2c3af:2018-06:handover"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Retard de livraison : 19,1 % contre 7,9 % marketplace (ratio ×2,43) ; position au-dessus de la limite haute à 99,8 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 20,9 % contre 5,2 % marketplace (ratio ×4,00) ; position au-dessus de la limite haute à 99,8 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 18,5 % contre 14,4 % marketplace (ratio ×1,28) ; dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:06a2c3af:2018-06:poor"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "Les retards de livraison pourraient être liés aux remises tardives au transporteur, les deux indicateurs évoluant de façon similaire sur les mois récents.",
+          "type": "hypothese",
+          "preuves": [
+            "kpi:history:06a2c3af:2018-06"
+          ]
+        },
+        {
+          "texte": "Les problèmes de préparation (stock, capacité, jours non ouvrés) pourraient expliquer la remise tardive au transporteur.",
+          "type": "hypothese",
+          "preuves": [
+            "alr:06a2c3af:2018-06:handover"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "La cause exacte des retards de livraison et des remises tardives n'est pas enregistrée dans Olist.",
+          "type": "inconnu",
+          "preuves": [
+            "alr:06a2c3af:2018-06:late",
+            "alr:06a2c3af:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Aucune donnée de publicité, campagne, promotion ou marketing n'est disponible dans Olist pour expliquer la performance.",
+          "type": "inconnu",
+          "preuves": []
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur à 20,9 % contre 5,2 % marketplace",
+        "action": "Vérifier avec le vendeur ses délais de préparation (stock, capacité, jours non ouvrés).",
+        "priorite": "haute",
+        "impact": "Baisse du taux de remise tardive au transporteur et du retard de livraison",
+        "direction_attendue": "Baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Cause exacte de la remise tardive (stock, capacité, jours non ouvrés)",
+        "preuves": [
+          "alr:06a2c3af:2018-06:handover",
+          "kpi:seller:06a2c3af:2018-06:handover"
+        ]
+      },
+      {
+        "faiblesse": "Retard de livraison à 19,1 % contre 7,9 % marketplace",
+        "action": "Traiter d'abord la préparation des commandes chez le vendeur, les retards coïncidant avec les remises tardives au transporteur.",
+        "priorite": "haute",
+        "impact": "Baisse du taux de retard de livraison",
+        "direction_attendue": "Baisse du taux de retard de livraison",
+        "information_manquante": "Lien de causalité entre remise tardive et retard de livraison",
+        "preuves": [
+          "alr:06a2c3af:2018-06:late"
+        ]
+      }
+    ],
+    "resume": "Le vendeur 06a2c3af présente un retard de livraison de 19,1 % sur 90 jours contre 7,9 % pour la marketplace et une remise tardive au transporteur de 20,9 % contre 5,2 %. Les avis 1-2 étoiles sont de 18,5 %, sans alerte niveau par rapport à la marketplace (14,4 %). La remise tardive au transporteur est en alerte sévérité élevée et le retard de livraison en alerte sévérité moyenne.",
+    "rejected": [
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Alerte niveau sur retard de livraison et remise tardive au transporteur",
+          "action": "Prendre contact avec le vendeur avant toute sanction : les écarts sont des associations observées, sans cause enregistrée.",
+          "priorite": "moyenne",
+          "impact": "Dialogue constructif avec le vendeur",
+          "direction_attendue": "Amélioration des délais de préparation",
+          "information_manquante": "Cause des écarts",
+          "preuves": []
+        },
+        "problems": [
+          "action sans preuve citée"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Risque de généralisation prématurée d'une action",
+          "action": "Mesurer l'effet de toute action (comparaison avec des vendeurs comparables non contactés) avant de la généraliser.",
+          "priorite": "basse",
+          "impact": "Validation de l'efficacité de l'action",
+          "direction_attendue": "Preuve d'impact avant déploiement",
+          "information_manquante": "Résultats de l'action testée",
+          "preuves": []
+        },
+        "problems": [
+          "affirmation causale non prudente",
+          "action sans preuve citée"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 22,
+      "items_valid": 20,
+      "items_rejected": 2,
+      "grounding_rate": 0.909
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "nvidia/nemotron-3.5-super-vl:free",
+      "model_returned": "nvidia/nemotron-3.5-super-vl:free",
+      "latency_s": 15.26,
+      "usage": {
+        "prompt_tokens": 13004,
+        "completion_tokens": 2388,
+        "total_tokens": 15392
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 15.36,
+      "package_chars": 28940
+    }
+  },
+  "error": null,
+  "judge": {
+    "scores": {
+      "adherence_preuves": 5,
+      "coherence_factuelle": 5,
+      "profondeur_analytique": 4,
+      "separation_faits_hypotheses": 5,
+      "pertinence_recommandations": 4,
+      "actionnabilite": 4,
+      "completude": 4,
+      "clarte": 5
+    },
+    "complete": true,
+    "causal": false,
+    "hallucination": false,
+    "comment": "Analyse fidèle aux preuves, avec une séparation claire faits/hypothèses et des inconnues bien identifiées. La profondeur aurait pu intégrer les aspects critiques des avis clients et le profil de similarité, et l'action 2 formule un impact causal implicite malgré l'absence de lien de causalité enregistré.",
+    "call": {
+      "latency_s": 4.63,
+      "usage": {
+        "prompt_tokens": 10702,
+        "completion_tokens": 191,
+        "total_tokens": 10893
+      },
+      "cost": 0.0,
+      "cached": false
+    }
+  },
+  "judge_error": null
+}

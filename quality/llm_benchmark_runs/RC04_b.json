@@ -1,0 +1,251 @@
+{
+  "case_id": "RC04",
+  "category": "persistent",
+  "slot": "b",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "analysis": {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Vendeur de l'État SP : 141 commandes mono-vendeur sur 12 mois avant le 2018-07-01 ; catégories computers_accessories 43 %, watches_gifts 40 %, autre 11 % ; destinations SP 53 %, autre 26 %, MG 11 % ; prix médian 124,9 R$, délai promis moyen 27,5 jours ; segment grand volume, Sudeste.",
+          "type": "fait",
+          "preuves": [
+            "sel:2eb70248:2018-06"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 57,0 % sur les 90 derniers jours (n = 114 issues connues sur 127 commandes ; IC 95 % 47,9 % – 65,7 %) ; 55,5 % sur 12 mois (n = 128).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 37,7 % sur les 90 derniers jours (n = 114 issues connues sur 127 commandes ; IC 95 % 29,4 % – 46,9 %) ; 37,0 % sur 12 mois (n = 127).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 13,3 % sur les 90 derniers jours (n = 105 issues connues sur 127 commandes ; IC 95 % 8,1 % – 21,1 %) ; 17,0 % sur 12 mois (n = 118).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:late"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Avis 1-2 étoiles : 57,0 % contre 14,3 % pour la marketplace (ratio ×3,97) ; alerte niveau sévérité élevée, au-dessus de la limite haute à 99,8 % ; déjà en alerte le mois précédent (2018-05).",
+          "type": "fait",
+          "preuves": [
+            "alr:2eb70248:2018-06:poor",
+            "kpi:seller:2eb70248:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 37,7 % contre 5,2 % pour la marketplace (ratio ×7,19) ; alerte niveau sévérité élevée, au-dessus de la limite haute à 99,8 % ; déjà en alerte 2 mois auparavant (2018-04, 2018-05).",
+          "type": "fait",
+          "preuves": [
+            "alr:2eb70248:2018-06:handover",
+            "kpi:seller:2eb70248:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Aspects les plus critiqués dans les avis clients (12 mois, 90 avis) : « Livraison et délais » (24 avis), « Qualité et état du produit » (20 avis), « Article erroné, manquant ou incomplet » (19 avis).",
+          "type": "fait",
+          "preuves": [
+            "mdl:aspects:seller:2eb70248:2018-06"
+          ]
+        },
+        {
+          "texte": "Évolution remise tardive au transporteur (90 jours) : 2018-03 18,2 % (n = 11) → 2018-04 44,1 % (n = 34) → 2018-05 29,2 % (n = 96) → 2018-06 37,7 % (n = 114).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:2eb70248:2018-06"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Retard de livraison : 13,3 % sur 90 jours contre 7,9 % pour la marketplace ; position dans l'intervalle attendu ; pas d'alerte niveau ; déjà en alerte le mois précédent (2018-05) mais non confirmé ce mois.",
+          "type": "fait",
+          "preuves": [
+            "alr:2eb70248:2018-06:late",
+            "kpi:seller:2eb70248:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Évolution retard de livraison (90 jours) : 2018-03 33,3 % (n = 9) → 2018-04 30,0 % (n = 20) → 2018-05 20,4 % (n = 54) → 2018-06 13,3 % (n = 105).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:2eb70248:2018-06"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Avis 1-2 étoiles : 57,0 % contre 14,3 % marketplace (ratio ×3,97) ; position au-dessus de la limite haute à 99,8 % ; taux rétréci 49,9 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 37,7 % contre 5,2 % marketplace (ratio ×7,19) ; position au-dessus de la limite haute à 99,8 % ; taux rétréci 32,7 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 13,3 % contre 7,9 % marketplace (ratio ×1,69) ; position dans l'intervalle attendu ; taux rétréci 15,6 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:late"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "La remise tardive au transporteur (37,7 %) pourrait expliquer en partie les retards de livraison et les avis 1-2 étoiles, à vérifier car Olist n'enregistre pas la cause des retards ni des notes basses.",
+          "type": "hypothese",
+          "preuves": [
+            "kpi:seller:2eb70248:2018-06:handover",
+            "kpi:seller:2eb70248:2018-06:poor",
+            "kpi:seller:2eb70248:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Les problèmes de stock, de capacité de préparation ou de jours non ouvrés pourraient expliquer la remise tardive au transporteur, à confirmer avec le vendeur.",
+          "type": "hypothese",
+          "preuves": [
+            "alr:2eb70248:2018-06:handover"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "Olist ne contient aucune donnée de publicité, campagne, promotion ou marketing ; ces informations manqueraient pour expliquer les variations de volume ou de note.",
+          "type": "inconnu",
+          "preuves": [
+            "ctx:limites"
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur à 37,7 % (alerte sévère, persistante depuis 2018-04).",
+        "action": "Vérifier avec le vendeur ses délais de préparation (stock, capacité, jours non ouvrés).",
+        "priorite": "haute",
+        "impact": "Baisse du taux de remise tardive au transporteur, réduction des retards de livraison et amélioration des avis.",
+        "direction_attendue": "Baisse du taux de remise tardive au transporteur vers le niveau marketplace (5,2 %).",
+        "information_manquante": "Cause exacte de la remise tardive (stock, capacité, jours non ouvrés) non enregistrée par Olist.",
+        "preuves": [
+          "alr:2eb70248:2018-06:handover",
+          "kpi:seller:2eb70248:2018-06:handover"
+        ]
+      }
+    ],
+    "resume": "Le vendeur 2eb70248 (SP, 141 commandes mono-vendeur sur 12 mois) présente deux alertes de niveau sévères fin 2018-06 : avis 1-2 étoiles à 57,0 % (n = 114) contre 14,3 % pour la marketplace, et remise tardive au transporteur à 37,7 % (n = 114) contre 5,2 %. Le retard de livraison s'améliore à 13,3 % (n = 105) contre 7,9 %, sans alerte de niveau.",
+    "rejected": [
+      {
+        "section": "inconnues",
+        "item": {
+          "texte": "La cause exacte des avis 1-2 étoiles et des retards n'est pas enregistrée dans Olist ; seule l'association observée est connue.",
+          "type": "inconnu",
+          "preuves": [
+            "actions"
+          ]
+        },
+        "problems": [
+          "preuve inconnue : actions"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Avis 1-2 étoiles à 57,0 % (alerte sévère, persistante depuis 2018-05) ; critiques partagées livraison (24 avis) et produit/préparation (39 avis).",
+          "action": "Traiter les délais (remise au transporteur) et contrôler la préparation et les fiches produit.",
+          "priorite": "haute",
+          "impact": "Baisse du taux d'avis 1-2 étoiles vers le niveau marketplace (14,3 %).",
+          "direction_attendue": "Baisse du taux d'avis 1-2 étoiles.",
+          "information_manquante": "Cause exacte des avis négatifs non enregistrée par Olist.",
+          "preuves": [
+            "alr:2eb70248:2018-06:poor",
+            "mdl:aspects:seller:2eb70248:2018-06"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 39"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Aucune des deux alertes n'a de cause enregistrée ; les écarts sont des associations observées.",
+          "action": "Prendre contact avec le vendeur avant toute sanction.",
+          "priorite": "moyenne",
+          "impact": "Décision éclairée sans sanction prématurée.",
+          "direction_attendue": "Dialogue constructif avec le vendeur avant mesure corrective.",
+          "information_manquante": "Aucune donnée de cause dans Olist.",
+          "preuves": [
+            "actions"
+          ]
+        },
+        "problems": [
+          "preuve inconnue : actions",
+          "action sans preuve citée"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Efficacité des actions correctives non mesurée.",
+          "action": "Mesurer l'effet de toute action (comparaison avec des vendeurs comparables non contactés) avant de la généraliser.",
+          "priorite": "moyenne",
+          "impact": "Validation de l'efficacité des actions avant déploiement large.",
+          "direction_attendue": "Preuve d'impact avant généralisation.",
+          "information_manquante": "Groupe de contrôle de vendeurs comparables non contactés.",
+          "preuves": [
+            "actions"
+          ]
+        },
+        "problems": [
+          "preuve inconnue : actions",
+          "action sans preuve citée"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 22,
+      "items_valid": 18,
+      "items_rejected": 4,
+      "grounding_rate": 0.818
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "nvidia/nemotron-3.5-super-vl:free",
+      "model_returned": "nvidia/nemotron-3.5-super-vl:free",
+      "latency_s": 19.16,
+      "usage": {
+        "prompt_tokens": 13063,
+        "completion_tokens": 2711,
+        "total_tokens": 15774
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 19.26,
+      "package_chars": 29272
+    }
+  },
+  "error": null,
+  "judge_error": {
+    "kind": "rate_limited",
+    "message": "inclusionai/ling-3.2-flash:free indisponible après 4 tentatives (HTTP 429)."
+  }
+}

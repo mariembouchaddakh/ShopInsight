@@ -1,0 +1,245 @@
+{
+  "case_id": "RC03",
+  "category": "persistent",
+  "slot": "b",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "analysis": {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Vendeur de l'État SP : 745 commandes mono-vendeur achetées sur les 12 mois avant le 2018-07-01 ; catégories : autre 91 % ; destinations : SP 41 %, autre 32 %, RJ 18 % ; prix médian 159,94 R$, délai promis moyen 34,1 jours ; segment descriptif : grand volume, Sudeste.",
+          "type": "fait",
+          "preuves": [
+            "sel:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "ALERTE niveau (par rapport à la marketplace), sévérité élevée — remise tardive au transporteur : 15,3 % sur 90 jours (n = 131) contre 5,1 % (taux de la marketplace) ; détecteur : a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil.",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : déjà en alerte 9 mois de décision auparavant (dernière : 2018-05, niveau (par rapport à la marketplace)).",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Remise tardive au transporteur : 15,3 % sur 90 jours contre 5,1 % pour l'ensemble des autres vendeurs (n = 66579) ; ratio ×2,97 ; position : au-dessus de la limite haute à 99,8 % ; taux du vendeur rétréci vers la marketplace : 20,3 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur — évolution : 2018-03 25,4 % (n = 232) → 2018-04 16,6 % (n = 223) → 2018-05 15,3 % (n = 216) → 2018-06 15,3 % (n = 131).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Avis écrits de ses clients (12 mois, publiés avant la décision) : 367 ; aspects les plus critiqués : « Livraison et délais » (78 avis) ; « Article erroné, manquant ou incomplet » (41 avis) ; « Retour, échange, remboursement » (33 avis).",
+          "type": "fait",
+          "preuves": [
+            "mdl:aspects:seller:7c67e144:2018-06"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Pas d'alerte niveau (par rapport à la marketplace) — retard de livraison : 8,9 % sur 90 jours (n = 124) contre 7,9 % (taux de la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte tendance (par rapport à son propre passé) — retard de livraison : 8,9 % sur 90 jours (n = 124) contre 10,6 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte niveau (par rapport à la marketplace) — avis 1-2 étoiles : 20,8 % sur 90 jours (n = 125) contre 14,3 % (taux de la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte tendance (par rapport à son propre passé) — avis 1-2 étoiles : 20,8 % sur 90 jours (n = 125) contre 27,7 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:poor"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Remise tardive au transporteur — comparaison à la marketplace : 15,3 % contre 5,1 % pour l'ensemble des autres vendeurs (n = 66579) ; ratio ×2,97 ; position : au-dessus de la limite haute à 99,8 % ; taux du vendeur rétréci vers la marketplace : 20,3 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison — comparaison à la marketplace : 8,9 % contre 7,9 % pour l'ensemble des autres vendeurs (n = 64686) ; ratio ×1,12 ; position : dans l'intervalle attendu ; taux du vendeur rétréci vers la marketplace : 10,3 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles — comparaison à la marketplace : 20,8 % contre 14,3 % pour l'ensemble des autres vendeurs (n = 64638) ; ratio ×1,46 ; position : dans l'intervalle attendu ; taux du vendeur rétréci vers la marketplace : 26,6 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:poor"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "Les délais de préparation du vendeur pourraient expliquer la remise tardive au transporteur (stock, capacité, jours non ouvrés).",
+          "type": "hypothese",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover",
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "La remise tardive au transporteur pourrait être liée aux retards de livraison et aux avis 1-2 étoiles observés sur les mêmes commandes.",
+          "type": "hypothese",
+          "preuves": [
+            "ord:024ab991361d48e491b7dad2f172b43f",
+            "ord:a87e931eec5702ceb837f15fdcf39684",
+            "ord:731739da258b5bf19d913f4c7dc53a3f"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "Olist n'enregistre pas pourquoi une commande est remise tardivement au transporteur : cause non établie par les données.",
+          "type": "inconnu",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Olist ne contient aucune donnée de publicité, campagne, promotion ou marketing : ces informations manqueraient pour expliquer les écarts de performance.",
+          "type": "inconnu",
+          "preuves": [
+            "ctx:limites"
+          ]
+        },
+        {
+          "texte": "Le modèle d'aspects des avis (baseline mots-clés portugais + note) est NON validé (DS2.1) : les aspects critiqués sont à interpréter avec prudence.",
+          "type": "inconnu",
+          "preuves": [
+            "mdl:aspects:seller:7c67e144:2018-06"
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur : 15,3 % sur 90 jours contre 5,1 % pour la marketplace (n = 131).",
+        "action": "Vérifier avec le vendeur ses délais de préparation : 15,3 % de ses commandes récentes ont été remises au transporteur après la date limite. Hypothèses à confirmer : stock, capacité, jours non ouvrés.",
+        "priorite": "haute",
+        "impact": "Baisse du taux de remise tardive au transporteur vers le niveau de la marketplace.",
+        "direction_attendue": "baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Cause de la remise tardive (stock, capacité, jours non ouvrés) non enregistrée par Olist.",
+        "preuves": [
+          "alr:7c67e144:2018-06:handover",
+          "kpi:seller:7c67e144:2018-06:handover"
+        ]
+      },
+      {
+        "faiblesse": "Avis 1-2 étoiles : 20,8 % sur 90 jours ; aspects les plus critiqués : « Livraison et délais » (78 avis).",
+        "action": "Prendre contact avec le vendeur avant toute sanction : les écarts sont des associations observées, sans cause enregistrée.",
+        "priorite": "moyenne",
+        "impact": "Amélioration de la satisfaction client et réduction des avis négatifs.",
+        "direction_attendue": "baisse du taux d'avis 1-2 étoiles",
+        "information_manquante": "Cause des avis négatifs non enregistrée par Olist.",
+        "preuves": [
+          "kpi:seller:7c67e144:2018-06:poor",
+          "mdl:aspects:seller:7c67e144:2018-06"
+        ]
+      },
+      {
+        "faiblesse": "Remise tardive au transporteur : alerte niveau sévérité élevée persistante depuis plusieurs mois.",
+        "action": "Mesurer l'effet de toute action (comparaison avec des vendeurs comparables non contactés) avant de la généraliser.",
+        "priorite": "basse",
+        "impact": "Validation de l'efficacité de l'intervention avant déploiement à grande échelle.",
+        "direction_attendue": "confirmation de l'impact de l'action sur le taux de remise tardive",
+        "information_manquante": "Données de vendeurs comparables non contactés pour groupe témoin.",
+        "preuves": [
+          "alr:7c67e144:2018-06:handover"
+        ]
+      }
+    ],
+    "resume": "Vendeur 7c67e144 (SP, grand volume, Sudeste) : 745 commandes mono-vendeur sur 12 mois. Alerte niveau sévérité élevée sur remise tardive au transporteur : 15,3 % sur 90 jours contre 5,1 % pour la marketplace (n = 131). Retard de livraison 8,9 % et avis 1-2 étoiles 20,8 % sans alerte niveau ni tendance à la décision.",
+    "rejected": [
+      {
+        "section": "situation",
+        "item": {
+          "texte": "Remise tardive au transporteur : 15,3 % sur les 90 derniers jours (n = 131 issues connues sur 152 commandes ; IC 95 % 10,1 % – 22,4 %) ; 20,8 % sur 12 mois (n = 723).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 95"
+        ]
+      },
+      {
+        "section": "faiblesses",
+        "item": {
+          "texte": "Avis 1-2 étoiles : 20,8 % sur les 90 derniers jours (n = 125 issues connues sur 152 commandes ; IC 95 % 14,6 % – 28,7 %) ; 26,9 % sur 12 mois (n = 714).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:poor"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 95"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 24,
+      "items_valid": 22,
+      "items_rejected": 2,
+      "grounding_rate": 0.917
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "nvidia/nemotron-3.5-super-vl:free",
+      "model_returned": "nvidia/nemotron-3.5-super-vl:free",
+      "latency_s": 18.38,
+      "usage": {
+        "prompt_tokens": 13379,
+        "completion_tokens": 2904,
+        "total_tokens": 16283
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 18.48,
+      "package_chars": 29674
+    }
+  },
+  "error": null,
+  "judge_error": {
+    "kind": "rate_limited",
+    "message": "inclusionai/ling-3.2-flash:free indisponible après 4 tentatives (HTTP 429)."
+  }
+}

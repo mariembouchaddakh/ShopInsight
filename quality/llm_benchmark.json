@@ -1,0 +1,158 @@
+{
+  "models": {
+    "a": "baidu/ernie-5.5-flash-preview:free",
+    "b": "nvidia/nemotron-3.5-super-vl:free",
+    "judge": "inclusionai/ling-3.2-flash:free"
+  },
+  "n_cases": 20,
+  "budget_usd": 0,
+  "per_model": {
+    "a": {
+      "model": "baidu/ernie-5.5-flash-preview:free",
+      "cases_attempted": 8,
+      "cases_ok": 8,
+      "failures": {},
+      "schema_ok_rate": 1.0,
+      "grounding_rate_mean": 0.937,
+      "items_valid_mean": 25.625,
+      "items_rejected_mean": 1.75,
+      "rejection_reasons": {
+        "chiffre non sourcé": 9,
+        "action sans preuve citée": 6
+      },
+      "hypotheses_mean": 3.375,
+      "actions_mean": 3.125,
+      "latency_s_median": 28.4,
+      "tokens_mean": 19299.375,
+      "cost_total_usd": 0.0,
+      "judge_cases": 7,
+      "judge_scores_mean": {
+        "adherence_preuves": 4.571,
+        "coherence_factuelle": 4.571,
+        "profondeur_analytique": 4,
+        "separation_faits_hypotheses": 5,
+        "pertinence_recommandations": 4.286,
+        "actionnabilite": 4.143,
+        "completude": 4.571,
+        "clarte": 4.857
+      },
+      "judge_overall_mean": 4.5,
+      "judge_causal_flags": 2,
+      "judge_hallucination_flags": 3,
+      "by_category": {
+        "insufficient": {
+          "ok": 0,
+          "grounding": null
+        },
+        "mixed": {
+          "ok": 0,
+          "grounding": null
+        },
+        "persistent": {
+          "ok": 4,
+          "grounding": 0.946
+        },
+        "recent": {
+          "ok": 4,
+          "grounding": 0.927
+        },
+        "strong": {
+          "ok": 0,
+          "grounding": null
+        },
+        "weak_trend": {
+          "ok": 0,
+          "grounding": null
+        }
+      }
+    },
+    "b": {
+      "model": "nvidia/nemotron-3.5-super-vl:free",
+      "cases_attempted": 8,
+      "cases_ok": 8,
+      "failures": {},
+      "schema_ok_rate": 0.875,
+      "grounding_rate_mean": 0.885,
+      "items_valid_mean": 19.75,
+      "items_rejected_mean": 2.625,
+      "rejection_reasons": {
+        "chiffre non sourcé": 11,
+        "action sans preuve citée": 6,
+        "affirmation causale non prudente": 4,
+        "preuve inconnue": 3,
+        "type absent ou invalide": 2
+      },
+      "hypotheses_mean": 2.125,
+      "actions_mean": 2.125,
+      "latency_s_median": 18.8,
+      "tokens_mean": 15465.25,
+      "cost_total_usd": 0.0,
+      "judge_cases": 4,
+      "judge_scores_mean": {
+        "adherence_preuves": 5,
+        "coherence_factuelle": 5,
+        "profondeur_analytique": 4,
+        "separation_faits_hypotheses": 5,
+        "pertinence_recommandations": 4,
+        "actionnabilite": 4,
+        "completude": 4.25,
+        "clarte": 5
+      },
+      "judge_overall_mean": 4.531,
+      "judge_causal_flags": 0,
+      "judge_hallucination_flags": 0,
+      "by_category": {
+        "insufficient": {
+          "ok": 0,
+          "grounding": null
+        },
+        "mixed": {
+          "ok": 0,
+          "grounding": null
+        },
+        "persistent": {
+          "ok": 4,
+          "grounding": 0.873
+        },
+        "recent": {
+          "ok": 4,
+          "grounding": 0.898
+        },
+        "strong": {
+          "ok": 0,
+          "grounding": null
+        },
+        "weak_trend": {
+          "ok": 0,
+          "grounding": null
+        }
+      }
+    }
+  },
+  "configured_in_env": {
+    "a": "google/gemma-4-31b-it:free",
+    "b": "nvidia/nemotron-3.5-super-vl:free",
+    "judge": "inclusionai/ling-3.2-flash:free"
+  },
+  "call_statuses_by_model": {
+    "nvidia/nemotron-3.5-super-vl:free": {
+      "200": 9
+    },
+    "google/gemma-4-31b-it:free": {
+      "429": 11
+    },
+    "inclusionai/ling-3.2-flash:free": {
+      "429": 54,
+      "200": 11
+    },
+    "baidu/ernie-5.5-flash-preview:free": {
+      "400": 8,
+      "200": 8,
+      "429": 1
+    }
+  },
+  "selection": {
+    "selected_slot": null,
+    "rule": "au moins 5 cas analysés ET jugés par modèle requis ; relancer le banc d'essai (quota gratuit journalier)"
+  }
+}
