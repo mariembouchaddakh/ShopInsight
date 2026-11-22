@@ -122,9 +122,9 @@ Olist est historique et statique. Le reporting mensuel peut être démontré en 
 Source : Brazilian E-Commerce Public Dataset by Olist, Kaggle. Licence affichée par la source : CC BY-NC-SA 4.0.
 
 
-## Dossier technique (V3, novembre 2026)
+## Rapport de validation technique (novembre 2026)
 
-La plateforme complète est décrite dans un document unique : **[docs/ShopInsight_Dossier_Technique.pdf](docs/ShopInsight_Dossier_Technique.pdf)**. Il couvre le pipeline de données, les agents BO1, BO2 et BO3, l'API FastAPI, l'interface React, la couche d'IA générative encadrée, le benchmark des modèles, les tests et résultats, les limites et la reproduction. Les fiches détaillées des DSO de BO3 se trouvent en section 7 ; elles sont résumées ci-dessous.
+Le rapport **[docs/ShopInsight_Dossier_Technique.pdf](docs/ShopInsight_Dossier_Technique.pdf)** (12 pages) présente l'état du projet pour validation : réalisation étape par étape, pile technique, architecture, workflows, coordination des agents BO1, BO2 et BO3, évaluation chiffrée de chaque agent et de la couche d'IA, limites et reproduction. Les fiches détaillées des DSO de BO3 sont ci-dessous.
 
 ## BO3 : audit des vendeurs (DS3.1, DS3.2, DS3.3)
 
@@ -182,7 +182,7 @@ Le code partagé est dans [src/agents/bo3_sellers.py](src/agents/bo3_sellers.py)
 | Métriques | **Précision** (coût d'une investigation inutile), **rappel**, **F1**, **alertes par mois** (charge de travail) et **gain** = précision / taux de base. Le gain est indispensable parce que l'événement est rare (≈ 3 %). |
 | Niveau retenu | Détecteur bêta-binomial (a priori = référence, τ = 0,99, ≥ 30 issues). Sur TEST : précision **20,5 %**, rappel 31,1 %, F1 0,247, 45 alertes/mois, **gain ×6,1** (taux de base 3,3 %). |
 | Tendance retenue | Binomial + BH contre l'historique (α = 0,05, ≥ 30 issues). Sur TEST : précision 7,8 %, rappel 14,1 %, gain ×2,4. C'est un signal faible, présenté comme tel. |
-| Benchmark | 12 détecteurs. Niveau : règle « > facteur × référence », binomial + BH, bêta-binomial, observé/attendu. Tendance : règle, binomial + BH (historique court et long), CUSUM ×1,5/×2/×3, bayésien, EWMA. Le tableau complet est en section 7.3 du dossier. |
+| Benchmark | 12 détecteurs. Niveau : règle « > facteur × référence », binomial + BH, bêta-binomial, observé/attendu. Tendance : règle, binomial + BH (historique court et long), CUSUM ×1,5/×2/×3, bayésien, EWMA. Le tableau complet est en section 8.5 du rapport. |
 | Sévérité | Règle fixée à l'avance. Précision sur TEST : élevée 28,2 %, moyenne 21,8 %, faible 0 %. L'ordre est respecté, donc la sévérité sert à prioriser. La règle de persistance n'a pas été adoptée. |
 | Dégradations simulées | Taux de détection en 3 mois pour une hausse de +5 / +10 / +20 points : retard 20 / 32 / 52 %, avis 8 / 12 / 32 %, remise 4 / 16 / 48 %. |
 | Historique | Rejoué de 2017-03 à 2018-08 : 1 426 lignes (526 nouvelles, 407 en cours, 493 résolues). |
