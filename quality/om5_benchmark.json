@@ -1,0 +1,72 @@
+{
+  "selection_rule_pre_test": "Paramètres fixés a priori; à sensibilité comparable, préférer la méthode qui utilise les dénominateurs, contrôle les comparaisons multiples et expose l'incertitude.",
+  "selected": "tests de proportion + BH pour taux; MAD robuste pour KPI continus",
+  "test_months": [
+    "2018-04",
+    "2018-05",
+    "2018-06"
+  ],
+  "test_read_once_by_this_script": true,
+  "results": {
+    "real_history": {
+      "ground_truth_available": false,
+      "unlabelled_alerts": 0,
+      "alert_rate_per_metric_month": 0.0,
+      "note": "Taux d'alertes descriptif, pas un faux-positif mesurable sans vérité terrain."
+    },
+    "simulation": {
+      "label": "anomalies injectées, non observations réelles",
+      "trials": 27,
+      "rates_by_delta_pp": {
+        "5": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        },
+        "10": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        },
+        "20": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        }
+      }
+    }
+  }
+}
