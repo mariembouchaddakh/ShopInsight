@@ -222,3 +222,16 @@ Tests : `python -m unittest tests/test_bo3.py tests/api/test_api.py tests/api/te
 
 La couche IA est facultative. Pour l'activer, copier `.env.example` en `.env` et renseigner `OPENROUTER_API_KEY` (modèles gratuits uniquement, budget 0 $).
 Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_dictionary.md), [docs/agents_BO1_BO2.md](docs/agents_BO1_BO2.md).
+
+## OM5 : monitoring autonome des KPI et reporting multi-agent
+
+OM5 ajoute un rapport global marketplace distinct des audits vendeur BO3 : KPI `as_of` ou rétrospectifs, comparaisons mensuelles, détection statistique, analyse des États/catégories, sélection dynamique de BO1/BO2/BO3, preuves validées et exports PDF/CSV/JSON. Le workflow fonctionne sans clé API et sans LLM.
+
+```powershell
+python src/run_om5.py --month 2018-03 --mode as_of --with-agents
+python src/evaluate_om5.py --project-dir .
+python -m uvicorn backend.app.main:app --port 8000
+# interface : http://localhost:5173/om5
+```
+
+Endpoints : `/api/om5/meta`, `/kpis`, `/trends`, `/anomalies`, `/segments`, `/report`, `/report.pdf`, `/kpis.csv`, `/evidence.csv`. Documentation : [architecture](docs/OM5_ARCHITECTURE.md), [fondements mathématiques](docs/OM5_MATHEMATICAL_FOUNDATIONS.md), [audit](docs/OM5_TECHNICAL_AUDIT.md) et [guide d'intégration](docs/OM5_INTEGRATION_GUIDE.md).
