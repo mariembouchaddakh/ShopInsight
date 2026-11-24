@@ -29,7 +29,7 @@ export interface Evidence {
 }
 
 export interface ReportResponse {
-  agent: "bo1" | "bo2" | "bo3"
+  agent: "bo1" | "bo2" | "bo3" | "bo4"
   report: Report
   markdown: string
   evidence: Evidence[]
@@ -242,6 +242,13 @@ export interface Health {
   config: Record<string, unknown>
 }
 
+export interface BO4Context {
+  order: { order_id: string; as_of: string; observable_status: string; promised_delivery_date: string | null; customer_state: string | null; category: string | null; item_count: number | null; seller_count: number | null }
+  timeline: { events: { event: string; at: string }[] }
+  eta: { state: string; valid_current_estimate: boolean; p10_date?: string; p50_date?: string; p90_date?: string; target_coverage?: number; model?: string; message?: string }
+  similar_orders: { count: number; cases: { order_id: string; customer_state?: string; primary_category?: string; delivery_duration_days?: number; similarity_distance: number }[] }
+}
+
 
 // ---- Analyse stratégique et assistant : contenu validé contre les preuves déterministes
 export type AiKind = "fait" | "hypothese" | "inconnu" | "piste"
@@ -451,6 +458,8 @@ export const api = {
   bo1Diagnosis: (orderId: string) => request<ReportResponse>(`/api/bo1/orders/${orderId}/diagnosis`),
   bo2Report: (p: { month?: string; state?: string; category?: string }) => request<ReportResponse>("/api/bo2/report", undefined, p),
   bo2DefaultMonth: () => request<{ month: string }>("/api/bo2/default-month"),
+  bo4Context: (orderId: string, asOf?: string) => request<ToolResponse<BO4Context>>(`/api/bo4/orders/${orderId}/context`, undefined, { as_of: asOf }),
+  bo4Ask: (orderId: string, question: string, asOf?: string) => request<ReportResponse>("/api/bo4/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order_id: orderId, question, as_of: asOf }) }),
   aiStatus: () => request<AiStatus>("/api/llm/status"),
   aiAnalysis: (seller: string, month: string | undefined, model: "a" | "b") =>
     request<AiAnalysis>(`/api/llm/sellers/${seller}/analysis`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ month, model }) }),

@@ -222,3 +222,17 @@ Tests : `python -m unittest tests/test_bo3.py tests/api/test_api.py tests/api/te
 
 La couche IA est facultative. Pour l'activer, copier `.env.example` en `.env` et renseigner `OPENROUTER_API_KEY` (modèles gratuits uniquement, budget 0 $).
 Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_dictionary.md), [docs/agents_BO1_BO2.md](docs/agents_BO1_BO2.md).
+
+## BO4 : assistant client historique
+
+BO4 ajoute des intervalles de livraison P10/P50/P90 conformalisés, une recherche hybride d'expériences (TF-IDF, BM25, BGE-M3, FAISS, RRF) et un assistant dont chaque affirmation renvoie à une preuve. Toutes les fonctions acceptent `as_of` et masquent jalons, issues et avis futurs. La page **BO4 — Assistant client** et l'API `/api/bo4` sont intégrées à la plateforme.
+
+Le protocole CRISP-DM, l'architecture, l'audit de fuite et les commandes sont dans [docs/agents_BO4.md](docs/agents_BO4.md). Les données préparées étant absentes de ce checkout, `quality/bo4_*` indique les évaluations restant à exécuter ; aucun résultat synthétique n'est présenté comme scientifique.
+
+```powershell
+pip install -r requirements.txt -r requirements-agents.txt -r requirements-api.txt -r requirements-bo4.txt
+python src/train_bo4_models.py --project-dir .
+python src/build_bo4_index.py --project-dir .
+python src/evaluate_bo4.py --project-dir .
+python src/run_agents.py bo4 --order <order_id> --as-of 2018-06-01 --ask "Quand arrivera ma commande ?"
+```

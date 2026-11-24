@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Bell, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
+import { Bell, Bot, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { AssistantWidget } from "@/components/assistant/assistant-widget"
@@ -22,7 +22,7 @@ const NAV = [
     ],
   },
   { group: "Commandes & livraisons", items: [{ to: "/bo1", label: "Commandes à risque", icon: PackageSearch }] },
-  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }] },
+  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }, { to: "/bo4", label: "BO4 — Assistant client", icon: Bot }] },
 ]
 
 function ApiStatus() {
