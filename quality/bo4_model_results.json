@@ -1,0 +1,6 @@
+{
+  "status": "not_evaluated",
+  "reason": "Prepared Olist datasets are absent from this checkout. Run prepare_data.py, build_model_features.py, then train_bo4_models.py.",
+  "metrics": {},
+  "synthetic_data_used_for_scientific_results": false
+}

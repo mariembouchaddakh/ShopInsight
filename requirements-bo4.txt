@@ -1,0 +1,5 @@
+# In addition to requirements.txt, requirements-agents.txt and requirements-api.txt
+lightgbm>=4.3
+rank-bm25>=0.2.2
+sentence-transformers>=3.0
+faiss-cpu>=1.8

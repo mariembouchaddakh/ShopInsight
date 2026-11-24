@@ -1,0 +1,6 @@
+{
+  "status": "awaiting_human_annotations",
+  "questions": 100,
+  "metrics": {},
+  "note": "No relevance scores are reported until candidate reviews receive human judgments."
+}
