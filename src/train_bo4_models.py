@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import sys
+import time
 
 import joblib
 import numpy as np
@@ -40,7 +41,12 @@ def pipe(frame: pd.DataFrame, quantile: float, kind: str):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--project-dir", type=Path, default=Path(".")); a = ap.parse_args()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--project-dir", type=Path, default=Path("."))
+    ap.add_argument("--linear-max-rows", type=int, default=12000,
+                    help="Deterministic chronological sample for the exact linear-programming baseline")
+    ap.add_argument("--refresh", action="store_true", help="Ignore resumable model checkpoints")
+    a = ap.parse_args()
     root = a.project_dir.resolve(); d = approval_time_frame(root)
     d = d[d.delivery_duration_days.notna() & (d.delivery_duration_days >= 0)].copy()
     # The outcome must have become observable before each fitting cutoff.
@@ -51,6 +57,7 @@ def main():
     ycol = "delivery_duration_days"; drop = {ycol, "order_id", "order_purchase_timestamp", "source_split", "order_delivered_customer_date",
                                              "order_status", "order_estimated_delivery_date", "order_approved_at", "review_answer_timestamp"}
     Xcols = [c for c in d.columns if c not in drop and not c.startswith("te_")]
+    cache = root / "data/model/bo4_training_cache"; cache.mkdir(parents=True, exist_ok=True)
     candidates = {}; fitted = {}
     gq = tuple(train[ycol].quantile([.1,.5,.9]).to_numpy())
     fitted["global_empirical"] = EmpiricalIntervalModel(gq)
@@ -60,11 +67,25 @@ def main():
         bp=fitted[kind].predict_frame(tune);candidates[kind]=interval_metrics(tune[ycol].to_numpy(),bp[:,0],bp[:,1],bp[:,2])
     for kind in ("linear", "gradient_boosting", "lightgbm"):
         try:
-            models = {}; features = None
-            for q, alpha in (("p10", .1), ("p50", .5), ("p90", .9)):
-                m, features = pipe(train[Xcols], alpha, kind); m.fit(train[Xcols], train[ycol]); models[q] = m
-            obj = DeliveryIntervalModel(models, Xcols, name=kind); pred = obj.predict_frame(tune)
+            checkpoint = cache / f"selection_{kind}.joblib"
+            fit_train = train
+            if kind == "linear" and len(train) > a.linear_max_rows:
+                idx = np.linspace(0, len(train) - 1, a.linear_max_rows, dtype=int)
+                fit_train = train.sort_values("order_purchase_timestamp").iloc[idx]
+            if checkpoint.exists() and not a.refresh:
+                print(f"[{kind}] reprise du checkpoint {checkpoint.name}", flush=True)
+                obj = joblib.load(checkpoint)
+            else:
+                print(f"[{kind}] entraînement sur {len(fit_train)} lignes", flush=True)
+                models = {}; features = None
+                for q, alpha in (("p10", .1), ("p50", .5), ("p90", .9)):
+                    started=time.time(); print(f"  {q}…", flush=True)
+                    m, features = pipe(fit_train[Xcols], alpha, kind); m.fit(fit_train[Xcols], fit_train[ycol]); models[q] = m
+                    print(f"  {q} terminé en {(time.time()-started)/60:.1f} min", flush=True)
+                obj = DeliveryIntervalModel(models, Xcols, name=kind); joblib.dump(obj, checkpoint)
+            pred = obj.predict_frame(tune)
             candidates[kind] = interval_metrics(tune[ycol].to_numpy(), pred[:, 0], pred[:, 1], pred[:, 2]); fitted[kind] = obj
+            candidates[kind]["fit_rows"] = int(len(fit_train))
         except RuntimeError as e:
             candidates[kind] = {"status": "skipped", "reason": str(e)}
     eligible = {k: v for k, v in candidates.items() if "mae" in v}
@@ -73,10 +94,19 @@ def main():
     # Refit the chosen learned family with all outcomes observable by 1 March;
     # March remains a disjoint conformal calibration window.
     if selected in ("linear", "gradient_boosting", "lightgbm"):
-        fit=pd.concat([train,tune],ignore_index=True);models={}
-        for q,alpha in (("p10",.1),("p50",.5),("p90",.9)):
-            m,_=pipe(fit[Xcols],alpha,selected);m.fit(fit[Xcols],fit[ycol]);models[q]=m
-        final=DeliveryIntervalModel(models,Xcols,name=selected)
+        fit=pd.concat([train,tune],ignore_index=True).sort_values("order_purchase_timestamp")
+        if selected == "linear" and len(fit) > a.linear_max_rows:
+            fit=fit.iloc[np.linspace(0,len(fit)-1,a.linear_max_rows,dtype=int)]
+        checkpoint=cache/f"final_{selected}.joblib"
+        if checkpoint.exists() and not a.refresh:
+            print(f"[final] reprise de {checkpoint.name}",flush=True);final=joblib.load(checkpoint)
+        else:
+            print(f"[final] réentraînement {selected} sur {len(fit)} lignes",flush=True);models={}
+            for q,alpha in (("p10",.1),("p50",.5),("p90",.9)):
+                started=time.time();print(f"  {q}…",flush=True)
+                m,_=pipe(fit[Xcols],alpha,selected);m.fit(fit[Xcols],fit[ycol]);models[q]=m
+                print(f"  {q} terminé en {(time.time()-started)/60:.1f} min",flush=True)
+            final=DeliveryIntervalModel(models,Xcols,name=selected);joblib.dump(final,checkpoint)
     cp = final.predict_frame(cal); scores = np.maximum(cp[:, 0] - cal[ycol].to_numpy(), cal[ycol].to_numpy() - cp[:, 2])
     final.calibration = float(max(0, np.quantile(scores, min(1, np.ceil((len(scores) + 1) * .8) / len(scores)), method="higher")))
     tp = final.predict_frame(test); test_metrics = interval_metrics(test[ycol].to_numpy(), tp[:, 0], tp[:, 1], tp[:, 2])
@@ -92,7 +122,9 @@ def main():
     save_results(root / "quality/bo4_model_results.json", {"status": "evaluated", "selection_split": candidates, "selected": selected,
                  "calibration_days": final.calibration, "test": test_metrics, "n": {"train": len(train), "tune": len(tune), "calibration": len(cal), "test": len(test)},
                  "original_marketplace_promise":promise,"test_slices":groups,
+                 "linear_baseline_sampling": {"max_rows": a.linear_max_rows, "method": "evenly_spaced_chronological"},
                  "leakage_audit": "BO1/BO2 shuffled target encodings excluded; outcomes constrained by fitting cutoff."})
+    print(f"BO4 sélectionné: {selected}; résultats: {root / 'quality/bo4_model_results.json'}", flush=True)
 
 
 if __name__ == "__main__": main()

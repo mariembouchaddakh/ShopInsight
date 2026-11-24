@@ -69,7 +69,9 @@ class HistoricalReviewIndex:
                 scores[i] += idf * tf * 2.2 / (tf + 1.2 * (1 - .75 + .75 * lens[i] / avg))
         return scores
 
-    def search(self, query: str, as_of: Any, order_id: str | None = None, context: dict | None = None, k: int = 5) -> list[dict]:
+    def search(self, query: str, as_of: Any, order_id: str | None = None, context: dict | None = None, k: int = 5,
+               system: str = "hybrid") -> list[dict]:
+        if system not in {"tfidf", "bm25", "dense", "hybrid"}: raise ValueError(f"Système de recherche inconnu: {system}")
         snapshots = [self._eligible(as_of, order_id, context), self._eligible(as_of, order_id, {"customer_state": (context or {}).get("customer_state")}),
                      self._eligible(as_of, order_id, None)]
         d = next((x for x in snapshots if len(x) >= max(k, 3)), snapshots[-1]).copy()
@@ -78,11 +80,14 @@ class HistoricalReviewIndex:
         texts = d.text_search.tolist(); vec = TfidfVectorizer(lowercase=True, ngram_range=(1, 2), min_df=1).fit(texts)
         tf = np.asarray((vec.transform(texts) @ vec.transform([query]).T).toarray()).ravel()
         bm = self._bm25([tokens(x) for x in texts], tokens(query))
-        rankings = [np.argsort(-tf).tolist(), np.argsort(-bm).tolist()]
+        rankings = []
+        if system in {"tfidf", "hybrid"}: rankings.append(np.argsort(-tf).tolist())
+        if system in {"bm25", "hybrid"}: rankings.append(np.argsort(-bm).tolist())
         dense_scores = None
-        if self.encoder is not None and self.embeddings is not None:
+        if system in {"dense", "hybrid"} and self.encoder is not None and self.embeddings is not None:
             q = self.encoder.encode([query], normalize_embeddings=True)[0]
             dense_scores = self.embeddings[d.index.to_numpy()] @ q; rankings.append(np.argsort(-dense_scores).tolist())
+        if not rankings: return []
         fused = rrf(rankings); order = sorted(fused, key=fused.get, reverse=True)
         out = []
         for pos in order:
@@ -93,7 +98,7 @@ class HistoricalReviewIndex:
                         "text_fr": r.full_fr, "translation_status": r.translation_status, "published_at": r.available_at.isoformat(),
                         "customer_state": r.get("customer_state"), "category": r.get("primary_category"),
                         "delivery_duration_days": None if pd.isna(r.get("delivery_duration_days")) else float(r.delivery_duration_days),
-                        "rrf_score": fused[pos]})
+                        "retrieval_system": system, "rrf_score": fused[pos]})
             if len(out) >= k: break
         return out
 
