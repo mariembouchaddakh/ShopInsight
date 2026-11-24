@@ -1,0 +1,139 @@
+{
+  "dataset": {
+    "name": "Brazilian E-Commerce Public Dataset by Olist",
+    "authentic": true,
+    "orders": 99441,
+    "complete_months": 21,
+    "train": "2016-10..2017-12",
+    "validation": "2018-01..2018-03",
+    "test": [
+      "2018-04",
+      "2018-05",
+      "2018-06"
+    ]
+  },
+  "kpis": {
+    "gold_concordance_checks": 126,
+    "gold_concordance_passed": 126,
+    "gold_concordance_rate": 1.0,
+    "temporal_invariance_after_future_suppression": true,
+    "zero_denominator_returns_null": true
+  },
+  "detectors": {
+    "real_history": {
+      "ground_truth_available": false,
+      "unlabelled_alerts": 0,
+      "alert_rate_per_metric_month": 0.0,
+      "note": "Taux d'alertes descriptif, pas un faux-positif mesurable sans vérité terrain."
+    },
+    "simulation": {
+      "label": "anomalies injectées, non observations réelles",
+      "trials": 27,
+      "rates_by_delta_pp": {
+        "5": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        },
+        "10": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        },
+        "20": {
+          "positive_trials": 9,
+          "negative_controls": 9,
+          "robust": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "false_alert_rate": 0.0
+          },
+          "simple_threshold": {
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571,
+            "false_alert_rate": 0.3333333333333333
+          }
+        }
+      }
+    }
+  },
+  "agent": {
+    "scenarios": {
+      "degradation_2018_03": {
+        "expected_segment_analysis": true,
+        "passed": true,
+        "evidence_valid": true,
+        "calls": 5
+      },
+      "standard_2018_06": {
+        "unnecessary_external_calls": 0,
+        "within_budget": true
+      },
+      "agents_unavailable": {
+        "partial_report": true,
+        "evidence_valid": true,
+        "errors_captured": 3
+      }
+    },
+    "latency_seconds_cold": 5.03,
+    "works_without_llm": true,
+    "citation_accuracy": 1.0,
+    "ablation": {
+      "kpi_only": {
+        "components": [
+          "KPI"
+        ],
+        "agent_calls": 0
+      },
+      "kpi_detection": {
+        "components": [
+          "KPI",
+          "détection"
+        ],
+        "detected_2018_03": 3
+      },
+      "dynamic_agents": {
+        "components": [
+          "KPI",
+          "détection",
+          "planification"
+        ],
+        "planned_tools": [
+          "get_monthly_kpis",
+          "compare_periods",
+          "detect_kpi_anomalies",
+          "analyze_segments",
+          "analyze_segments"
+        ]
+      },
+      "validated_llm": {
+        "executed": false,
+        "reason": "Aucune clé API requise ni utilisée; fallback déterministe évalué."
+      }
+    }
+  }
+}
