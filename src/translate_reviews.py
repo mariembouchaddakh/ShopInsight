@@ -207,10 +207,12 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--device", default="auto", help="auto, cpu ou cuda")
     parser.add_argument("--limit", type=int, help="Traduire seulement les N premiers avis (test rapide)")
+    parser.add_argument("--checkpoint-rows", type=int, default=256,
+                        help="Nombre de textes traduits entre deux écritures durables du cache")
     args = parser.parse_args()
     project_dir = args.project_dir.resolve()
     translator = MarianPivotTranslator(batch_size=args.batch_size, device=args.device)
-    run(project_dir, translator, limit=args.limit)
+    run(project_dir, translator, limit=args.limit, chunk=args.checkpoint_rows)
 
 
 if __name__ == "__main__":
