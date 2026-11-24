@@ -401,6 +401,69 @@ export interface AiStatus {
   models: Record<"a" | "b" | "judge", { id: string | null; free_verified: boolean }>
 }
 
+export type Om5Mode = "as_of" | "retrospective"
+export interface Om5Kpi {
+  metric_id: string
+  label: string
+  value: number | null
+  unit: string
+  numerator: number | null
+  denominator: number | null
+  period: string
+  source: string
+  available_at: string
+  evidence_id: string
+  quality_status: string
+  mode: Om5Mode
+  direction: "higher" | "lower"
+}
+export interface Om5Anomaly {
+  metric_id: string
+  label: string
+  unit: string
+  value: number | null
+  baseline: number | null
+  method: string
+  robust_z: number | null
+  q_value: number | null
+  sample_size: number
+  sufficient_n: boolean
+  anomaly: boolean
+  severity: "none" | "medium" | "high"
+  evidence_id: string
+}
+export interface Om5Recommendation {
+  metric_id: string
+  severity: string
+  priority_score: number
+  recommendation: string
+  justification: string
+  evidence_id: string
+}
+export interface Om5Trace {
+  tool: string
+  status: "ok" | "error" | "skipped" | "deduplicated"
+  duration_ms?: number
+  reason?: string
+  error?: string
+}
+export interface Om5ReportResponse {
+  agent: "om5"
+  report: Report & { meta: {
+    partial: boolean
+    evidence_valid: boolean
+    anomalies: Om5Anomaly[]
+    recommendations: Om5Recommendation[]
+    tool_trace: Om5Trace[]
+    agent_insights: Record<string, unknown>
+    segments: Record<string, unknown>
+    calls_used: number
+    call_budget: number
+  } }
+  markdown: string
+  evidence: Evidence[]
+}
+
 export class ApiError extends Error {
   status: number
   constructor(status: number, message: string) {
@@ -467,4 +530,8 @@ export const api = {
   callList: (month?: string) => request<ToolResponse<CallList>>("/api/bo3/call-list", undefined, { month }),
   familyTrends: (month?: string) => request<ToolResponse<FamilyTrends>>("/api/bo3/market-map/trends", undefined, { month }),
   brief: (month?: string) => request<ToolResponse<Brief>>("/api/bo3/brief", undefined, { month }),
+  om5Report: (month: string, mode: Om5Mode, include_agents = true) =>
+    request<Om5ReportResponse>("/api/om5/report", undefined, { month, mode, include_agents }),
+  om5Kpis: (month: string, mode: Om5Mode) => request<{ month: string; mode: Om5Mode; kpis: Om5Kpi[] }>("/api/om5/kpis", undefined, { month, mode }),
+  om5Trends: (mode: Om5Mode) => request<{ mode: Om5Mode; rows: Record<string, number | string | boolean | null>[] }>("/api/om5/trends", undefined, { mode }),
 }
