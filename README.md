@@ -227,12 +227,13 @@ Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_diction
 
 BO4 ajoute des intervalles de livraison P10/P50/P90 conformalisés, une recherche hybride d'expériences (TF-IDF, BM25, BGE-M3, FAISS, RRF) et un assistant dont chaque affirmation renvoie à une preuve. Toutes les fonctions acceptent `as_of` et masquent jalons, issues et avis futurs. La page **BO4 — Assistant client** et l'API `/api/bo4` sont intégrées à la plateforme.
 
-Le protocole CRISP-DM, l'architecture, l'audit de fuite et les commandes sont dans [docs/agents_BO4.md](docs/agents_BO4.md). Les données préparées étant absentes de ce checkout, `quality/bo4_*` indique les évaluations restant à exécuter ; aucun résultat synthétique n'est présenté comme scientifique.
+Le protocole CRISP-DM, l'architecture, l'audit de fuite et les commandes sont dans [docs/agents_BO4.md](docs/agents_BO4.md). Les artefacts volumineux restent hors Git, mais les rapports `quality/bo4_*` consignent désormais une exécution complète sur les données Olist originales. Gradient Boosting est sélectionné (test : MAE 3,846 jours, RMSE 5,923, PICP 0,762, MPIW 11,908 et Winkler 18,576). Les métriques de pertinence retrieval restent volontairement vides tant que les 1 464 candidats n'ont pas reçu de jugements humains.
 
 ```powershell
 pip install -r requirements.txt -r requirements-agents.txt -r requirements-api.txt -r requirements-bo4.txt
 python src/train_bo4_models.py --project-dir .
 python src/build_bo4_index.py --project-dir .
 python src/evaluate_bo4.py --project-dir .
+python src/evaluate_bo4_agent.py --project-dir . --scenarios 60
 python src/run_agents.py bo4 --order <order_id> --as-of 2018-06-01 --ask "Quand arrivera ma commande ?"
 ```
