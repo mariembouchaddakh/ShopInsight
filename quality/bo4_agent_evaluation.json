@@ -1,0 +1,7 @@
+{
+  "status": "not_evaluated",
+  "reason": "The real Olist prepared datasets and trained BO4 artifacts are absent. Synthetic fixtures are used only for software tests.",
+  "scenarios": 0,
+  "metrics": {},
+  "synthetic_data_used_for_scientific_results": false
+}

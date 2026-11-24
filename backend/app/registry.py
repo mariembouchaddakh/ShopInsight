@@ -19,13 +19,15 @@ sys.path.insert(0, str(ROOT / "src"))
 from agents.bo1_agent import PreventiveDiagnosisAgent  # noqa: E402
 from agents.bo2_agent import VoiceOfCustomerAgent  # noqa: E402
 from agents.bo3_agent import SellerAuditAgent  # noqa: E402
+from agents.bo4_agent import CustomerAssistantAgent  # noqa: E402
 
 FACTORIES: dict[str, Callable[[Path], Any]] = {
     "bo3": lambda p: SellerAuditAgent(p, translate_quotes=True),
     "bo1": lambda p: PreventiveDiagnosisAgent(p),
     "bo2": lambda p: VoiceOfCustomerAgent(p),
+    "bo4": lambda p: CustomerAssistantAgent(p),
 }
-WARMUP_ORDER = ("bo3", "bo1", "bo2")
+WARMUP_ORDER = ("bo3", "bo1", "bo2", "bo4")
 
 
 class AgentUnavailable(RuntimeError):

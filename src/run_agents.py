@@ -23,18 +23,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from agents.bo1_agent import PreventiveDiagnosisAgent  # noqa: E402
 from agents.bo2_agent import VoiceOfCustomerAgent  # noqa: E402
 from agents.bo3_agent import SellerAuditAgent  # noqa: E402
+from agents.bo4_agent import CustomerAssistantAgent  # noqa: E402
 from agents.core import LLMClient  # noqa: E402
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("agent", choices=["bo1", "bo2", "bo3"])
+    ap.add_argument("agent", choices=["bo1", "bo2", "bo3", "bo4"])
     ap.add_argument("--project-dir", type=Path, default=Path("."))
     ap.add_argument("--llm-url")
     ap.add_argument("--llm-model")
     ap.add_argument("--json", type=Path, help="écrit aussi le rapport en JSON")
     ap.add_argument("--ask", help="question en langage naturel")
     ap.add_argument("--order")
+    ap.add_argument("--as-of", help="BO4: historical ISO-8601 timestamp")
     ap.add_argument("--triage", metavar="AAAA-MM")
     ap.add_argument("--target", choices=["late", "poor"], default="late")
     ap.add_argument("--audit", action="store_true", help="BO1 : affiche aussi l'issue réelle (évaluation rétrospective uniquement)")
@@ -63,7 +65,7 @@ def main() -> None:
     elif a.agent == "bo2":
         ag = VoiceOfCustomerAgent(a.project_dir, llm)
         rep = ag.ask(a.ask) if a.ask else ag.report(a.month, a.state, a.category)
-    else:
+    elif a.agent == "bo3":
         ag = SellerAuditAgent(a.project_dir, llm)
         if a.seller:
             rep = ag.audit(a.seller, a.month, a.metric)
@@ -73,6 +75,10 @@ def main() -> None:
             rep = ag.ask(a.ask)
         else:
             ap.error("bo3 : --seller, --alerts ou --ask requis")
+    else:
+        if not a.order or not a.ask:
+            ap.error("bo4 : --order et --ask requis")
+        rep = CustomerAssistantAgent(a.project_dir, llm).answer_customer_question(a.order, a.ask, a.as_of)
     print(rep.to_markdown())
     if a.json:
         a.json.write_text(json.dumps(rep.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
