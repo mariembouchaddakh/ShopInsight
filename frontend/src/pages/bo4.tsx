@@ -18,8 +18,9 @@ export function Bo4Page() {
   const [orderId, setOrderId] = useState("")
   const [asOf, setAsOf] = useState("2018-08-31")
   const [question, setQuestion] = useState(QUESTIONS[0])
-  const context = useQuery({ queryKey: ["bo4-context", orderId, asOf], queryFn: () => api.bo4Context(orderId, asOf), enabled: orderId.length >= 8, retry: false })
-  const ask = useMutation({ mutationFn: () => api.bo4Ask(orderId, question, asOf) })
+  const asOfTimestamp = asOf ? `${asOf}T23:59:59` : undefined
+  const context = useQuery({ queryKey: ["bo4-context", orderId, asOf], queryFn: () => api.bo4Context(orderId, asOfTimestamp), enabled: orderId.length >= 8, retry: false })
+  const ask = useMutation({ mutationFn: () => api.bo4Ask(orderId, question, asOfTimestamp) })
   const c = context.data?.result
   return <div>
     <PageHeader title="BO4 · Assistant client" description="Démonstration historique Olist : faits vérifiés à la date choisie, intervalle statistique et expériences comparables. Aucun suivi GPS en temps réel." />
@@ -39,7 +40,7 @@ export function Bo4Page() {
         <Card><CardHeader><CardTitle className="flex items-center gap-2"><History className="size-4"/>Jalons observables</CardTitle></CardHeader><CardContent className="space-y-4">{c.timeline.events.map((e) => <div key={e.event} className="flex gap-3"><CheckCircle2 className="mt-0.5 size-4 text-forest"/><div><p className="text-sm font-medium">{label[e.event] ?? e.event}</p><p className="text-xs text-muted-foreground">{e.at.slice(0,16).replace("T"," ")}</p></div></div>)}</CardContent></Card>
         <Card><CardHeader><CardTitle>Commandes historiques comparables</CardTitle></CardHeader><CardContent className="space-y-3">{c.similar_orders.cases.length ? c.similar_orders.cases.map((x) => <div key={x.order_id} className="rounded-lg border p-3 text-sm"><div className="flex justify-between"><span>#{x.order_id.slice(0,8)}</span><Badge variant="outline">{x.customer_state ?? "—"}</Badge></div><p className="mt-1 text-muted-foreground">{x.primary_category ?? "Catégorie inconnue"} · {x.delivery_duration_days?.toFixed(1) ?? "—"} jours</p></div>) : <p className="text-sm text-muted-foreground">Pas assez de cas antérieurs pertinents.</p>}</CardContent></Card>
       </div>
-      <Card className="mb-6"><CardHeader><CardTitle className="flex items-center gap-2"><MessageCircleQuestion className="size-4"/>Poser une question</CardTitle></CardHeader><CardContent><div className="mb-3 flex flex-wrap gap-2">{QUESTIONS.map((q) => <Button key={q} size="sm" variant={question===q?"default":"outline"} onClick={() => setQuestion(q)}>{q}</Button>)}</div><form className="flex gap-2" onSubmit={(e)=>{e.preventDefault();ask.mutate()}}><Input value={question} onChange={(e)=>setQuestion(e.target.value)}/><Button disabled={ask.isPending}>Répondre</Button></form></CardContent></Card>
+      <Card className="mb-6"><CardHeader><CardTitle className="flex items-center gap-2"><MessageCircleQuestion className="size-4"/>Poser une question</CardTitle></CardHeader><CardContent><div className="mb-3 flex flex-wrap gap-2">{QUESTIONS.map((q) => <Button key={q} type="button" size="sm" variant={question===q?"default":"outline"} onClick={() => setQuestion(q)}>{q}</Button>)}</div><form className="flex gap-2" onSubmit={(e)=>{e.preventDefault();ask.mutate()}}><Input value={question} onChange={(e)=>setQuestion(e.target.value)}/><Button type="submit" disabled={ask.isPending}>Répondre</Button></form></CardContent></Card>
       {ask.isPending && <LoadingBlock rows={5}/>} {ask.isError && <ErrorBlock error={ask.error}/>} {ask.data && <ReportView report={ask.data.report} evidence={ask.data.evidence}/>}
     </>}
   </div>

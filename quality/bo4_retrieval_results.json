@@ -1,6 +1,39 @@
 {
   "status": "awaiting_human_annotations",
   "questions": 100,
-  "metrics": {},
-  "note": "No relevance scores are reported until candidate reviews receive human judgments."
+  "candidate_rows": 1464,
+  "systems": [
+    "tfidf",
+    "bm25",
+    "dense",
+    "hybrid"
+  ],
+  "latency": {
+    "tfidf": {
+      "mean_ms": 84.39877900120337,
+      "p95_ms": 140.77019498654408,
+      "queries": 100
+    },
+    "bm25": {
+      "mean_ms": 81.74495500163175,
+      "p95_ms": 133.64936998987102,
+      "queries": 100
+    },
+    "dense": {
+      "mean_ms": 198.76741499989294,
+      "p95_ms": 257.6335750054568,
+      "queries": 100
+    },
+    "hybrid": {
+      "mean_ms": 199.82279300049413,
+      "p95_ms": 253.15865001466588,
+      "queries": 100
+    }
+  },
+  "index_files_bytes": {
+    "data/model/bo4_review_embeddings.joblib": 174846226,
+    "data/model/bo4_reviews.faiss": 174845997
+  },
+  "relevance_metrics": {},
+  "note": "Precision/recall/MRR/nDCG are intentionally blank until pooled candidates receive human judgments."
 }

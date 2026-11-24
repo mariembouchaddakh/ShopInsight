@@ -22,7 +22,7 @@ flowchart LR
 
 Entrées : `features_{train,valid,test}.csv.gz`, `orders_analysis.csv.gz`, `reviews_text.jsonl.gz` et sa traduction française. La date individuelle `review_answered_at` (ou `review_created_at`) détermine la disponibilité d'un avis. Une issue n'est disponible qu'à `order_delivered_customer_date`.
 
-Les données préparées ne sont pas versionnées et sont absentes du présent checkout. Aucun score scientifique n'est donc publié ; les fixtures synthétiques servent uniquement aux tests logiciels.
+Les données préparées et modèles ne sont pas versionnés. La reproduction réelle utilise les neuf CSV Olist originaux, dont les empreintes sont contrôlées par `prepare_data.py`. Les rapports agrégés reproductibles sont conservés sous `quality/`, sans publier les données ni les représentations vectorielles.
 
 ## 3. Préparation et audit de fuite
 
@@ -34,11 +34,17 @@ Le benchmark compare quantiles globaux et régionaux, régression quantile liné
 
 Mesures : MAE, RMSE, pinball P10/P50/P90, PICP, MPIW et Winkler, globalement et par mois, État et nombre de vendeurs. La promesse marketplace est comparée séparément.
 
+### Résultats réels
+
+Sur la sélection chronologique, Gradient Boosting obtient le meilleur critère (MAE 4,302 jours, PICP 0,795, Winkler 19,779) devant les baselines empirique, régionale, linéaire et LightGBM. Après réentraînement et calibration conformale sur mars 2018, le test intact avril–août 2018 donne : MAE 3,846 jours, RMSE 5,923, pinball P10/P50/P90 0,591/1,923/1,266, PICP 0,762, MPIW 11,908 et Winkler 18,576 sur 32 150 commandes. La couverture sous la cible de 80 % est une limitation observée sous dérive temporelle, pas un résultat à masquer.
+
 ## 5. Recherche hybride
 
 `HistoricalReviewIndex` reconstruit le corpus disponible à `as_of`, recalcule TF-IDF et BM25 sur ce snapshot, ajoute facultativement BGE-M3, puis fusionne par RRF. Les filtres région/catégorie sont relâchés progressivement. Un résultat sans pertinence minimale n'est pas ajouté pour remplir `top-k`. Les commandes comparables doivent être livrées avant `as_of` et la cible est exclue.
 
 `evaluate_bo4.py` produit 100 questions bilingues et un gabarit d'annotation. Precision@5, Recall@5, MRR et nDCG@5 ne doivent être calculés qu'après jugements humains ; le résultat reste explicitement en attente jusque-là.
+
+L'exécution réelle indexe 42 687 avis en 1 024 dimensions avec BGE-M3 et FAISS. Sur 100 questions et avec le modèle en cache local, les latences moyennes du dernier rapport sont 84,4 ms (TF-IDF), 81,7 ms (BM25), 198,8 ms (dense) et 199,8 ms (hybride). Le pool contient 1 464 couples question–document à annoter ; aucune pertinence humaine n'a été inventée.
 
 ## 6. Déploiement et sécurité
 
@@ -62,6 +68,7 @@ pip install -r requirements.txt -r requirements-agents.txt -r requirements-api.t
 python src/train_bo4_models.py --project-dir .
 python src/build_bo4_index.py --project-dir .
 python src/evaluate_bo4.py --project-dir .
+python src/evaluate_bo4_agent.py --project-dir . --scenarios 60
 python tests/test_bo4.py -v
 python tests/api/test_bo4_api.py -v
 uvicorn backend.app.main:app --port 8000
@@ -70,8 +77,8 @@ cd frontend; npm ci; npm run dev
 
 ## Limites et améliorations
 
-- Reconstruire `data/` pour produire les métriques réelles et 60 scénarios d'évaluation agent.
 - Faire annoter la pertinence par des humains bilingues.
+- La traduction française locale Marian reste une étape longue sur CPU ; le cache durable permet de reprendre avec `python src/translate_reviews.py --project-dir . --device cpu --checkpoint-rows 32`.
+- Les 60 scénarios historiques réels réussissent les contrôles déterministes de faits, citations, temporalité et incertitude, ainsi que le rejet d'une réponse hallucinée. Cela ne remplace pas une évaluation humaine d'un LLM externe.
 - Entraîner un modèle conditionnel de temps restant avant de proposer une ETA après expiration.
-- BGE-M3/FAISS sont optionnels ; le repli lexical reste opérationnel.
 - Tester dérive temporelle, calibration conditionnelle et contrôle d'accès en environnement sécurisé.
