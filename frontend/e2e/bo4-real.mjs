@@ -8,28 +8,49 @@ const executablePath = process.env.BROWSER_PATH ?? browsers.find((p) => fs.exist
 const browser = await chromium.launch({ executablePath, headless: true })
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
 const errors = []
+const orderId = "53cdb2fc8bc7dce0b6741e2150273451"
+const suggested = ["Où en est ma commande ?", "Quand devrait-elle arriver ?", "D'autres clients ont-ils connu un retard similaire ?", "Que puis-je faire si la date promise est dépassée ?"]
 page.on("pageerror", (e) => errors.push(e.message))
 page.on("console", (m) => m.type() === "error" && errors.push(m.text()))
 page.on("request", (r) => r.url().includes("/api/bo4/") && console.log(r.method(), r.url()))
 await page.goto(`${base}/bo4`, { waitUntil: "domcontentloaded", timeout: 120_000 })
 console.log("page loaded")
-await page.getByLabel("Identifiant de commande").fill("d9612f4021d391b5430703c339d62b26")
-await page.getByLabel("Date de simulation historique").fill("2018-04-05")
+await page.getByLabel("Identifiant de commande").fill(orderId)
+await page.getByLabel("Date de simulation historique").fill("2018-07-27")
 await page.getByRole("button", { name: "Consulter" }).click()
-console.log("order submitted")
-await page.getByText("Statut vérifié").waitFor({ timeout: 120_000 })
-console.log("context rendered")
-await page.getByRole("button", { name: "Quand devrait-elle arriver ?" }).click()
-console.log("question selected")
-await page.getByRole("button", { name: "Répondre" }).click()
-console.log("question submitted")
-await page.waitForTimeout(3_000)
-if (errors.length) console.log("browser errors", errors)
-await page.getByText(/Assistant client — commande/).waitFor({ timeout: 120_000 })
-console.log("answer rendered")
-const text = await page.locator("body").innerText()
-const expected = ["BO4 · Assistant client", "approved", "Estimation de livraison", "Commandes historiques comparables", "Faits observés", "Comparaisons et expériences d'autres clients"]
+await page.getByText("Remise au transporteur", { exact: true }).first().waitFor({ timeout: 120_000 })
+let text = await page.locator("body").innerText()
+if (text.includes("observed_delivered") || text.includes("perfumery") || text.includes("Delivered")) errors.push("technical or untranslated labels visible before delivery")
+if (!text.includes("Parfumerie")) errors.push("translated category missing")
+if (!text.includes("Médiane") || !text.includes("couverture cible 80 %")) errors.push("pre-delivery prediction missing")
+
+async function ask(question) {
+  const chip = page.getByRole("button", { name: question, exact: true })
+  if (await chip.count()) await chip.click()
+  else await page.getByLabel("Question client").fill(question)
+  const responsePromise = page.waitForResponse((r) => r.url().endsWith("/api/bo4/ask") && r.request().method() === "POST", { timeout: 120_000 })
+  await page.getByRole("button", { name: "Répondre", exact: true }).click()
+  const response = await responsePromise
+  const payload = await response.json()
+  if (response.status() !== 200 || !payload.report?.facts?.length || !payload.evidence?.length) errors.push(`invalid assistant response for: ${question}`)
+  await page.getByText(/Assistant client — commande/).waitFor({ timeout: 120_000 })
+}
+
+for (const question of suggested) await ask(question)
+await ask("Le transporteur a-t-il perdu mon colis ?")
+
+await page.getByLabel("Date de simulation historique").fill("2018-08-31")
+await page.getByRole("button", { name: "Consulter" }).click()
+await page.getByText("Livrée", { exact: true }).first().waitFor({ timeout: 120_000 })
+await page.getByText("Livraison constatée", { exact: true }).waitFor({ timeout: 120_000 })
+await ask("Où en est ma commande ?")
+text = await page.locator("body").innerText()
+const expected = ["BO4 · Assistant client", "BO4 en ligne", "BO1 indisponible", "Livrée", "Parfumerie", "31/08/2018", "Faits observés", "Comparaisons et expériences d'autres clients"]
 const missing = expected.filter((x) => !text.includes(x))
+const reply = page.getByRole("button", { name: "Répondre", exact: true })
+const launcher = page.getByRole("button", { name: "Ouvrir l'assistant", exact: true })
+const [replyBox, launcherBox] = await Promise.all([reply.boundingBox(), launcher.boundingBox()])
+if (replyBox && launcherBox && !(replyBox.x + replyBox.width < launcherBox.x || launcherBox.x + launcherBox.width < replyBox.x || replyBox.y + replyBox.height < launcherBox.y || launcherBox.y + launcherBox.height < replyBox.y)) errors.push("floating assistant overlaps BO4 response button")
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
 await browser.close()
 if (errors.length || missing.length || overflow > 1) {

@@ -23,6 +23,16 @@ export function monthLabel(m: string): string {
   return new Date(y, mo - 1, 1).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })
 }
 
+export function dateLabel(value: string | null | undefined, withTime = false): string {
+  if (!value) return "—"
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleDateString(
+    "fr-FR",
+    withTime ? { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" } : undefined,
+  )
+}
+
 export function shortId(id: string): string {
   return `${id.slice(0, 8)}…`
 }

@@ -18,6 +18,10 @@ def _time(x: Any) -> pd.Timestamp:
     return t.tz_localize(None) if t.tzinfo else t
 
 
+def _fr_date(x: Any) -> str:
+    return _time(x).strftime("%d/%m/%Y")
+
+
 def verify_customer_narrative(text: str, log: EvidenceLog) -> tuple[bool, list[str]]:
     """Claim-level guard on top of numeric validation.
 
@@ -131,9 +135,11 @@ class CustomerAssistantAgent:
         self.log = EvidenceLog(); ctx = self.get_order_context(order_id, as_of); eta = self.predict_delivery_interval(order_id, as_of)
         reviews = self.retrieve_similar_reviews(question, order_id, as_of, 3)
         rep = Report(f"Assistant client — commande {order_id[:8]}…")
-        rep.facts.append(Line(f"Au {ctx['as_of'][:10]}, le statut vérifiable est « {ctx['observable_status']} ». Date promise : {ctx['promised_delivery_date'] or 'indisponible'}.", [f"ord:{order_id}"]))
+        status_fr = {"ordered": "commande créée", "approved": "paiement approuvé", "shipped": "remise au transporteur", "delivered": "livrée"}
+        promised = _fr_date(ctx["promised_delivery_date"]) if ctx["promised_delivery_date"] else "indisponible"
+        rep.facts.append(Line(f"Au {_fr_date(ctx['as_of'])}, le statut vérifiable est « {status_fr.get(ctx['observable_status'], ctx['observable_status'])} ». Date promise : {promised}.", [f"ord:{order_id}"]))
         if eta.get("valid_current_estimate"):
-            rep.estimates.append(Line(f"Estimation à l'approbation : entre {eta['p10_date'][:10]} et {eta['p90_date'][:10]}, médiane {eta['p50_date'][:10]}. Couverture cible : 80 %.", [f"mdl:eta:{order_id}:{_time(ctx['as_of']).date()}"]))
+            rep.estimates.append(Line(f"Estimation à l'approbation : entre le {_fr_date(eta['p10_date'])} et le {_fr_date(eta['p90_date'])}, médiane le {_fr_date(eta['p50_date'])}. Couverture cible : 80 %.", [f"mdl:eta:{order_id}:{_time(ctx['as_of']).date()}"]))
         else: rep.estimates.append(Line(eta.get("message", "Aucune estimation actuelle valide."), [f"mdl:eta:{order_id}:{_time(ctx['as_of']).date()}"]))
         for x in reviews["reviews"]:
             text = x["text_fr"] or x["text_pt"]
