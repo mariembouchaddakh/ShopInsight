@@ -76,6 +76,7 @@ function markTeaserSeen() {
  * contexte « marketplace » ailleurs (alertes prioritaires et catégories du mois). Réponses contrôlées contre les sources. */
 export function AssistantWidget() {
   const loc = useLocation()
+  const isBo4 = loc.pathname.startsWith("/bo4")
   const match = matchPath("/bo3/sellers/:sellerId", loc.pathname)
   const seller = match?.params.sellerId
   const [month] = useDecisionMonth()
@@ -171,7 +172,7 @@ export function AssistantWidget() {
     <>
       {open && (
         <section
-          className="pop-in fixed right-4 bottom-24 z-40 flex h-[min(680px,calc(100svh-8rem))] w-[min(440px,calc(100vw-2rem))] origin-bottom-right flex-col overflow-hidden rounded-3xl border bg-popover text-popover-foreground shadow-[0_30px_80px_-20px_rgb(19_34_56/45%)] sm:right-6"
+          className={cn("pop-in fixed bottom-24 z-40 flex h-[min(680px,calc(100svh-8rem))] w-[min(440px,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border bg-popover text-popover-foreground shadow-[0_30px_80px_-20px_rgb(19_34_56/45%)]", isBo4 ? "left-4 origin-bottom-left sm:left-6" : "right-4 origin-bottom-right sm:right-6")}
           aria-label="Assistant ShopInsight"
         >
           <header className="brand-gradient relative flex items-start justify-between gap-3 px-4 py-4 text-white">
@@ -305,7 +306,7 @@ export function AssistantWidget() {
       )}
 
       {teaser && !open && (
-        <div className="pop-in fixed right-4 bottom-24 z-40 w-[min(300px,calc(100vw-2rem))] origin-bottom-right sm:right-6" role="status">
+        <div className={cn("pop-in fixed bottom-24 z-40 w-[min(300px,calc(100vw-2rem))]", isBo4 ? "left-4 origin-bottom-left sm:left-6" : "right-4 origin-bottom-right sm:right-6")} role="status">
           <div className="relative rounded-2xl rounded-br-md border bg-popover p-3.5 pr-8 text-sm leading-relaxed shadow-xl">
             <button
               onClick={() => {
@@ -335,7 +336,8 @@ export function AssistantWidget() {
       <button
         onClick={toggle}
         className={cn(
-          "si-launcher group fixed right-4 bottom-6 z-40 flex h-14 items-center rounded-full text-white transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] sm:right-6",
+          "si-launcher group fixed bottom-6 z-40 flex h-14 items-center rounded-full text-white transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+          isBo4 ? "left-4 sm:left-6" : "right-4 sm:right-6",
           open ? "w-14 justify-center bg-[var(--brand-ink)]" : "brand-gradient w-14 justify-start pl-[11px] hover:w-[11.5rem] hover:-translate-y-0.5",
         )}
         aria-label={open ? "Fermer l'assistant" : "Ouvrir l'assistant"}

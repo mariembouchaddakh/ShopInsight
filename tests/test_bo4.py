@@ -1,5 +1,7 @@
-import subprocess, sys, tempfile, unittest
+import subprocess, sys, tempfile, types, unittest
 from pathlib import Path
+from unittest import mock
+import joblib
 import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
@@ -32,6 +34,20 @@ class TestBO4(unittest.TestCase):
     def test_reviews_obey_asof_and_exclude_target(self):
         r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False);items=idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5)
         self.assertTrue(all(x["order_id"]!=self.oid and x["published_at"]<=r.order_approved_at.isoformat() for x in items))
+    def test_dense_encoder_uses_cached_public_model_without_implicit_token(self):
+        reviews = self.ag.store.reviews()
+        joblib.dump({"model": "BAAI/bge-m3", "embeddings": np.zeros((len(reviews), 4), dtype="float32")},
+                    self.root / "data/model/bo4_review_embeddings.joblib")
+        seen = {}
+        class FakeEncoder:
+            def __init__(self, model, **kwargs): seen.update(model=model, **kwargs)
+        fake_module = types.SimpleNamespace(SentenceTransformer=FakeEncoder)
+        with mock.patch.dict(sys.modules, {"sentence_transformers": fake_module}):
+            idx = HistoricalReviewIndex(self.root)
+        self.assertIsNotNone(idx.encoder)
+        self.assertEqual(seen["model"], "BAAI/bge-m3")
+        self.assertTrue(seen["local_files_only"])
+        self.assertIs(seen["token"], False)
     def test_future_review_does_not_change_past(self):
         r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False);before=idx.search("produto errado",r.order_approved_at,self.oid,None,5)
         future=idx.df.iloc[0].copy();future["review_id"]="future";future["available_at"]=r.order_approved_at+np.timedelta64(100,"D");idx.df=__import__("pandas").concat([idx.df,__import__("pandas").DataFrame([future])],ignore_index=True)

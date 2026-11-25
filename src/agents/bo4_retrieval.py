@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -45,8 +46,13 @@ class HistoricalReviewIndex:
         emb = self.root / "data/model/bo4_review_embeddings.joblib"
         if dense and emb.exists():
             bundle = joblib.load(emb); self.embeddings = bundle["embeddings"]
+            os.environ["HF_HUB_DISABLE_IMPLICIT_TOKEN"] = "1"
             from sentence_transformers import SentenceTransformer
-            self.encoder = SentenceTransformer(bundle["model"])
+            # The index was built locally and the matching public encoder must
+            # be loaded from the same local cache. Explicitly disabling auth
+            # prevents an expired user-level Hugging Face token from turning a
+            # public, cached model into a 401 at the first BO4 question.
+            self.encoder = SentenceTransformer(bundle["model"], local_files_only=True, token=False)
 
     def _eligible(self, as_of: Any, order_id: str | None, context: dict | None) -> pd.DataFrame:
         t = pd.Timestamp(as_of).tz_localize(None)
