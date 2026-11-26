@@ -104,8 +104,10 @@ def make_annotation_template(ag: VoiceOfCustomerAgent, out: Path, n: int = 500, 
 
 
 def f1_per_aspect(ag: VoiceOfCustomerAgent, ann: pd.DataFrame) -> dict:
-    an = ag.an.set_index("review_id")
+    # un même avis peut être rattaché à plusieurs commandes : ses prédictions sont identiques, on garde une ligne par avis
+    an = ag.an.drop_duplicates("review_id").set_index("review_id")
     res = {}
+    ann = ann.drop_duplicates("review_id")
     ann = ann[ann["review_id"].isin(an.index)]
     for a in ASPECTS:
         gold = pd.to_numeric(ann[a], errors="coerce")  # NaN = non mentionné

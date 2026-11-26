@@ -1,0 +1,25 @@
+ANNOTATION DES AVIS - BO2
+=========================
+
+Le guide complet (regles, exemples, deroule) est le document partage
+"Guide d'annotation des avis - BO2". Lisez-le avant de commencer.
+
+POUR CHAQUE ANNOTATEUR (A, B, C, D, E)
+1. Ouvrir outil_annotation.html (double-clic, dans Chrome, Edge ou Firefox).
+2. "Ouvrir un fichier" -> fichiers_annotateurs/<VOTRE LETTRE>_1_essai_40_avis.csv
+3. Annoter, valider chaque avis (Entree), puis "Exporter".
+4. Deposer le fichier ..._annote.csv dans le dossier retours/.
+5. Apres la reunion de calage : meme chose avec <VOTRE LETTRE>_2_principal_200_avis.csv
+
+Ne regardez pas le dossier coordination/ avant d'avoir rendu vos annotations
+(il contient les notes des avis et l'affectation des binomes).
+
+POUR LA COORDINATRICE
+  python analyse_annotations.py essai
+  python analyse_annotations.py principal
+  (les arbitres remplissent la colonne "decision" de coordination/arbitrage_X.csv)
+  python analyse_annotations.py final
+  python ../src/evaluate_agents.py --project-dir ..
+
+Binomes : lot 1 A-B, 2 A-C, 3 A-D, 4 A-E, 5 B-C, 6 B-D, 7 B-E, 8 C-D, 9 C-E, 10 D-E
+Arbitres : A -> lots 5 et 10 ; B -> 2 et 3 ; C -> 1 et 4 ; D -> 7 et 9 ; E -> 6 et 8
