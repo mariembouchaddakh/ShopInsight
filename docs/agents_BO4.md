@@ -15,8 +15,37 @@ flowchart LR
   C --> G
   D --> G
   F --> G
-  G --> H[Réponse déterministe validée]
+  G --> H[Réponse LLM validée]
+  G --> I[Repli déterministe par intention]
 ```
+
+### Architecture conversationnelle auditée
+
+Avant cette évolution, `POST /api/bo4/ask` appelait directement
+`CustomerAssistantAgent.answer_customer_question`. Cette méthode Python exécutait toujours contexte, ETA et recherche d'avis,
+quel que soit le besoin exprimé. Le registre construisait l'agent avec `llm=None` : aucune détection d'intention, aucun historique
+et aucun appel OpenRouter n'avaient lieu pendant l'inférence. Le rapport analytique affiché était donc entièrement déterministe.
+
+L'orchestrateur actuel est `backend/app/llm/bo4.py::converse`. Quand OpenRouter est configuré, il transmet au modèle les schémas
+de fonctions, laisse le modèle choisir les outils nécessaires, puis exécute ces appels dans une liste blanche Python. L'identifiant
+de commande et la date `as_of` fournis par le modèle sont toujours remplacés par les valeurs autoritatives de l'application. La
+réponse finale doit citer les preuves produites ; `verify_customer_narrative` rejette chiffres ou références inconnus, causalité
+certaine, GPS et remboursement garanti. Sans clé, modèle compatible ou réponse valide, le classifieur conservateur Python choisit
+un plan minimal et produit une réponse explicitement marquée comme repli déterministe.
+
+Outils exposés au function calling :
+
+- `get_order_context(order_id: str, as_of: str)` ;
+- `get_order_timeline(order_id: str, as_of: str)` ;
+- `predict_delivery_interval(order_id: str, as_of: str)` ;
+- `find_similar_orders(order_id: str, as_of: str, k: int = 3)` ;
+- `retrieve_similar_reviews(order_id: str, as_of: str, question: str, k: int = 3)` ;
+- `get_customer_options(order_id: str, as_of: str)`, qui expose les actions générales autorisées et leurs limites comme garde-fou
+  ShopInsight, sans les présenter comme une politique Olist.
+
+Le client React conserve jusqu'à douze tours et les renvoie à chaque question. La réponse conversationnelle est prioritaire ; le
+rapport structuré et ses preuves restent repliables. Le panneau debug optionnel expose intention, appels, arguments, résultats,
+fournisseur/modèle, latence, références, validation et utilisation du repli.
 
 ## 2. Compréhension des données
 
@@ -57,7 +86,7 @@ Avant production : authentification, autorisation d'appartenance de la commande,
 - `GET /api/bo4/orders/{order_id}/context?as_of=...`
 - `GET /api/bo4/orders/{order_id}/eta?as_of=...`
 - `GET /api/bo4/orders/{order_id}/similar?as_of=...&k=5`
-- `POST /api/bo4/ask` avec `order_id`, `question`, `as_of`
+- `POST /api/bo4/ask` avec `order_id`, `question`, `as_of`, `history` et le créneau `model` optionnel (`a` ou `b`)
 
 ### Reproduction
 

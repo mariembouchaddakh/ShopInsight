@@ -60,6 +60,11 @@ def ok(content, model=FREE, cost=0):
     return 200, {"model": model, "choices": [{"message": {"content": content}}], "usage": {"total_tokens": 10, "cost": cost}}
 
 
+def ok_tool(name="get_order_context", model=FREE):
+    call = {"id": "call-1", "type": "function", "function": {"name": name, "arguments": "{}"}}
+    return 200, {"model": model, "choices": [{"message": {"content": None, "tool_calls": [call]}}], "usage": {"total_tokens": 10, "cost": 0}}
+
+
 class TestProvider(unittest.TestCase):
     def setUp(self):
         prov._CATALOG.update({"at": 0.0, "models": {}})
@@ -109,6 +114,14 @@ class TestProvider(unittest.TestCase):
         with self.assertRaises(LLMError) as cm:
             self.make(Mock([]), key=None).complete([{"role": "user", "content": "e"}])
         self.assertEqual(cm.exception.kind, "no_key")
+
+    def test_native_tool_calls_are_sent_parsed_and_cached(self):
+        m = Mock([ok_tool()]); p = self.make(m)
+        tools = [{"type": "function", "function": {"name": "get_order_context", "parameters": {"type": "object"}}}]
+        first = p.complete([{"role": "user", "content": "status"}], json_mode=False, tools=tools, tool_choice="auto")
+        second = p.complete([{"role": "user", "content": "status"}], json_mode=False, tools=tools, tool_choice="auto")
+        self.assertEqual(first.tool_calls[0]["function"]["name"], "get_order_context")
+        self.assertTrue(second.cached); self.assertEqual(m.posts, 1)
 
     def test_mandatory_reasoning_same_model_retry(self):
         """Point d'accès qui impose le raisonnement : réessai sur le MÊME modèle (jamais un autre), avec raisonnement activé."""

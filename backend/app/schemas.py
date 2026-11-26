@@ -54,6 +54,24 @@ class AskRequest(BaseModel):
 class BO4AskRequest(AskRequest):
     order_id: str = Field(min_length=8, max_length=64)
     as_of: str | None = Field(None, description="Historical simulation timestamp (ISO-8601)")
+    model: Literal["a", "b"] = "a"
+    history: list["ChatTurnOut"] = Field(default_factory=list, max_length=12)
+
+
+class ChatTurnOut(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=4000)
+
+
+class BO4ChatResponse(BaseModel):
+    agent: Literal["bo4"]
+    answer: str
+    answer_source: Literal["llm_verified", "deterministic_fallback"]
+    language: Literal["fr", "pt", "en"]
+    report: ReportOut
+    markdown: str
+    evidence: list[EvidenceOut]
+    debug: dict[str, Any]
 
 
 class AgentStatus(BaseModel):

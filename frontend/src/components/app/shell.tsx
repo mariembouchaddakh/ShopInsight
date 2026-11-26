@@ -107,7 +107,7 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
-      <AssistantWidget />
+      {!loc.pathname.startsWith("/bo4") && <AssistantWidget />}
     </div>
   )
 }

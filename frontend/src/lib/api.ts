@@ -243,10 +243,30 @@ export interface Health {
 }
 
 export interface BO4Context {
-  order: { order_id: string; as_of: string; observable_status: string; promised_delivery_date: string | null; customer_state: string | null; category: string | null; item_count: number | null; seller_count: number | null }
+  order: { order_id: string; as_of: string; observable_status: string; purchase_at: string | null; approved_at: string | null; delivered_at: string | null; promised_delivery_date: string | null; promised_date_exceeded: boolean | null; promise_state: "unknown" | "within_promise" | "exceeded" | "delivered_on_time" | "delivered_late"; customer_state: string | null; category: string | null; item_count: number | null; seller_count: number | null }
   timeline: { events: { event: string; at: string }[] }
   eta: { state: string; valid_current_estimate: boolean; p10_date?: string; p50_date?: string; p90_date?: string; target_coverage?: number; model?: string; message?: string }
-  similar_orders: { count: number; cases: { order_id: string; customer_state?: string; primary_category?: string; delivery_duration_days?: number; similarity_distance: number }[] }
+}
+
+export interface BO4ChatTurn { role: "user" | "assistant"; content: string }
+export interface BO4Debug {
+  intent: string
+  intent_source: string
+  selected_tools: string[]
+  tool_calls: { tool: string; arguments: Record<string, unknown>; ok: boolean; source: string; result?: unknown; error?: string }[]
+  provider: string
+  model: string | null
+  latency_ms: number
+  evidence_references: string[]
+  validation: { valid: boolean; problems: string[] }
+  fallback_used: boolean
+  fallback_reason: string | null
+}
+export interface BO4ChatResponse extends ReportResponse {
+  answer: string
+  answer_source: "llm_verified" | "deterministic_fallback"
+  language: "fr" | "pt" | "en"
+  debug: BO4Debug
 }
 
 
@@ -459,7 +479,8 @@ export const api = {
   bo2Report: (p: { month?: string; state?: string; category?: string }) => request<ReportResponse>("/api/bo2/report", undefined, p),
   bo2DefaultMonth: () => request<{ month: string }>("/api/bo2/default-month"),
   bo4Context: (orderId: string, asOf?: string) => request<ToolResponse<BO4Context>>(`/api/bo4/orders/${orderId}/context`, undefined, { as_of: asOf }),
-  bo4Ask: (orderId: string, question: string, asOf?: string) => request<ReportResponse>("/api/bo4/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order_id: orderId, question, as_of: asOf }) }),
+  bo4Ask: (orderId: string, question: string, asOf?: string, history: BO4ChatTurn[] = [], model: "a" | "b" = "a") =>
+    request<BO4ChatResponse>("/api/bo4/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ order_id: orderId, question, as_of: asOf, history, model }) }),
   aiStatus: () => request<AiStatus>("/api/llm/status"),
   aiAnalysis: (seller: string, month: string | undefined, model: "a" | "b") =>
     request<AiAnalysis>(`/api/llm/sellers/${seller}/analysis`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ month, model }) }),

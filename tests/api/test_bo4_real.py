@@ -37,7 +37,11 @@ class TestBO4RealRegression(unittest.TestCase):
         # Reproduce the workstation condition: an unusable implicit HF token
         # must not affect the already-cached public BGE-M3 encoder.
         cls.old_hf_token = os.environ.get("HF_TOKEN")
+        cls.old_openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+        cls.old_bo4_local = os.environ.get("BO4_LOCAL_MODEL")
         os.environ["HF_TOKEN"] = "hf_expired_or_invalid_regression_token"
+        os.environ["OPENROUTER_API_KEY"] = ""
+        os.environ["BO4_LOCAL_MODEL"] = ""
         from fastapi.testclient import TestClient
         from backend.app.main import app
         cls.context = TestClient(app)
@@ -50,6 +54,14 @@ class TestBO4RealRegression(unittest.TestCase):
             os.environ.pop("HF_TOKEN", None)
         else:
             os.environ["HF_TOKEN"] = cls.old_hf_token
+        if cls.old_openrouter_key is None:
+            os.environ.pop("OPENROUTER_API_KEY", None)
+        else:
+            os.environ["OPENROUTER_API_KEY"] = cls.old_openrouter_key
+        if cls.old_bo4_local is None:
+            os.environ.pop("BO4_LOCAL_MODEL", None)
+        else:
+            os.environ["BO4_LOCAL_MODEL"] = cls.old_bo4_local
 
     def test_before_and_after_delivery_are_point_in_time_safe(self):
         before = self.client.get(f"/api/bo4/orders/{ORDER_ID}/context", params={"as_of": BEFORE})
@@ -75,8 +87,9 @@ class TestBO4RealRegression(unittest.TestCase):
                 self.assertEqual(response.status_code, 200, f"{when} / {question}: {response.text}")
                 body = response.json()
                 self.assertEqual(body["agent"], "bo4")
-                self.assertEqual(body["report"]["narrative_source"], "deterministe")
-                self.assertTrue(body["report"]["facts"])
+                self.assertEqual(body["answer_source"], "deterministic_fallback")
+                self.assertTrue(body["answer"])
+                self.assertTrue(body["debug"]["selected_tools"])
                 self.assertTrue(body["evidence"])
                 ids = {item["id"] for item in body["evidence"]}
                 for section in ("facts", "estimates", "similar_experiences", "actions"):

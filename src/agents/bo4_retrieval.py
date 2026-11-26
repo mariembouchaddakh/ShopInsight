@@ -78,9 +78,13 @@ class HistoricalReviewIndex:
     def search(self, query: str, as_of: Any, order_id: str | None = None, context: dict | None = None, k: int = 5,
                system: str = "hybrid") -> list[dict]:
         if system not in {"tfidf", "bm25", "dense", "hybrid"}: raise ValueError(f"Système de recherche inconnu: {system}")
-        snapshots = [self._eligible(as_of, order_id, context), self._eligible(as_of, order_id, {"customer_state": (context or {}).get("customer_state")}),
-                     self._eligible(as_of, order_id, None)]
-        d = next((x for x in snapshots if len(x) >= max(k, 3)), snapshots[-1]).copy()
+        snapshots = [
+            ("region_and_category", self._eligible(as_of, order_id, context)),
+            ("region", self._eligible(as_of, order_id, {"customer_state": (context or {}).get("customer_state")})),
+            ("all_historical", self._eligible(as_of, order_id, None)),
+        ]
+        comparison_scope, selected = next(((scope, rows) for scope, rows in snapshots if len(rows) >= max(k, 3)), snapshots[-1])
+        d = selected.copy()
         d = d[d.text_search.str.strip().str.len() > 0]
         if d.empty: return []
         texts = d.text_search.tolist(); vec = TfidfVectorizer(lowercase=True, ngram_range=(1, 2), min_df=1).fit(texts)
@@ -104,7 +108,7 @@ class HistoricalReviewIndex:
                         "text_fr": r.full_fr, "translation_status": r.translation_status, "published_at": r.available_at.isoformat(),
                         "customer_state": r.get("customer_state"), "category": r.get("primary_category"),
                         "delivery_duration_days": None if pd.isna(r.get("delivery_duration_days")) else float(r.delivery_duration_days),
-                        "retrieval_system": system, "rrf_score": fused[pos]})
+                        "retrieval_system": system, "rrf_score": fused[pos], "comparison_scope": comparison_scope})
             if len(out) >= k: break
         return out
 
