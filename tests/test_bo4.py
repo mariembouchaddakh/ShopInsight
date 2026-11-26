@@ -4,8 +4,8 @@ from unittest import mock
 import joblib
 import numpy as np
 
-ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/"src"))
-from agents.bo4_agent import CustomerAssistantAgent
+ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT),str(ROOT/"src")]
+from agents.bo4_agent import CustomerAssistantAgent, detect_intent, verify_customer_narrative
 from agents.bo4_eta import interval_metrics, repair_quantiles
 from agents.bo4_retrieval import HistoricalReviewIndex
 
@@ -62,5 +62,71 @@ class TestBO4(unittest.TestCase):
         r=self.ag._order(self.oid);self.ag.llm=Fake()
         rep=self.ag.answer_customer_question(self.oid,"Où est mon colis ?",r.order_approved_at);self.ag.llm=None
         self.assertEqual(rep.narrative_source,"deterministe");self.assertIn("llm_narrative_rejected",rep.meta)
+
+    def test_intents_execute_different_minimal_tool_sets(self):
+        r = self.ag._order(self.oid)
+        status = self.ag.deterministic_conversation(self.oid, "Où en est ma commande ?", r.order_approved_at)
+        eta = self.ag.deterministic_conversation(self.oid, "Quand arrivera-t-elle ?", r.order_approved_at)
+        policy = self.ag.deterministic_conversation(self.oid, "Pouvez-vous garantir un remboursement ?", r.order_approved_at)
+        self.assertEqual(status["tools"], ["get_order_context", "get_order_timeline"])
+        self.assertEqual(eta["tools"], ["get_order_context", "predict_delivery_interval"])
+        self.assertEqual(policy["tools"], ["get_order_context", "get_customer_options"])
+        self.assertIn("No refund entitlement", " ".join(policy["results"]["get_customer_options"]["limitations"]))
+
+    def test_short_compliment_does_not_inherit_delivery_intent(self):
+        history = [{"role": "user", "content": "Quand arrivera ma commande ?"},
+                   {"role": "assistant", "content": "Elle est encore en route."}]
+        self.assertEqual(detect_intent("okay i love your service thanks", history), "general")
+
+    def test_native_llm_tool_call_is_controlled_and_validated(self):
+        from backend.app.llm.bo4 import converse
+        from backend.app.llm.provider import LLMResult
+        oid = self.oid
+        class FakeProvider:
+            model = "test/function-model:free"
+            def __init__(self): self.calls = []
+            def complete(self, messages, **kwargs):
+                self.calls.append((messages, kwargs))
+                if len(self.calls) == 1:
+                    return LLMResult("", self.model, self.model, 0.01, tool_calls=[{"id": "call-1", "type": "function", "function": {"name": "get_order_context", "arguments": '{"order_id":"evil","as_of":"2099-01-01"}'}}])
+                return LLMResult(f"Votre commande a un statut vérifié [{f'ord:{oid}'}].", self.model, self.model, 0.01)
+        r = self.ag._order(oid); provider = FakeProvider()
+        out = converse(self.ag, provider, oid, "Et son statut ?", r.order_approved_at.isoformat(),
+                       [{"role": "user", "content": "Parlez-moi de ma commande"}])
+        self.assertEqual(out["source"], "llm_verified")
+        self.assertEqual(out["debug"]["selected_tools"], ["get_order_context"])
+        self.assertEqual(out["debug"]["tool_calls"][0]["arguments"]["order_id"], oid)
+        self.assertTrue(any(m.get("content") == "Parlez-moi de ma commande" for m in provider.calls[0][0]))
+        offered = {x["function"]["name"] for x in provider.calls[0][1]["tools"]}
+        self.assertEqual(offered, {"get_order_context", "get_order_timeline", "predict_delivery_interval",
+                                   "find_similar_orders", "retrieve_similar_reviews"})
+
+    def test_natural_language_dates_are_checked_against_evidence(self):
+        r = self.ag._order(self.oid); self.ag.log = __import__("agents.core", fromlist=["EvidenceLog"]).EvidenceLog()
+        self.ag.get_order_context(self.oid, r.order_approved_at)
+        ref = f"ord:{self.oid}"
+        approved = __import__("pandas").Timestamp(r.order_approved_at)
+        known = f"La commande a été approuvée le {approved.day:02d}/{approved.month:02d}/{approved.year} [{ref}]."
+        invented = f"La commande sera livrée le 31/12/2099 [{ref}]."
+        self.assertTrue(verify_customer_narrative(known, self.ag.log)[0])
+        self.assertFalse(verify_customer_narrative(invented, self.ag.log)[0])
+
+    def test_customer_narrative_rejects_exposed_order_identifier(self):
+        r = self.ag._order(self.oid); self.ag.log = __import__("agents.core", fromlist=["EvidenceLog"]).EvidenceLog()
+        self.ag.get_order_context(self.oid, r.order_approved_at)
+        text = f"Une autre commande comparable porte l'identifiant {self.oid} [ord:{self.oid}]."
+        self.assertFalse(verify_customer_narrative(text, self.ag.log)[0])
+
+    def test_unvalidated_llm_answer_falls_back(self):
+        from backend.app.llm.bo4 import converse
+        from backend.app.llm.provider import LLMResult
+        class FakeProvider:
+            model = "test/function-model:free"
+            def complete(self, messages, **kwargs):
+                return LLMResult("Le transporteur a perdu le colis et garantit un remboursement.", self.model, self.model, 0.01)
+        r = self.ag._order(self.oid)
+        out = converse(self.ag, FakeProvider(), self.oid, "Pourquoi ce retard ?", r.order_approved_at.isoformat())
+        self.assertEqual(out["source"], "deterministic_fallback")
+        self.assertEqual(out["debug"]["fallback_reason"], "validation_failed")
 
 if __name__=="__main__":unittest.main()

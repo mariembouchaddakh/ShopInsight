@@ -32,8 +32,10 @@ async function ask(question) {
   await page.getByRole("button", { name: "Répondre", exact: true }).click()
   const response = await responsePromise
   const payload = await response.json()
-  if (response.status() !== 200 || !payload.report?.facts?.length || !payload.evidence?.length) errors.push(`invalid assistant response for: ${question}`)
-  await page.getByText(/Assistant client — commande/).waitFor({ timeout: 120_000 })
+  if (response.status() !== 200 || !payload.answer || !payload.debug?.selected_tools?.length || !payload.evidence?.length) errors.push(`invalid assistant response for: ${question}`)
+  await page.getByText(payload.answer, { exact: true }).last().waitFor({ timeout: 120_000 })
+  await page.getByText(payload.answer_source === "llm_verified" ? "Réponse IA vérifiée" : "Réponse déterministe", { exact: true }).last().waitFor()
+  return payload
 }
 
 for (const question of suggested) await ask(question)
@@ -43,9 +45,13 @@ await page.getByLabel("Date de simulation historique").fill("2018-08-31")
 await page.getByRole("button", { name: "Consulter" }).click()
 await page.getByText("Livrée", { exact: true }).first().waitFor({ timeout: 120_000 })
 await page.getByText("Livraison constatée", { exact: true }).waitFor({ timeout: 120_000 })
-await ask("Où en est ma commande ?")
+const finalPayload = await ask("Où en est ma commande ?")
+if (finalPayload.answer_source !== "llm_verified") errors.push(`expected a validated LLM answer, got ${finalPayload.answer_source}`)
+await page.getByText("Voir le rapport analytique et les preuves", { exact: true }).click()
+await page.getByRole("button", { name: /Développeur \/ debug/ }).click()
+await page.getByText(`Intent : ${finalPayload.debug.intent}`, { exact: true }).waitFor()
 text = await page.locator("body").innerText()
-const expected = ["BO4 · Assistant client", "BO4 en ligne", "BO1 indisponible", "Livrée", "Parfumerie", "31/08/2018", "Faits observés", "Comparaisons et expériences d'autres clients"]
+const expected = ["BO4 · Assistant client", "BO4 en ligne", "BO1 indisponible", "Livrée", "Parfumerie", "31/08/2018", "Faits observés", "Développeur / debug", "get_order_context"]
 const missing = expected.filter((x) => !text.includes(x))
 const reply = page.getByRole("button", { name: "Répondre", exact: true })
 const launcher = page.getByRole("button", { name: "Ouvrir l'assistant", exact: true })
