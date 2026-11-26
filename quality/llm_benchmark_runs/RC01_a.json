@@ -1,0 +1,278 @@
+{
+  "case_id": "RC01",
+  "category": "persistent",
+  "slot": "a",
+  "model": "baidu/ernie-5.5-flash-preview:free",
+  "analysis": {
+    "model": "baidu/ernie-5.5-flash-preview:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Profil : 473 commandes mono-vendeur sur 12 mois, watches_gifts 90 %, prix médian 144.0 R$, délai promis moyen 26.5 jours.",
+          "type": "fait",
+          "preuves": [
+            "sel:7d13fca1:2018-06"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 10.0 % sur 90 jours (n = 340) contre 5.3 % pour la marketplace, ratio ×1.90, au-dessus de la limite haute à 99,8 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 8.5 % sur 90 jours (n = 318) contre 7.9 %, dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 12.5 % sur 90 jours (n = 313) contre 14.4 %, dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:poor"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Remise tardive au transporteur : alerte niveau (sévérité moyenne), 10.0 % contre 5.3 % ; déjà en alerte en 2018-05.",
+          "type": "fait",
+          "preuves": [
+            "alr:7d13fca1:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison observé / attendu : 27 événements contre 13.3 attendus (ratio 2.03, z = 3.9, n = 318).",
+          "type": "fait",
+          "preuves": [
+            "mdl:expected:7d13fca1:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis écrits (197) : « Livraison et délais » critiqué dans 39 avis, aspect le plus cité.",
+          "type": "fait",
+          "preuves": [
+            "mdl:aspects:seller:7d13fca1:2018-06"
+          ]
+        },
+        {
+          "texte": "76 commandes sur 343 des 90 derniers jours ont un problème déjà connu à la décision.",
+          "type": "fait",
+          "preuves": [
+            "ord:seller:7d13fca1:2018-06"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Retard de livraison en baisse : 8.5 % (n = 318) contre 24.9 % sur l'historique du vendeur ; pas d'alerte tendance.",
+          "type": "fait",
+          "preuves": [
+            "alr:7d13fca1:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles en baisse : 12.5 % (n = 313) contre 31.9 % sur l'historique du vendeur ; pas d'alerte tendance.",
+          "type": "fait",
+          "preuves": [
+            "alr:7d13fca1:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles sous la marketplace : 12.5 % contre 14.4 % (ratio ×0.87).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Évolution favorable des avis 1-2 étoiles : 29.8 % (2018-03) → 12.5 % (2018-06).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:7d13fca1:2018-06"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Référence : toute la marketplace (1375 autres vendeurs) ; les plus proches vendent surtout watches_gifts (19).",
+          "type": "fait",
+          "preuves": [
+            "peer:7d13fca1:2018-06"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 10.0 % contre 5.3 % (n = 66832), ratio ×1.90, au-dessus de la limite haute à 99,8 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 8.5 % contre 7.9 % (n = 64953), ratio ×1.08, dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 12.5 % contre 14.4 % (n = 64912), ratio ×0.87, dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:poor"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "La remise tardive pourrait être liée à la préparation des commandes (stock, capacité, jours non ouvrés), à confirmer avec le vendeur.",
+          "type": "hypothese",
+          "preuves": [
+            "alr:7d13fca1:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Les retards de livraison pourraient contribuer aux avis 1-2 étoiles, « Livraison et délais » étant l'aspect le plus critiqué (39 avis).",
+          "type": "hypothese",
+          "preuves": [
+            "mdl:aspects:seller:7d13fca1:2018-06"
+          ]
+        },
+        {
+          "texte": "Le retard observé / attendu (ratio 2.03) pourrait refléter des facteurs propres aux commandes, à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "mdl:expected:7d13fca1:2018-06:late"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "La cause des remises tardives au transporteur n'est pas enregistrée par Olist.",
+          "type": "inconnu",
+          "preuves": [
+            "alr:7d13fca1:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "La cause des avis 1-2 étoiles n'est pas établie par les données.",
+          "type": "inconnu",
+          "preuves": [
+            "kpi:seller:7d13fca1:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Aucune donnée de publicité, campagne, promotion ou marketing n'est disponible ; ces informations manqueraient pour expliquer la demande.",
+          "type": "inconnu",
+          "preuves": [
+            "sel:7d13fca1:2018-06"
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur (10.0 % contre 5.3 %)",
+        "action": "Vérifier avec le vendeur ses délais de préparation (stock, capacité, jours non ouvrés).",
+        "priorite": "haute",
+        "impact": "Réduction des remises tardives et des retards associés.",
+        "direction_attendue": "baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Raison des remises tardives, non enregistrée par Olist.",
+        "preuves": [
+          "alr:7d13fca1:2018-06:handover",
+          "kpi:seller:7d13fca1:2018-06:handover"
+        ]
+      },
+      {
+        "faiblesse": "Retard de livraison observé supérieur à l'attendu (ratio 2.03)",
+        "action": "Examiner les commandes récentes en retard pour comprendre les délais réels.",
+        "priorite": "moyenne",
+        "impact": "Meilleure tenue des délais promis.",
+        "direction_attendue": "baisse du taux de retard de livraison",
+        "information_manquante": "Cause des retards, non enregistrée.",
+        "preuves": [
+          "mdl:expected:7d13fca1:2018-06:late",
+          "kpi:seller:7d13fca1:2018-06:late"
+        ]
+      },
+      {
+        "faiblesse": "Avis 1-2 étoiles, aspect « Livraison et délais »",
+        "action": "Prendre contact avec le vendeur avant toute sanction ; les écarts sont des associations observées, sans cause enregistrée.",
+        "priorite": "moyenne",
+        "impact": "Amélioration de la satisfaction client.",
+        "direction_attendue": "baisse du taux d'avis 1-2 étoiles",
+        "information_manquante": "Motif exact des avis négatifs.",
+        "preuves": [
+          "mdl:aspects:seller:7d13fca1:2018-06",
+          "kpi:seller:7d13fca1:2018-06:poor"
+        ]
+      },
+      {
+        "faiblesse": "Écart à confirmer avant toute généralisation",
+        "action": "Mesurer l'effet de l'action (comparaison avec des vendeurs comparables non contactés) avant de la généraliser.",
+        "priorite": "basse",
+        "impact": "Décision éclairée sur la généralisation.",
+        "direction_attendue": "baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Groupe de comparaison non contacté.",
+        "preuves": [
+          "alr:7d13fca1:2018-06:handover"
+        ]
+      }
+    ],
+    "resume": "Vendeur 7d13fca1, fin 2018-06 : alerte niveau (sévérité moyenne) sur la remise tardive au transporteur, 10.0 % sur 90 jours (n = 340) contre 5.3 % pour la marketplace. Retard de livraison à 8.5 % (n = 318) et avis 1-2 étoiles à 12.5 % (n = 313), sans alerte ce mois. Les taux de retard et d'avis 1-2 étoiles ont fortement baissé depuis 2018-04.",
+    "rejected": [],
+    "stats": {
+      "items_total": 27,
+      "items_valid": 27,
+      "items_rejected": 0,
+      "grounding_rate": 1.0
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "baidu/ernie-5.5-flash-preview:free",
+      "model_returned": "baidu/ernie-5.5-flash-preview:free",
+      "latency_s": 22.03,
+      "usage": {
+        "prompt_tokens": 10989,
+        "completion_tokens": 6528,
+        "total_tokens": 17517
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 22.55,
+      "package_chars": 28386
+    }
+  },
+  "error": null,
+  "judge": {
+    "scores": {
+      "adherence_preuves": 5,
+      "coherence_factuelle": 5,
+      "profondeur_analytique": 4,
+      "separation_faits_hypotheses": 5,
+      "pertinence_recommandations": 5,
+      "actionnabilite": 4,
+      "completude": 5,
+      "clarte": 5
+    },
+    "complete": true,
+    "causal": false,
+    "hallucination": false,
+    "comment": "Analyse fidèle et structurée, respectant la séparation faits/hypothèses et les limites des preuves. Les recommandations sont actionnables et cohérentes avec les alertes déterministes.",
+    "call": {
+      "latency_s": 5.79,
+      "usage": {
+        "prompt_tokens": 11123,
+        "completion_tokens": 163,
+        "total_tokens": 11286
+      },
+      "cost": 0.0,
+      "cached": false
+    }
+  },
+  "judge_error": null
+}

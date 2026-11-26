@@ -15,6 +15,7 @@
     "sparse_flag_matches_raw_counts": true,
     "period_flag_present_in_all_kpi_tables": true,
     "date_flags_recomputed_match": true,
+    "late_handover_recomputed_matches": true,
     "geo_centroids_inside_brazil": true
   },
   "passed": true,
@@ -33,6 +34,8 @@
       "2018-09",
       "2018-10"
     ],
-    "orders_with_date_issue": 1396
+    "orders_with_date_issue": 1396,
+    "handover_eligible": 97657,
+    "late_handover_orders": 5658
   }
 }

@@ -181,3 +181,119 @@ Olist est historique et statique. Le reporting mensuel peut être démontré en 
 
 Source : Brazilian E-Commerce Public Dataset by Olist, Kaggle. Licence affichée par la source : CC BY-NC-SA 4.0.
 
+
+## Rapport de validation technique (novembre 2026)
+
+Le rapport **[docs/ShopInsight_Dossier_Technique.pdf](docs/ShopInsight_Dossier_Technique.pdf)** (12 pages) présente l'état du projet pour validation : réalisation étape par étape, pile technique, architecture, workflows, coordination des agents BO1, BO2 et BO3, évaluation chiffrée de chaque agent et de la couche d'IA, limites et reproduction. Les fiches détaillées des DSO de BO3 sont ci-dessous.
+
+## BO3 : audit des vendeurs (DS3.1, DS3.2, DS3.3)
+
+L'objectif métier est de **prioriser l'investigation des vendeurs dont la performance est inhabituelle ou se dégrade**. Pour cela, on les compare à une référence pertinente et à leur propre passé. Les trois DSO s'enchaînent :
+
+- DS3.1 fournit la **référence** : à qui comparer.
+- DS3.2 décide des **alertes** : qui se dégrade.
+- DS3.3 **explique** dans un audit sourcé : pourquoi, et que faire.
+
+### Socle commun
+
+- **Indicateurs** (commandes mono-vendeur uniquement) :
+  - `late` : livraison après la date annoncée ;
+  - `poor` : avis de 1 ou 2 étoiles ;
+  - `handover` : remise au transporteur après la date limite d'expédition.
+- **Règle « à date »** : on décide à la date T, au début du mois suivant le mois analysé. Une issue n'entre dans un calcul que si elle était connue à T.
+- **Fenêtres** (dates d'achat) :
+  - récente : [T − 90 j, T) ;
+  - historique : [T − 365 j, T − 90 j) ;
+  - future : [T, T + 60 j), qui sert **uniquement à l'évaluation**.
+- **Découpage chronologique** :
+  - TRAIN : décisions de 2017-03 à 2017-12 ;
+  - validation : trois plis glissants (2017-T3, 2017-T4, 2018-T1) ;
+  - TEST : décisions de 2018-04 à 2018-06, lu une seule fois selon un protocole écrit à l'avance.
+- **Vérité prospective** : un vendeur est considéré dégradé si, sur les 60 jours suivants, son taux est significativement supérieur à la référence ou à son historique (binomial unilatéral, p < 0,05, au moins 5 commandes).
+- **Pipeline** :
+
+| Étape | Commande | Produit | Durée |
+|---|---|---|---|
+| Panel « à date » | `python src/build_seller_panel.py --project-dir .` | `data/model/seller_panel_asof` (48 876 lignes, 1 762 vendeurs) | ≈ 45 s |
+| DS3.1 + DS3.2 | `python src/train_seller_models.py --project-dir .` | `quality/bo3_model_results.json`, historique des alertes, historique mensuel | ≈ 3,3 min |
+| DS3.3 | `python src/evaluate_bo3.py --project-dir .` | `quality/bo3_agent_evaluation.json` (C1–C7) | ≈ 2 min |
+
+Le code partagé est dans [src/agents/bo3_sellers.py](src/agents/bo3_sellers.py) : données « à date », Wilson, Benjamini-Hochberg, détecteurs, groupes de pairs et concurrents directs. Les outils de l'agent sont dans [src/agents/bo3_agent.py](src/agents/bo3_agent.py).
+
+### DS3.1 : vendeurs comparables et positionnement
+
+| Rubrique | Contenu |
+|---|---|
+| Construction | Profil du vendeur à T, calculé sur 12 mois **sans aucune issue** : parts de catégories, destinations, volume, prix médian, part du port, poids, délai annoncé. Les variables sont standardisées. |
+| Modèles comparés | Marketplace entière, même catégorie, k plus proches voisins (k = 10/20/40), KMeans (5/8/12 groupes), segments volume × région. |
+| Métrique | **Perte logarithmique par commande** du taux des pairs pour prédire le taux du vendeur sur les 60 jours suivants, relative à la marketplace (= 1,000). C'est une règle de score propre, adaptée à la question « cette référence prédit-elle le futur ? ». La stabilité mensuelle est mesurée par l'ARI et le Jaccard. |
+| Benchmark | Même catégorie : 1,008 (TEST). KMeans : 1,001 à 1,002. Voisins : 1,002 à 1,019. Segments : 1,0003 à 1,0041. |
+| Résultat | Aucun regroupement ne prédit mieux que la marketplace, qui devient donc **la référence des alertes**. Les groupes restent descriptifs : rang dans la catégorie et parmi les **20 concurrents directs**, médiane, seuil du meilleur quart (cible du plan d'action). |
+| Carte du marché | KMeans à 5 familles sur 5 dimensions métier (prix, délai, volume, part du port, clients locaux), projection ACP à axes nommés. La séparation est 2,6 fois meilleure qu'avec le profil complet (silhouette 0,179 contre 0,068). Chaque famille a son évolution mensuelle. |
+| Sur la plateforme | **Fiche vendeur › onglet « Concurrence & classement »** : rangs, graphique vendeur / médianes / meilleur quart, profil commercial, concurrents directs. **Page « Carte du marché »**. La référence « marketplace X % » figure sur les cartes de la fiche. |
+| API | `/api/bo3/sellers/{id}/peers`, `/benchmark`, `/comparison`, `/api/bo3/market-map`, `/market-map/trends`, `/marketplace` |
+
+### DS3.2 : détection de dégradation
+
+| Rubrique | Contenu |
+|---|---|
+| Construction | Pour chaque vendeur × mois × indicateur, on calcule le taux récent (90 j, issues connues à T), la référence marketplace et l'historique du vendeur rétréci vers la référence. On évalue 12 détecteurs, avec correction de Benjamini-Hochberg. |
+| Réglage | Sur les plis uniquement. Un réglage est admissible s'il alerte au plus 10 % des cas éligibles dans **chaque** pli, ce qui correspond à la capacité d'investigation. On retient ensuite le meilleur F1 moyen. |
+| Métriques | **Précision** (coût d'une investigation inutile), **rappel**, **F1**, **alertes par mois** (charge de travail) et **gain** = précision / taux de base. Le gain est indispensable parce que l'événement est rare (≈ 3 %). |
+| Niveau retenu | Détecteur bêta-binomial (a priori = référence, τ = 0,99, ≥ 30 issues). Sur TEST : précision **20,5 %**, rappel 31,1 %, F1 0,247, 45 alertes/mois, **gain ×6,1** (taux de base 3,3 %). |
+| Tendance retenue | Binomial + BH contre l'historique (α = 0,05, ≥ 30 issues). Sur TEST : précision 7,8 %, rappel 14,1 %, gain ×2,4. C'est un signal faible, présenté comme tel. |
+| Benchmark | 12 détecteurs. Niveau : règle « > facteur × référence », binomial + BH, bêta-binomial, observé/attendu. Tendance : règle, binomial + BH (historique court et long), CUSUM ×1,5/×2/×3, bayésien, EWMA. Le tableau complet est en section 8.5 du rapport. |
+| Sévérité | Règle fixée à l'avance. Précision sur TEST : élevée 28,2 %, moyenne 21,8 %, faible 0 %. L'ordre est respecté, donc la sévérité sert à prioriser. La règle de persistance n'a pas été adoptée. |
+| Dégradations simulées | Taux de détection en 3 mois pour une hausse de +5 / +10 / +20 points : retard 20 / 32 / 52 %, avis 8 / 12 / 32 %, remise 4 / 16 / 48 %. |
+| Historique | Rejoué de 2017-03 à 2018-08 : 1 426 lignes (526 nouvelles, 407 en cours, 493 résolues). |
+| Extensions | Retards par État de destination (≥ 15 livraisons, BH q < 0,05, ≥ 1,5 × la référence), non évalué rétrospectivement. Liste « À appeler cette semaine », avec motif, e-mail et script. |
+| Sur la plateforme | **Page « Alertes vendeurs »** : alertes du mois expliquées en clair et réparties par priorité, historique, retards par État. **Page « À appeler cette semaine »**. Badges de l'annuaire. Sur la fiche vendeur : bandeau d'état, badges des cartes, courbe « Trajectoire sur 18 mois ». |
+| API | `/api/bo3/alerts`, `/alert-history`, `/state-alerts`, `/call-list`, `/sellers/{id}/deterioration`, `/strengths`, `/history` |
+
+### DS3.3 : agent d'audit `SellerAuditAgent`
+
+| Rubrique | Contenu |
+|---|---|
+| Architecture | Outils Python déterministes → EvidenceLog (identifiants citables `sel:`, `peer:`, `kpi:`, `alr:`, `ord:`, `rev:`, `mdl:`) → rapport (faits, estimations, comparaisons, actions, limites) → résumé vérifié par `verify_bo3_narrative` → couche IA facultative, dont chaque élément est revalidé contre les preuves. Le cadre `src/agents/core.py` (partagé avec BO1/BO2) n'est pas modifié. |
+| Outils | `get_seller_profile`, `get_peer_group`, `competitive_benchmark`, `compare_to_peers`, `detect_deterioration`, `list_alerts`, `find_strengths`, `get_seller_history`, `get_seller_orders`, `seller_voice`, `get_seller_geography`, `seller_state_alerts`, `multi_seller_exposure`, `market_map`, `market_family_trends`, `call_list`, `marketplace_brief` |
+| Modèles | Pas de modèle entraîné propre : l'agent appelle DS3.1 et DS3.2. S'y ajoutent la traduction locale MarianMT (portugais → français, à la demande) et des modèles de langage gratuits via OpenRouter, qui servent uniquement à la rédaction : Nemotron 3.5 Super principal, plus 5 modèles de repli. |
+| Métriques | Contrôles C1–C7 sur 60 audits TEST stratifiés : structure, citations, absence d'information future (mêmes résultats sur des données amputées après T), pairs passés, chiffres exacts, pas de causalité, effectifs affichés. |
+| Résultats | **C1–C7 : 60/60** pour chaque contrôle. Couche IA sur un audit réel : 34 éléments sur 34 validés après une passe de correction. |
+| Benchmark IA | 8 cas par modèle. Ernie 5.5 Flash : JSON conforme 100 %, éléments validés 93,7 %, juge 4,5/5, latence 28 s. Nemotron 3.5 Super : JSON 87,5 %, éléments validés 88,5 %, juge 4,53/5, latence 19 s. Coût : 0 $. La sélection n'est pas conclue (quota gratuit). |
+| Sur la plateforme | **Fiche vendeur** : bandeau d'état, 3 cartes (taux sur 90 jours comparé à la marketplace, sources cliquables) et 4 onglets (Bilan & plan d'action par l'IA validée, Concurrence & classement, Clients/catalogue/historique, Voix du client & commandes). **Bouton « Télécharger le Bilan PDF »**. **Assistant flottant** sur toutes les pages ; il répond directement à partir des données si le quota IA est épuisé. |
+| API | `/api/bo3/sellers/{id}/audit`, `/api/bo3/ask`, `/api/llm/sellers/{id}/analysis`, `/api/llm/sellers/{id}/chat`, `/api/llm/chat`, `/api/reports/sellers/{id}.pdf`, `/api/reports/sellers/{id}/evidence.csv` |
+
+**Lisibilité.** Chaque information n'apparaît qu'à un seul endroit de l'interface. Chaque pourcentage est donné avec sa base (« sur N commandes ») et sa référence. Les États brésiliens sont écrits en toutes lettres (São Paulo, Minas Gerais…) partout, y compris dans les rapports BO1/BO2 affichés, le PDF et les réponses de l'IA.
+
+## Démarrage rapide
+
+Après la préparation des données ci-dessus :
+
+```powershell
+pip install -r requirements.txt -r requirements-agents.txt -r requirements-api.txt
+pip install torch --index-url https://download.pytorch.org/whl/cpu ; pip install -r requirements-translation.txt   # avis traduits en français
+python src/build_model_features.py --project-dir . ; python src/train_agent_models.py --project-dir .
+python src/build_seller_panel.py --project-dir .   ; python src/train_seller_models.py --project-dir .
+python -m uvicorn backend.app.main:app --port 8000         # API : http://localhost:8000/docs
+cd frontend ; npm install ; npm run dev                     # interface : http://localhost:5173
+```
+
+Tests : `python -m unittest tests/test_bo3.py tests/api/test_api.py tests/api/test_llm.py tests/test_agents.py -v` (72 tests) ; `cd frontend ; npm run build ; node e2e/smoke.mjs` (16 contrôles).
+
+La couche IA est facultative. Pour l'activer, copier `.env.example` en `.env` et renseigner `OPENROUTER_API_KEY` (modèles gratuits uniquement, budget 0 $).
+Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_dictionary.md), [docs/agents_BO1_BO2.md](docs/agents_BO1_BO2.md).
+
+## BO4 : assistant client historique
+
+BO4 ajoute des intervalles de livraison P10/P50/P90 conformalisés, une recherche hybride d'expériences (TF-IDF, BM25, BGE-M3, FAISS, RRF) et un assistant dont chaque affirmation renvoie à une preuve. Toutes les fonctions acceptent `as_of` et masquent jalons, issues et avis futurs. La page **BO4 — Assistant client** et l'API `/api/bo4` sont intégrées à la plateforme.
+
+Le protocole CRISP-DM, l'architecture, l'audit de fuite et les commandes sont dans [docs/agents_BO4.md](docs/agents_BO4.md). Les artefacts volumineux restent hors Git, mais les rapports `quality/bo4_*` consignent désormais une exécution complète sur les données Olist originales. Gradient Boosting est sélectionné (test : MAE 3,846 jours, RMSE 5,923, PICP 0,762, MPIW 11,908 et Winkler 18,576). Les métriques de pertinence retrieval restent volontairement vides tant que les 1 464 candidats n'ont pas reçu de jugements humains.
+
+```powershell
+pip install -r requirements.txt -r requirements-agents.txt -r requirements-api.txt -r requirements-bo4.txt
+python src/train_bo4_models.py --project-dir .
+python src/build_bo4_index.py --project-dir .
+python src/evaluate_bo4.py --project-dir .
+python src/evaluate_bo4_agent.py --project-dir . --scenarios 60
+python src/run_agents.py bo4 --order <order_id> --as-of 2018-06-01 --ask "Quand arrivera ma commande ?"
+```

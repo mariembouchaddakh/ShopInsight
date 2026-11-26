@@ -25,6 +25,7 @@ Grain : une ligne par commande, avec résultats rétrospectifs et indicateurs d'
 | `freight_total` | float64 | 775 |
 | `product_weight_mean_g` | float64 | 791 |
 | `product_volume_mean_cm3` | float64 | 791 |
+| `shipping_limit_max` | datetime64[us] | 775 |
 | `primary_category` | str | 0 |
 | `single_seller_id` | str | 2053 |
 | `payment_rows` | Int64 | 0 |
@@ -41,6 +42,7 @@ Grain : une ligne par commande, avec résultats rétrospectifs et indicateurs d'
 | `is_poor_review` | Int64 | 768 |
 | `has_items` | boolean | 0 |
 | `is_multi_seller` | boolean | 0 |
+| `seller_state` | str | 2053 |
 | `customer_lat` | float64 | 279 |
 | `customer_lng` | float64 | 279 |
 | `customer_has_geo` | bool | 0 |
@@ -59,6 +61,9 @@ Grain : une ligne par commande, avec résultats rétrospectifs et indicateurs d'
 | `late_label_eligible` | bool | 0 |
 | `is_late` | Int64 | 2971 |
 | `poor_review_label_eligible` | bool | 0 |
+| `handover_label_eligible` | bool | 0 |
+| `handover_delay_days` | float64 | 1784 |
+| `is_late_handover` | Int64 | 1784 |
 
 ## orders_model_base
 

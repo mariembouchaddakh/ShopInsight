@@ -1,0 +1,3679 @@
+{
+  "protocol": "docs/ShopInsight_Dossier_Technique.pdf, annexe A",
+  "ds3_1_peer_groups": {
+    "configs": {
+      "global": {
+        "label": "toute la marketplace",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.23812,
+              "brier": 0.0575
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.2467,
+              "brier": 0.05773
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37533,
+              "brier": 0.10871
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.3721,
+              "brier": 0.10783
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19328,
+              "brier": 0.04535
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18495,
+              "brier": 0.04417
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32024,
+              "brier": 0.08229
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32511,
+              "brier": 0.08213
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44473,
+              "brier": 0.13517
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44597,
+              "brier": 0.13472
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25349,
+              "brier": 0.06455
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23727,
+              "brier": 0.06231
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39423,
+              "brier": 0.10795
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39884,
+              "brier": 0.10802
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46368,
+              "brier": 0.14293
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46157,
+              "brier": 0.14181
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18806,
+              "brier": 0.04405
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17209,
+              "brier": 0.04377
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17793,
+              "brier": 0.03895
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18301,
+              "brier": 0.04062
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34226,
+              "brier": 0.09526
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33748,
+              "brier": 0.09449
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19277,
+              "brier": 0.04559
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18526,
+              "brier": 0.04509
+            }
+          }
+        },
+        "stability": null,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 1.0,
+          "valid_2017Q4": 1.0,
+          "valid_2018Q1": 1.0,
+          "test": 1.0,
+          "valid_mean": 1.0
+        }
+      },
+      "category": {
+        "label": "même catégorie principale",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24137,
+              "brier": 0.05759
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24822,
+              "brier": 0.05776
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37567,
+              "brier": 0.10872
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37268,
+              "brier": 0.10794
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19732,
+              "brier": 0.04737
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18522,
+              "brier": 0.04418
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32371,
+              "brier": 0.08243
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32598,
+              "brier": 0.08215
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44576,
+              "brier": 0.13517
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44627,
+              "brier": 0.13468
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25223,
+              "brier": 0.06351
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23794,
+              "brier": 0.06228
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39821,
+              "brier": 0.10817
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39985,
+              "brier": 0.10809
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46436,
+              "brier": 0.14302
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46174,
+              "brier": 0.14179
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.19032,
+              "brier": 0.04444
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17311,
+              "brier": 0.04381
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17914,
+              "brier": 0.03923
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18316,
+              "brier": 0.04067
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34274,
+              "brier": 0.09549
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33745,
+              "brier": 0.09451
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19578,
+              "brier": 0.04592
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18666,
+              "brier": 0.04514
+            }
+          }
+        },
+        "stability": 0.946,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 1.0118,
+          "valid_2017Q4": 1.0027,
+          "valid_2018Q1": 1.0079,
+          "test": 1.0079,
+          "valid_mean": 1.0075
+        }
+      },
+      "knn_k20": {
+        "label": "20 vendeurs les plus proches (k plus proches voisins)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24103,
+              "brier": 0.05762
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24787,
+              "brier": 0.05774
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37535,
+              "brier": 0.1087
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37243,
+              "brier": 0.10787
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19066,
+              "brier": 0.04515
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18573,
+              "brier": 0.04422
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32496,
+              "brier": 0.08253
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32683,
+              "brier": 0.08219
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44606,
+              "brier": 0.13531
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44683,
+              "brier": 0.13478
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25975,
+              "brier": 0.06494
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.2382,
+              "brier": 0.06237
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40065,
+              "brier": 0.10839
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.4016,
+              "brier": 0.10817
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46701,
+              "brier": 0.14354
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46329,
+              "brier": 0.1421
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.1926,
+              "brier": 0.04458
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17376,
+              "brier": 0.04395
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17891,
+              "brier": 0.0392
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18322,
+              "brier": 0.04068
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34133,
+              "brier": 0.09511
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33717,
+              "brier": 0.09445
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19678,
+              "brier": 0.04596
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18657,
+              "brier": 0.04518
+            }
+          }
+        },
+        "stability": 0.592,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 0.9996,
+          "valid_2017Q4": 1.0141,
+          "valid_2018Q1": 1.0159,
+          "test": 1.0079,
+          "valid_mean": 1.0099
+        }
+      },
+      "cluster_8": {
+        "label": "groupe KMeans (8 groupes)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.2399,
+              "brier": 0.0576
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.2467,
+              "brier": 0.05772
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37736,
+              "brier": 0.10915
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37284,
+              "brier": 0.10796
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19293,
+              "brier": 0.04551
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18634,
+              "brier": 0.04425
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32141,
+              "brier": 0.08234
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32525,
+              "brier": 0.08212
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44527,
+              "brier": 0.13526
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44572,
+              "brier": 0.13466
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25808,
+              "brier": 0.06501
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23837,
+              "brier": 0.06235
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39545,
+              "brier": 0.10803
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39954,
+              "brier": 0.10805
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46389,
+              "brier": 0.14297
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46146,
+              "brier": 0.14179
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18872,
+              "brier": 0.04418
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17212,
+              "brier": 0.04379
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17794,
+              "brier": 0.03896
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18291,
+              "brier": 0.0406
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34217,
+              "brier": 0.09526
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33731,
+              "brier": 0.09446
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19343,
+              "brier": 0.0457
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18581,
+              "brier": 0.04511
+            }
+          }
+        },
+        "stability": 0.46,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 1.0037,
+          "valid_2017Q4": 1.0077,
+          "valid_2018Q1": 1.0024,
+          "test": 1.0011,
+          "valid_mean": 1.0046
+        }
+      },
+      "knn_k10": {
+        "label": "10 vendeurs les plus proches (k plus proches voisins)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24347,
+              "brier": 0.05772
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24904,
+              "brier": 0.05777
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37649,
+              "brier": 0.10891
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37271,
+              "brier": 0.10792
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19453,
+              "brier": 0.04567
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18664,
+              "brier": 0.0444
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32626,
+              "brier": 0.08253
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32782,
+              "brier": 0.0822
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44772,
+              "brier": 0.13556
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44757,
+              "brier": 0.13491
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.26445,
+              "brier": 0.0654
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.2409,
+              "brier": 0.06251
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40388,
+              "brier": 0.10858
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.4028,
+              "brier": 0.10825
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46991,
+              "brier": 0.14408
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46451,
+              "brier": 0.14234
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.19622,
+              "brier": 0.04493
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17369,
+              "brier": 0.04399
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18013,
+              "brier": 0.03948
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18304,
+              "brier": 0.04066
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34216,
+              "brier": 0.09539
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33753,
+              "brier": 0.09452
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.20122,
+              "brier": 0.04637
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18665,
+              "brier": 0.04516
+            }
+          }
+        },
+        "stability": 0.548,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 1.0107,
+          "valid_2017Q4": 1.0229,
+          "valid_2018Q1": 1.0271,
+          "test": 1.0186,
+          "valid_mean": 1.0202
+        }
+      },
+      "knn_k40": {
+        "label": "40 vendeurs les plus proches (k plus proches voisins)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.23972,
+              "brier": 0.05758
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24725,
+              "brier": 0.05774
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37509,
+              "brier": 0.10866
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37238,
+              "brier": 0.10786
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19063,
+              "brier": 0.0451
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18574,
+              "brier": 0.0442
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32299,
+              "brier": 0.08245
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32622,
+              "brier": 0.08218
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44462,
+              "brier": 0.13507
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44625,
+              "brier": 0.1347
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25658,
+              "brier": 0.06474
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23754,
+              "brier": 0.06231
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39975,
+              "brier": 0.10838
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40107,
+              "brier": 0.10816
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46538,
+              "brier": 0.14324
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46257,
+              "brier": 0.14198
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18891,
+              "brier": 0.04418
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17317,
+              "brier": 0.04387
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17794,
+              "brier": 0.03901
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18311,
+              "brier": 0.04066
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34111,
+              "brier": 0.09503
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33713,
+              "brier": 0.09443
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.1948,
+              "brier": 0.04574
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18593,
+              "brier": 0.04513
+            }
+          }
+        },
+        "stability": 0.626,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 0.9975,
+          "valid_2017Q4": 1.0068,
+          "valid_2018Q1": 1.0074,
+          "test": 1.0024,
+          "valid_mean": 1.0039
+        }
+      },
+      "cluster_5": {
+        "label": "groupe KMeans (5 groupes)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.23872,
+              "brier": 0.05753
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24639,
+              "brier": 0.05771
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37618,
+              "brier": 0.10889
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37239,
+              "brier": 0.10789
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19285,
+              "brier": 0.04537
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18619,
+              "brier": 0.04422
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32071,
+              "brier": 0.08232
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32512,
+              "brier": 0.08213
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44496,
+              "brier": 0.13521
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44587,
+              "brier": 0.1347
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25542,
+              "brier": 0.06471
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23628,
+              "brier": 0.0622
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39448,
+              "brier": 0.10797
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39882,
+              "brier": 0.10802
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.4641,
+              "brier": 0.14302
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.4615,
+              "brier": 0.14181
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18832,
+              "brier": 0.0441
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17214,
+              "brier": 0.04377
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.1779,
+              "brier": 0.03895
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18302,
+              "brier": 0.04063
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34218,
+              "brier": 0.09525
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33738,
+              "brier": 0.09448
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19325,
+              "brier": 0.04565
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18556,
+              "brier": 0.04511
+            }
+          }
+        },
+        "stability": 0.638,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 1.0009,
+          "valid_2017Q4": 1.0032,
+          "valid_2018Q1": 1.001,
+          "test": 1.0007,
+          "valid_mean": 1.0017
+        }
+      },
+      "cluster_12": {
+        "label": "groupe KMeans (12 groupes)",
+        "valid_2017Q3": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.23932,
+              "brier": 0.05755
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21524,
+              "logloss": 0.24626,
+              "brier": 0.0577
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37608,
+              "brier": 0.10887
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 921,
+              "n_orders": 21735,
+              "logloss": 0.37224,
+              "brier": 0.10785
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.19146,
+              "brier": 0.04537
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 916,
+              "n_orders": 21712,
+              "logloss": 0.18598,
+              "brier": 0.04427
+            }
+          }
+        },
+        "valid_2017Q4": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32183,
+              "brier": 0.08235
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1153,
+              "n_orders": 30585,
+              "logloss": 0.32511,
+              "brier": 0.0821
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44535,
+              "brier": 0.13525
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1162,
+              "n_orders": 30841,
+              "logloss": 0.44591,
+              "brier": 0.13468
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.25555,
+              "brier": 0.06476
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1161,
+              "n_orders": 30993,
+              "logloss": 0.23677,
+              "brier": 0.06224
+            }
+          }
+        },
+        "valid_2018Q1": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39622,
+              "brier": 0.10808
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39965,
+              "brier": 0.10807
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46396,
+              "brier": 0.14295
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46155,
+              "brier": 0.14178
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18906,
+              "brier": 0.04425
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17236,
+              "brier": 0.04381
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17847,
+              "brier": 0.03908
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18307,
+              "brier": 0.04064
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34235,
+              "brier": 0.09532
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33746,
+              "brier": 0.09449
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19351,
+              "brier": 0.04566
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18535,
+              "brier": 0.0451
+            }
+          }
+        },
+        "stability": 0.368,
+        "relative_logloss_vs_global": {
+          "valid_2017Q3": 0.9992,
+          "valid_2017Q4": 1.0048,
+          "valid_2018Q1": 1.0037,
+          "test": 1.0024,
+          "valid_mean": 1.0026
+        }
+      }
+    },
+    "selected": "global",
+    "selection_rule": "perte log moyenne sur les 3 plis VALID (2017-Q3, 2017-Q4, 2018-Q1) du taux de référence → taux futur, relative à la marketplace"
+  },
+  "ds3_2_detectors": {
+    "regle_pairs": {
+      "family": "level",
+      "description": "taux récent > facteur × taux de référence (règle simple)",
+      "min_history": 30,
+      "params": {
+        "factor": 3.0
+      },
+      "gate": "eligible",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 39,
+          "alerts_per_month": 13.0,
+          "eligible_cases": 1385,
+          "alert_share_of_eligible": 0.0282,
+          "evaluable_cases": 1256,
+          "tp": 8,
+          "fp": 21,
+          "fn": 130,
+          "precision": 0.2759,
+          "recall": 0.058,
+          "f1": 0.0958,
+          "truth_base_rate": 0.1099,
+          "lift": 2.51
+        },
+        "2017Q4": {
+          "alerts": 120,
+          "alerts_per_month": 40.0,
+          "eligible_cases": 1848,
+          "alert_share_of_eligible": 0.0649,
+          "evaluable_cases": 1560,
+          "tp": 44,
+          "fp": 37,
+          "fn": 284,
+          "precision": 0.5432,
+          "recall": 0.1341,
+          "f1": 0.2152,
+          "truth_base_rate": 0.2103,
+          "lift": 2.58
+        },
+        "2018Q1": {
+          "alerts": 206,
+          "alerts_per_month": 68.67,
+          "eligible_cases": 2459,
+          "alert_share_of_eligible": 0.0838,
+          "evaluable_cases": 2167,
+          "tp": 55,
+          "fp": 112,
+          "fn": 281,
+          "precision": 0.3293,
+          "recall": 0.1637,
+          "f1": 0.2187,
+          "truth_base_rate": 0.1551,
+          "lift": 2.12
+        }
+      },
+      "valid_mean_f1": 0.1766,
+      "valid_max_alert_share": 0.0838,
+      "valid": {
+        "alerts": 206,
+        "alerts_per_month": 68.67,
+        "eligible_cases": 2459,
+        "alert_share_of_eligible": 0.0838,
+        "evaluable_cases": 2167,
+        "tp": 55,
+        "fp": 112,
+        "fn": 281,
+        "precision": 0.3293,
+        "recall": 0.1637,
+        "f1": 0.2187,
+        "truth_base_rate": 0.1551,
+        "lift": 2.12
+      },
+      "test": {
+        "alerts": 154,
+        "alerts_per_month": 51.33,
+        "eligible_cases": 2848,
+        "alert_share_of_eligible": 0.0541,
+        "evaluable_cases": 2214,
+        "tp": 23,
+        "fp": 82,
+        "fn": 51,
+        "precision": 0.219,
+        "recall": 0.3108,
+        "f1": 0.257,
+        "truth_base_rate": 0.0334,
+        "lift": 6.55
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 57,
+          "alerts_per_month": 19.0,
+          "eligible_cases": 935,
+          "alert_share_of_eligible": 0.061,
+          "evaluable_cases": 727,
+          "tp": 1,
+          "fp": 38,
+          "fn": 7,
+          "precision": 0.0256,
+          "recall": 0.125,
+          "f1": 0.0426,
+          "truth_base_rate": 0.011,
+          "lift": 2.33
+        },
+        "poor": {
+          "alerts": 22,
+          "alerts_per_month": 7.33,
+          "eligible_cases": 921,
+          "alert_share_of_eligible": 0.0239,
+          "evaluable_cases": 717,
+          "tp": 4,
+          "fp": 13,
+          "fn": 12,
+          "precision": 0.2353,
+          "recall": 0.25,
+          "f1": 0.2424,
+          "truth_base_rate": 0.0223,
+          "lift": 10.54
+        },
+        "handover": {
+          "alerts": 75,
+          "alerts_per_month": 25.0,
+          "eligible_cases": 992,
+          "alert_share_of_eligible": 0.0756,
+          "evaluable_cases": 770,
+          "tp": 18,
+          "fp": 31,
+          "fn": 32,
+          "precision": 0.3673,
+          "recall": 0.36,
+          "f1": 0.3636,
+          "truth_base_rate": 0.0649,
+          "lift": 5.66
+        }
+      }
+    },
+    "binomial_bh_pairs": {
+      "family": "level",
+      "description": "test binomial unilatéral vs taux de référence, correction de Benjamini-Hochberg",
+      "min_history": 30,
+      "params": {
+        "alpha": 0.1
+      },
+      "gate": "eligible",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 19,
+          "alerts_per_month": 6.33,
+          "eligible_cases": 1385,
+          "alert_share_of_eligible": 0.0137,
+          "evaluable_cases": 1256,
+          "tp": 7,
+          "fp": 9,
+          "fn": 131,
+          "precision": 0.4375,
+          "recall": 0.0507,
+          "f1": 0.0909,
+          "truth_base_rate": 0.1099,
+          "lift": 3.98
+        },
+        "2017Q4": {
+          "alerts": 89,
+          "alerts_per_month": 29.67,
+          "eligible_cases": 1848,
+          "alert_share_of_eligible": 0.0482,
+          "evaluable_cases": 1560,
+          "tp": 47,
+          "fp": 25,
+          "fn": 281,
+          "precision": 0.6528,
+          "recall": 0.1433,
+          "f1": 0.235,
+          "truth_base_rate": 0.2103,
+          "lift": 3.1
+        },
+        "2018Q1": {
+          "alerts": 213,
+          "alerts_per_month": 71.0,
+          "eligible_cases": 2459,
+          "alert_share_of_eligible": 0.0866,
+          "evaluable_cases": 2167,
+          "tp": 68,
+          "fp": 118,
+          "fn": 268,
+          "precision": 0.3656,
+          "recall": 0.2024,
+          "f1": 0.2605,
+          "truth_base_rate": 0.1551,
+          "lift": 2.36
+        }
+      },
+      "valid_mean_f1": 0.1955,
+      "valid_max_alert_share": 0.0866,
+      "valid": {
+        "alerts": 213,
+        "alerts_per_month": 71.0,
+        "eligible_cases": 2459,
+        "alert_share_of_eligible": 0.0866,
+        "evaluable_cases": 2167,
+        "tp": 68,
+        "fp": 118,
+        "fn": 268,
+        "precision": 0.3656,
+        "recall": 0.2024,
+        "f1": 0.2605,
+        "truth_base_rate": 0.1551,
+        "lift": 2.36
+      },
+      "test": {
+        "alerts": 180,
+        "alerts_per_month": 60.0,
+        "eligible_cases": 2848,
+        "alert_share_of_eligible": 0.0632,
+        "evaluable_cases": 2214,
+        "tp": 25,
+        "fp": 122,
+        "fn": 49,
+        "precision": 0.1701,
+        "recall": 0.3378,
+        "f1": 0.2262,
+        "truth_base_rate": 0.0334,
+        "lift": 5.09
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 79,
+          "alerts_per_month": 26.33,
+          "eligible_cases": 935,
+          "alert_share_of_eligible": 0.0845,
+          "evaluable_cases": 727,
+          "tp": 3,
+          "fp": 63,
+          "fn": 5,
+          "precision": 0.0455,
+          "recall": 0.375,
+          "f1": 0.0811,
+          "truth_base_rate": 0.011,
+          "lift": 4.13
+        },
+        "poor": {
+          "alerts": 50,
+          "alerts_per_month": 16.67,
+          "eligible_cases": 921,
+          "alert_share_of_eligible": 0.0543,
+          "evaluable_cases": 717,
+          "tp": 6,
+          "fp": 38,
+          "fn": 10,
+          "precision": 0.1364,
+          "recall": 0.375,
+          "f1": 0.2,
+          "truth_base_rate": 0.0223,
+          "lift": 6.11
+        },
+        "handover": {
+          "alerts": 51,
+          "alerts_per_month": 17.0,
+          "eligible_cases": 992,
+          "alert_share_of_eligible": 0.0514,
+          "evaluable_cases": 770,
+          "tp": 16,
+          "fp": 21,
+          "fn": 34,
+          "precision": 0.4324,
+          "recall": 0.32,
+          "f1": 0.3678,
+          "truth_base_rate": 0.0649,
+          "lift": 6.66
+        }
+      }
+    },
+    "beta_binomial_pairs": {
+      "family": "level",
+      "description": "a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil",
+      "min_history": 30,
+      "params": {
+        "tau": 0.99
+      },
+      "gate": "eligible",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 21,
+          "alerts_per_month": 7.0,
+          "eligible_cases": 1385,
+          "alert_share_of_eligible": 0.0152,
+          "evaluable_cases": 1256,
+          "tp": 8,
+          "fp": 10,
+          "fn": 130,
+          "precision": 0.4444,
+          "recall": 0.058,
+          "f1": 0.1026,
+          "truth_base_rate": 0.1099,
+          "lift": 4.05
+        },
+        "2017Q4": {
+          "alerts": 86,
+          "alerts_per_month": 28.67,
+          "eligible_cases": 1848,
+          "alert_share_of_eligible": 0.0465,
+          "evaluable_cases": 1560,
+          "tp": 48,
+          "fp": 22,
+          "fn": 280,
+          "precision": 0.6857,
+          "recall": 0.1463,
+          "f1": 0.2412,
+          "truth_base_rate": 0.2103,
+          "lift": 3.26
+        },
+        "2018Q1": {
+          "alerts": 174,
+          "alerts_per_month": 58.0,
+          "eligible_cases": 2459,
+          "alert_share_of_eligible": 0.0708,
+          "evaluable_cases": 2167,
+          "tp": 59,
+          "fp": 89,
+          "fn": 277,
+          "precision": 0.3986,
+          "recall": 0.1756,
+          "f1": 0.2438,
+          "truth_base_rate": 0.1551,
+          "lift": 2.57
+        }
+      },
+      "valid_mean_f1": 0.1959,
+      "valid_max_alert_share": 0.0708,
+      "valid": {
+        "alerts": 174,
+        "alerts_per_month": 58.0,
+        "eligible_cases": 2459,
+        "alert_share_of_eligible": 0.0708,
+        "evaluable_cases": 2167,
+        "tp": 59,
+        "fp": 89,
+        "fn": 277,
+        "precision": 0.3986,
+        "recall": 0.1756,
+        "f1": 0.2438,
+        "truth_base_rate": 0.1551,
+        "lift": 2.57
+      },
+      "test": {
+        "alerts": 135,
+        "alerts_per_month": 45.0,
+        "eligible_cases": 2848,
+        "alert_share_of_eligible": 0.0474,
+        "evaluable_cases": 2214,
+        "tp": 23,
+        "fp": 89,
+        "fn": 51,
+        "precision": 0.2054,
+        "recall": 0.3108,
+        "f1": 0.2473,
+        "truth_base_rate": 0.0334,
+        "lift": 6.14
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 51,
+          "alerts_per_month": 17.0,
+          "eligible_cases": 935,
+          "alert_share_of_eligible": 0.0545,
+          "evaluable_cases": 727,
+          "tp": 3,
+          "fp": 39,
+          "fn": 5,
+          "precision": 0.0714,
+          "recall": 0.375,
+          "f1": 0.12,
+          "truth_base_rate": 0.011,
+          "lift": 6.49
+        },
+        "poor": {
+          "alerts": 41,
+          "alerts_per_month": 13.67,
+          "eligible_cases": 921,
+          "alert_share_of_eligible": 0.0445,
+          "evaluable_cases": 717,
+          "tp": 5,
+          "fp": 31,
+          "fn": 11,
+          "precision": 0.1389,
+          "recall": 0.3125,
+          "f1": 0.1923,
+          "truth_base_rate": 0.0223,
+          "lift": 6.22
+        },
+        "handover": {
+          "alerts": 43,
+          "alerts_per_month": 14.33,
+          "eligible_cases": 992,
+          "alert_share_of_eligible": 0.0433,
+          "evaluable_cases": 770,
+          "tp": 15,
+          "fp": 19,
+          "fn": 35,
+          "precision": 0.4412,
+          "recall": 0.3,
+          "f1": 0.3571,
+          "truth_base_rate": 0.0649,
+          "lift": 6.79
+        }
+      }
+    },
+    "observe_attendu": {
+      "family": "level",
+      "description": "observé / attendu (modèle entraîné sur TRAIN, recalé sur la marketplace à T), score z",
+      "min_history": 30,
+      "params": {
+        "z": 2.0
+      },
+      "gate": "eligible",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 30,
+          "alerts_per_month": 10.0,
+          "eligible_cases": 898,
+          "alert_share_of_eligible": 0.0334,
+          "evaluable_cases": 815,
+          "tp": 2,
+          "fp": 23,
+          "fn": 99,
+          "precision": 0.08,
+          "recall": 0.0198,
+          "f1": 0.0317,
+          "truth_base_rate": 0.1239,
+          "lift": 0.65
+        },
+        "2017Q4": {
+          "alerts": 49,
+          "alerts_per_month": 16.33,
+          "eligible_cases": 1182,
+          "alert_share_of_eligible": 0.0415,
+          "evaluable_cases": 999,
+          "tp": 11,
+          "fp": 29,
+          "fn": 226,
+          "precision": 0.275,
+          "recall": 0.0464,
+          "f1": 0.0794,
+          "truth_base_rate": 0.2372,
+          "lift": 1.16
+        },
+        "2018Q1": {
+          "alerts": 136,
+          "alerts_per_month": 45.33,
+          "eligible_cases": 1580,
+          "alert_share_of_eligible": 0.0861,
+          "evaluable_cases": 1397,
+          "tp": 25,
+          "fp": 93,
+          "fn": 261,
+          "precision": 0.2119,
+          "recall": 0.0874,
+          "f1": 0.1238,
+          "truth_base_rate": 0.2047,
+          "lift": 1.03
+        }
+      },
+      "valid_mean_f1": 0.0783,
+      "valid_max_alert_share": 0.0861,
+      "valid": {
+        "alerts": 136,
+        "alerts_per_month": 45.33,
+        "eligible_cases": 1580,
+        "alert_share_of_eligible": 0.0861,
+        "evaluable_cases": 1397,
+        "tp": 25,
+        "fp": 93,
+        "fn": 261,
+        "precision": 0.2119,
+        "recall": 0.0874,
+        "f1": 0.1238,
+        "truth_base_rate": 0.2047,
+        "lift": 1.03
+      },
+      "test": {
+        "alerts": 243,
+        "alerts_per_month": 81.0,
+        "eligible_cases": 1856,
+        "alert_share_of_eligible": 0.1309,
+        "evaluable_cases": 1444,
+        "tp": 8,
+        "fp": 188,
+        "fn": 16,
+        "precision": 0.0408,
+        "recall": 0.3333,
+        "f1": 0.0727,
+        "truth_base_rate": 0.0166,
+        "lift": 2.46
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 115,
+          "alerts_per_month": 38.33,
+          "eligible_cases": 935,
+          "alert_share_of_eligible": 0.123,
+          "evaluable_cases": 727,
+          "tp": 1,
+          "fp": 94,
+          "fn": 7,
+          "precision": 0.0105,
+          "recall": 0.125,
+          "f1": 0.0194,
+          "truth_base_rate": 0.011,
+          "lift": 0.96
+        },
+        "poor": {
+          "alerts": 128,
+          "alerts_per_month": 42.67,
+          "eligible_cases": 921,
+          "alert_share_of_eligible": 0.139,
+          "evaluable_cases": 717,
+          "tp": 7,
+          "fp": 94,
+          "fn": 9,
+          "precision": 0.0693,
+          "recall": 0.4375,
+          "f1": 0.1197,
+          "truth_base_rate": 0.0223,
+          "lift": 3.11
+        }
+      }
+    },
+    "regle_historique": {
+      "family": "trend",
+      "description": "taux récent > facteur × historique du vendeur (règle simple)",
+      "min_history": 30,
+      "params": {
+        "factor": 3.0
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 60,
+          "alerts_per_month": 20.0,
+          "eligible_cases": 1169,
+          "alert_share_of_eligible": 0.0513,
+          "evaluable_cases": 1059,
+          "tp": 10,
+          "fp": 38,
+          "fn": 113,
+          "precision": 0.2083,
+          "recall": 0.0813,
+          "f1": 0.117,
+          "truth_base_rate": 0.1161,
+          "lift": 1.79
+        },
+        "2017Q4": {
+          "alerts": 177,
+          "alerts_per_month": 59.0,
+          "eligible_cases": 1639,
+          "alert_share_of_eligible": 0.108,
+          "evaluable_cases": 1377,
+          "tp": 68,
+          "fp": 75,
+          "fn": 268,
+          "precision": 0.4755,
+          "recall": 0.2024,
+          "f1": 0.2839,
+          "truth_base_rate": 0.244,
+          "lift": 1.95
+        },
+        "2018Q1": {
+          "alerts": 272,
+          "alerts_per_month": 90.67,
+          "eligible_cases": 2152,
+          "alert_share_of_eligible": 0.1264,
+          "evaluable_cases": 1882,
+          "tp": 63,
+          "fp": 168,
+          "fn": 248,
+          "precision": 0.2727,
+          "recall": 0.2026,
+          "f1": 0.2325,
+          "truth_base_rate": 0.1652,
+          "lift": 1.65
+        }
+      },
+      "valid_mean_f1": 0.2111,
+      "valid_max_alert_share": 0.1264,
+      "valid": {
+        "alerts": 272,
+        "alerts_per_month": 90.67,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.1264,
+        "evaluable_cases": 1882,
+        "tp": 63,
+        "fp": 168,
+        "fn": 248,
+        "precision": 0.2727,
+        "recall": 0.2026,
+        "f1": 0.2325,
+        "truth_base_rate": 0.1652,
+        "lift": 1.65
+      },
+      "test": {
+        "alerts": 189,
+        "alerts_per_month": 63.0,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0725,
+        "evaluable_cases": 1994,
+        "tp": 13,
+        "fp": 118,
+        "fn": 51,
+        "precision": 0.0992,
+        "recall": 0.2031,
+        "f1": 0.1333,
+        "truth_base_rate": 0.0321,
+        "lift": 3.09
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 109,
+          "alerts_per_month": 36.33,
+          "eligible_cases": 859,
+          "alert_share_of_eligible": 0.1269,
+          "evaluable_cases": 658,
+          "tp": 4,
+          "fp": 69,
+          "fn": 11,
+          "precision": 0.0548,
+          "recall": 0.2667,
+          "f1": 0.0909,
+          "truth_base_rate": 0.0228,
+          "lift": 2.4
+        },
+        "poor": {
+          "alerts": 19,
+          "alerts_per_month": 6.33,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.0224,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 13,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 61,
+          "alerts_per_month": 20.33,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0679,
+          "evaluable_cases": 685,
+          "tp": 9,
+          "fp": 36,
+          "fn": 36,
+          "precision": 0.2,
+          "recall": 0.2,
+          "f1": 0.2,
+          "truth_base_rate": 0.0657,
+          "lift": 3.04
+        }
+      }
+    },
+    "binomial_bh_historique": {
+      "family": "trend",
+      "description": "test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg",
+      "min_history": 30,
+      "params": {
+        "alpha": 0.05
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 5,
+          "alerts_per_month": 1.67,
+          "eligible_cases": 1169,
+          "alert_share_of_eligible": 0.0043,
+          "evaluable_cases": 1059,
+          "tp": 2,
+          "fp": 2,
+          "fn": 121,
+          "precision": 0.5,
+          "recall": 0.0163,
+          "f1": 0.0315,
+          "truth_base_rate": 0.1161,
+          "lift": 4.3
+        },
+        "2017Q4": {
+          "alerts": 91,
+          "alerts_per_month": 30.33,
+          "eligible_cases": 1639,
+          "alert_share_of_eligible": 0.0555,
+          "evaluable_cases": 1377,
+          "tp": 53,
+          "fp": 28,
+          "fn": 283,
+          "precision": 0.6543,
+          "recall": 0.1577,
+          "f1": 0.2542,
+          "truth_base_rate": 0.244,
+          "lift": 2.68
+        },
+        "2018Q1": {
+          "alerts": 198,
+          "alerts_per_month": 66.0,
+          "eligible_cases": 2152,
+          "alert_share_of_eligible": 0.092,
+          "evaluable_cases": 1882,
+          "tp": 57,
+          "fp": 116,
+          "fn": 254,
+          "precision": 0.3295,
+          "recall": 0.1833,
+          "f1": 0.2355,
+          "truth_base_rate": 0.1652,
+          "lift": 1.99
+        }
+      },
+      "valid_mean_f1": 0.1737,
+      "valid_max_alert_share": 0.092,
+      "valid": {
+        "alerts": 198,
+        "alerts_per_month": 66.0,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.092,
+        "evaluable_cases": 1882,
+        "tp": 57,
+        "fp": 116,
+        "fn": 254,
+        "precision": 0.3295,
+        "recall": 0.1833,
+        "f1": 0.2355,
+        "truth_base_rate": 0.1652,
+        "lift": 1.99
+      },
+      "test": {
+        "alerts": 135,
+        "alerts_per_month": 45.0,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0518,
+        "evaluable_cases": 1994,
+        "tp": 9,
+        "fp": 106,
+        "fn": 55,
+        "precision": 0.0783,
+        "recall": 0.1406,
+        "f1": 0.1006,
+        "truth_base_rate": 0.0321,
+        "lift": 2.44
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 80,
+          "alerts_per_month": 26.67,
+          "eligible_cases": 859,
+          "alert_share_of_eligible": 0.0931,
+          "evaluable_cases": 658,
+          "tp": 5,
+          "fp": 63,
+          "fn": 10,
+          "precision": 0.0735,
+          "recall": 0.3333,
+          "f1": 0.1205,
+          "truth_base_rate": 0.0228,
+          "lift": 3.23
+        },
+        "poor": {
+          "alerts": 34,
+          "alerts_per_month": 11.33,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.04,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 32,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 21,
+          "alerts_per_month": 7.0,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0234,
+          "evaluable_cases": 685,
+          "tp": 4,
+          "fp": 11,
+          "fn": 41,
+          "precision": 0.2667,
+          "recall": 0.0889,
+          "f1": 0.1333,
+          "truth_base_rate": 0.0657,
+          "lift": 4.06
+        }
+      }
+    },
+    "cusum_historique": {
+      "family": "trend",
+      "description": "CUSUM de Bernoulli (cote ×2) sur les 90 derniers jours vs historique",
+      "min_history": 50,
+      "params": {
+        "h": 4.0
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 2,
+          "alerts_per_month": 0.67,
+          "eligible_cases": 744,
+          "alert_share_of_eligible": 0.0027,
+          "evaluable_cases": 687,
+          "tp": 2,
+          "fp": 0,
+          "fn": 87,
+          "precision": 1.0,
+          "recall": 0.0225,
+          "f1": 0.044,
+          "truth_base_rate": 0.1295,
+          "lift": 7.72
+        },
+        "2017Q4": {
+          "alerts": 54,
+          "alerts_per_month": 18.0,
+          "eligible_cases": 1211,
+          "alert_share_of_eligible": 0.0446,
+          "evaluable_cases": 1068,
+          "tp": 35,
+          "fp": 14,
+          "fn": 247,
+          "precision": 0.7143,
+          "recall": 0.1241,
+          "f1": 0.2115,
+          "truth_base_rate": 0.264,
+          "lift": 2.71
+        },
+        "2018Q1": {
+          "alerts": 128,
+          "alerts_per_month": 42.67,
+          "eligible_cases": 1587,
+          "alert_share_of_eligible": 0.0807,
+          "evaluable_cases": 1427,
+          "tp": 38,
+          "fp": 74,
+          "fn": 228,
+          "precision": 0.3393,
+          "recall": 0.1429,
+          "f1": 0.2011,
+          "truth_base_rate": 0.1864,
+          "lift": 1.82
+        }
+      },
+      "valid_mean_f1": 0.1522,
+      "valid_max_alert_share": 0.0807,
+      "valid": {
+        "alerts": 128,
+        "alerts_per_month": 42.67,
+        "eligible_cases": 1587,
+        "alert_share_of_eligible": 0.0807,
+        "evaluable_cases": 1427,
+        "tp": 38,
+        "fp": 74,
+        "fn": 228,
+        "precision": 0.3393,
+        "recall": 0.1429,
+        "f1": 0.2011,
+        "truth_base_rate": 0.1864,
+        "lift": 1.82
+      },
+      "test": {
+        "alerts": 82,
+        "alerts_per_month": 27.33,
+        "eligible_cases": 2030,
+        "alert_share_of_eligible": 0.0404,
+        "evaluable_cases": 1584,
+        "tp": 6,
+        "fp": 73,
+        "fn": 45,
+        "precision": 0.0759,
+        "recall": 0.1176,
+        "f1": 0.0923,
+        "truth_base_rate": 0.0322,
+        "lift": 2.36
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 39,
+          "alerts_per_month": 13.0,
+          "eligible_cases": 669,
+          "alert_share_of_eligible": 0.0583,
+          "evaluable_cases": 520,
+          "tp": 3,
+          "fp": 35,
+          "fn": 6,
+          "precision": 0.0789,
+          "recall": 0.3333,
+          "f1": 0.1277,
+          "truth_base_rate": 0.0173,
+          "lift": 4.56
+        },
+        "poor": {
+          "alerts": 30,
+          "alerts_per_month": 10.0,
+          "eligible_cases": 668,
+          "alert_share_of_eligible": 0.0449,
+          "evaluable_cases": 523,
+          "tp": 0,
+          "fp": 30,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0057,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 13,
+          "alerts_per_month": 4.33,
+          "eligible_cases": 693,
+          "alert_share_of_eligible": 0.0188,
+          "evaluable_cases": 541,
+          "tp": 3,
+          "fp": 8,
+          "fn": 36,
+          "precision": 0.2727,
+          "recall": 0.0769,
+          "f1": 0.12,
+          "truth_base_rate": 0.0721,
+          "lift": 3.78
+        }
+      }
+    },
+    "cusum_historique_x1.5": {
+      "family": "trend",
+      "description": "CUSUM de Bernoulli (cote ×1,5) sur les 90 derniers jours vs historique",
+      "min_history": 80,
+      "params": {
+        "h": 3.0
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 2,
+          "alerts_per_month": 0.67,
+          "eligible_cases": 427,
+          "alert_share_of_eligible": 0.0047,
+          "evaluable_cases": 411,
+          "tp": 2,
+          "fp": 0,
+          "fn": 59,
+          "precision": 1.0,
+          "recall": 0.0328,
+          "f1": 0.0635,
+          "truth_base_rate": 0.1484,
+          "lift": 6.74
+        },
+        "2017Q4": {
+          "alerts": 32,
+          "alerts_per_month": 10.67,
+          "eligible_cases": 777,
+          "alert_share_of_eligible": 0.0412,
+          "evaluable_cases": 717,
+          "tp": 22,
+          "fp": 7,
+          "fn": 197,
+          "precision": 0.7586,
+          "recall": 0.1005,
+          "f1": 0.1774,
+          "truth_base_rate": 0.3054,
+          "lift": 2.48
+        },
+        "2018Q1": {
+          "alerts": 97,
+          "alerts_per_month": 32.33,
+          "eligible_cases": 1096,
+          "alert_share_of_eligible": 0.0885,
+          "evaluable_cases": 1015,
+          "tp": 32,
+          "fp": 54,
+          "fn": 185,
+          "precision": 0.3721,
+          "recall": 0.1475,
+          "f1": 0.2112,
+          "truth_base_rate": 0.2138,
+          "lift": 1.74
+        }
+      },
+      "valid_mean_f1": 0.1507,
+      "valid_max_alert_share": 0.0885,
+      "valid": {
+        "alerts": 97,
+        "alerts_per_month": 32.33,
+        "eligible_cases": 1096,
+        "alert_share_of_eligible": 0.0885,
+        "evaluable_cases": 1015,
+        "tp": 32,
+        "fp": 54,
+        "fn": 185,
+        "precision": 0.3721,
+        "recall": 0.1475,
+        "f1": 0.2112,
+        "truth_base_rate": 0.2138,
+        "lift": 1.74
+      },
+      "test": {
+        "alerts": 64,
+        "alerts_per_month": 21.33,
+        "eligible_cases": 1349,
+        "alert_share_of_eligible": 0.0474,
+        "evaluable_cases": 1115,
+        "tp": 5,
+        "fp": 59,
+        "fn": 36,
+        "precision": 0.0781,
+        "recall": 0.122,
+        "f1": 0.0952,
+        "truth_base_rate": 0.0368,
+        "lift": 2.12
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 31,
+          "alerts_per_month": 10.33,
+          "eligible_cases": 443,
+          "alert_share_of_eligible": 0.07,
+          "evaluable_cases": 366,
+          "tp": 3,
+          "fp": 28,
+          "fn": 5,
+          "precision": 0.0968,
+          "recall": 0.375,
+          "f1": 0.1538,
+          "truth_base_rate": 0.0219,
+          "lift": 4.43
+        },
+        "poor": {
+          "alerts": 26,
+          "alerts_per_month": 8.67,
+          "eligible_cases": 446,
+          "alert_share_of_eligible": 0.0583,
+          "evaluable_cases": 368,
+          "tp": 0,
+          "fp": 26,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0027,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 7,
+          "alerts_per_month": 2.33,
+          "eligible_cases": 460,
+          "alert_share_of_eligible": 0.0152,
+          "evaluable_cases": 381,
+          "tp": 2,
+          "fp": 5,
+          "fn": 30,
+          "precision": 0.2857,
+          "recall": 0.0625,
+          "f1": 0.1026,
+          "truth_base_rate": 0.084,
+          "lift": 3.4
+        }
+      }
+    },
+    "cusum_historique_x3": {
+      "family": "trend",
+      "description": "CUSUM de Bernoulli (cote ×3) sur les 90 derniers jours vs historique",
+      "min_history": 50,
+      "params": {
+        "h": 5.0
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 2,
+          "alerts_per_month": 0.67,
+          "eligible_cases": 744,
+          "alert_share_of_eligible": 0.0027,
+          "evaluable_cases": 687,
+          "tp": 2,
+          "fp": 0,
+          "fn": 87,
+          "precision": 1.0,
+          "recall": 0.0225,
+          "f1": 0.044,
+          "truth_base_rate": 0.1295,
+          "lift": 7.72
+        },
+        "2017Q4": {
+          "alerts": 70,
+          "alerts_per_month": 23.33,
+          "eligible_cases": 1211,
+          "alert_share_of_eligible": 0.0578,
+          "evaluable_cases": 1068,
+          "tp": 43,
+          "fp": 20,
+          "fn": 239,
+          "precision": 0.6825,
+          "recall": 0.1525,
+          "f1": 0.2493,
+          "truth_base_rate": 0.264,
+          "lift": 2.58
+        },
+        "2018Q1": {
+          "alerts": 140,
+          "alerts_per_month": 46.67,
+          "eligible_cases": 1587,
+          "alert_share_of_eligible": 0.0882,
+          "evaluable_cases": 1427,
+          "tp": 36,
+          "fp": 86,
+          "fn": 230,
+          "precision": 0.2951,
+          "recall": 0.1353,
+          "f1": 0.1856,
+          "truth_base_rate": 0.1864,
+          "lift": 1.58
+        }
+      },
+      "valid_mean_f1": 0.1596,
+      "valid_max_alert_share": 0.0882,
+      "valid": {
+        "alerts": 140,
+        "alerts_per_month": 46.67,
+        "eligible_cases": 1587,
+        "alert_share_of_eligible": 0.0882,
+        "evaluable_cases": 1427,
+        "tp": 36,
+        "fp": 86,
+        "fn": 230,
+        "precision": 0.2951,
+        "recall": 0.1353,
+        "f1": 0.1856,
+        "truth_base_rate": 0.1864,
+        "lift": 1.58
+      },
+      "test": {
+        "alerts": 82,
+        "alerts_per_month": 27.33,
+        "eligible_cases": 2030,
+        "alert_share_of_eligible": 0.0404,
+        "evaluable_cases": 1584,
+        "tp": 6,
+        "fp": 68,
+        "fn": 45,
+        "precision": 0.0811,
+        "recall": 0.1176,
+        "f1": 0.096,
+        "truth_base_rate": 0.0322,
+        "lift": 2.52
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 42,
+          "alerts_per_month": 14.0,
+          "eligible_cases": 669,
+          "alert_share_of_eligible": 0.0628,
+          "evaluable_cases": 520,
+          "tp": 3,
+          "fp": 36,
+          "fn": 6,
+          "precision": 0.0769,
+          "recall": 0.3333,
+          "f1": 0.125,
+          "truth_base_rate": 0.0173,
+          "lift": 4.44
+        },
+        "poor": {
+          "alerts": 25,
+          "alerts_per_month": 8.33,
+          "eligible_cases": 668,
+          "alert_share_of_eligible": 0.0374,
+          "evaluable_cases": 523,
+          "tp": 0,
+          "fp": 24,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0057,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 15,
+          "alerts_per_month": 5.0,
+          "eligible_cases": 693,
+          "alert_share_of_eligible": 0.0216,
+          "evaluable_cases": 541,
+          "tp": 3,
+          "fp": 8,
+          "fn": 36,
+          "precision": 0.2727,
+          "recall": 0.0769,
+          "f1": 0.12,
+          "truth_base_rate": 0.0721,
+          "lift": 3.78
+        }
+      }
+    },
+    "binomial_bh_historique_long": {
+      "family": "trend",
+      "description": "test binomial vs historique long (achats T-540 à T-90 j), correction de Benjamini-Hochberg",
+      "min_history": 30,
+      "params": {
+        "alpha": 0.05
+      },
+      "gate": "eligible_trend_long",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 5,
+          "alerts_per_month": 1.67,
+          "eligible_cases": 1169,
+          "alert_share_of_eligible": 0.0043,
+          "evaluable_cases": 1059,
+          "tp": 2,
+          "fp": 2,
+          "fn": 121,
+          "precision": 0.5,
+          "recall": 0.0163,
+          "f1": 0.0315,
+          "truth_base_rate": 0.1161,
+          "lift": 4.3
+        },
+        "2017Q4": {
+          "alerts": 88,
+          "alerts_per_month": 29.33,
+          "eligible_cases": 1640,
+          "alert_share_of_eligible": 0.0537,
+          "evaluable_cases": 1378,
+          "tp": 52,
+          "fp": 26,
+          "fn": 284,
+          "precision": 0.6667,
+          "recall": 0.1548,
+          "f1": 0.2512,
+          "truth_base_rate": 0.2438,
+          "lift": 2.73
+        },
+        "2018Q1": {
+          "alerts": 192,
+          "alerts_per_month": 64.0,
+          "eligible_cases": 2152,
+          "alert_share_of_eligible": 0.0892,
+          "evaluable_cases": 1882,
+          "tp": 57,
+          "fp": 112,
+          "fn": 254,
+          "precision": 0.3373,
+          "recall": 0.1833,
+          "f1": 0.2375,
+          "truth_base_rate": 0.1652,
+          "lift": 2.04
+        }
+      },
+      "valid_mean_f1": 0.1734,
+      "valid_max_alert_share": 0.0892,
+      "valid": {
+        "alerts": 192,
+        "alerts_per_month": 64.0,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.0892,
+        "evaluable_cases": 1882,
+        "tp": 57,
+        "fp": 112,
+        "fn": 254,
+        "precision": 0.3373,
+        "recall": 0.1833,
+        "f1": 0.2375,
+        "truth_base_rate": 0.1652,
+        "lift": 2.04
+      },
+      "test": {
+        "alerts": 134,
+        "alerts_per_month": 44.67,
+        "eligible_cases": 2609,
+        "alert_share_of_eligible": 0.0514,
+        "evaluable_cases": 1994,
+        "tp": 10,
+        "fp": 105,
+        "fn": 54,
+        "precision": 0.087,
+        "recall": 0.1562,
+        "f1": 0.1117,
+        "truth_base_rate": 0.0321,
+        "lift": 2.71
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 81,
+          "alerts_per_month": 27.0,
+          "eligible_cases": 860,
+          "alert_share_of_eligible": 0.0942,
+          "evaluable_cases": 658,
+          "tp": 5,
+          "fp": 63,
+          "fn": 10,
+          "precision": 0.0735,
+          "recall": 0.3333,
+          "f1": 0.1205,
+          "truth_base_rate": 0.0228,
+          "lift": 3.23
+        },
+        "poor": {
+          "alerts": 33,
+          "alerts_per_month": 11.0,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.0388,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 31,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 20,
+          "alerts_per_month": 6.67,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0222,
+          "evaluable_cases": 685,
+          "tp": 5,
+          "fp": 11,
+          "fn": 40,
+          "precision": 0.3125,
+          "recall": 0.1111,
+          "f1": 0.1639,
+          "truth_base_rate": 0.0657,
+          "lift": 4.76
+        }
+      }
+    },
+    "bayes_historique": {
+      "family": "trend",
+      "description": "comparaison bayésienne : P(taux récent > taux historique du vendeur) > seuil",
+      "min_history": 50,
+      "params": {
+        "tau": 0.99
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 2,
+          "alerts_per_month": 0.67,
+          "eligible_cases": 744,
+          "alert_share_of_eligible": 0.0027,
+          "evaluable_cases": 687,
+          "tp": 2,
+          "fp": 0,
+          "fn": 87,
+          "precision": 1.0,
+          "recall": 0.0225,
+          "f1": 0.044,
+          "truth_base_rate": 0.1295,
+          "lift": 7.72
+        },
+        "2017Q4": {
+          "alerts": 55,
+          "alerts_per_month": 18.33,
+          "eligible_cases": 1211,
+          "alert_share_of_eligible": 0.0454,
+          "evaluable_cases": 1068,
+          "tp": 34,
+          "fp": 15,
+          "fn": 248,
+          "precision": 0.6939,
+          "recall": 0.1206,
+          "f1": 0.2054,
+          "truth_base_rate": 0.264,
+          "lift": 2.63
+        },
+        "2018Q1": {
+          "alerts": 146,
+          "alerts_per_month": 48.67,
+          "eligible_cases": 1587,
+          "alert_share_of_eligible": 0.092,
+          "evaluable_cases": 1427,
+          "tp": 44,
+          "fp": 85,
+          "fn": 222,
+          "precision": 0.3411,
+          "recall": 0.1654,
+          "f1": 0.2228,
+          "truth_base_rate": 0.1864,
+          "lift": 1.83
+        }
+      },
+      "valid_mean_f1": 0.1574,
+      "valid_max_alert_share": 0.092,
+      "valid": {
+        "alerts": 146,
+        "alerts_per_month": 48.67,
+        "eligible_cases": 1587,
+        "alert_share_of_eligible": 0.092,
+        "evaluable_cases": 1427,
+        "tp": 44,
+        "fp": 85,
+        "fn": 222,
+        "precision": 0.3411,
+        "recall": 0.1654,
+        "f1": 0.2228,
+        "truth_base_rate": 0.1864,
+        "lift": 1.83
+      },
+      "test": {
+        "alerts": 90,
+        "alerts_per_month": 30.0,
+        "eligible_cases": 2030,
+        "alert_share_of_eligible": 0.0443,
+        "evaluable_cases": 1584,
+        "tp": 5,
+        "fp": 69,
+        "fn": 46,
+        "precision": 0.0676,
+        "recall": 0.098,
+        "f1": 0.08,
+        "truth_base_rate": 0.0322,
+        "lift": 2.1
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 44,
+          "alerts_per_month": 14.67,
+          "eligible_cases": 669,
+          "alert_share_of_eligible": 0.0658,
+          "evaluable_cases": 520,
+          "tp": 3,
+          "fp": 33,
+          "fn": 6,
+          "precision": 0.0833,
+          "recall": 0.3333,
+          "f1": 0.1333,
+          "truth_base_rate": 0.0173,
+          "lift": 4.81
+        },
+        "poor": {
+          "alerts": 31,
+          "alerts_per_month": 10.33,
+          "eligible_cases": 668,
+          "alert_share_of_eligible": 0.0464,
+          "evaluable_cases": 523,
+          "tp": 0,
+          "fp": 28,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0057,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 15,
+          "alerts_per_month": 5.0,
+          "eligible_cases": 693,
+          "alert_share_of_eligible": 0.0216,
+          "evaluable_cases": 541,
+          "tp": 2,
+          "fp": 8,
+          "fn": 37,
+          "precision": 0.2,
+          "recall": 0.0513,
+          "f1": 0.0816,
+          "truth_base_rate": 0.0721,
+          "lift": 2.77
+        }
+      }
+    },
+    "ewma_historique": {
+      "family": "trend",
+      "description": "EWMA (λ = 0,2) des issues récentes vs historique, écart standardisé > L",
+      "min_history": 30,
+      "params": {
+        "L": 2.0
+      },
+      "gate": "eligible_trend",
+      "valid_folds": {
+        "2017Q3": {
+          "alerts": 28,
+          "alerts_per_month": 9.33,
+          "eligible_cases": 1169,
+          "alert_share_of_eligible": 0.024,
+          "evaluable_cases": 1059,
+          "tp": 5,
+          "fp": 15,
+          "fn": 118,
+          "precision": 0.25,
+          "recall": 0.0407,
+          "f1": 0.0699,
+          "truth_base_rate": 0.1161,
+          "lift": 2.15
+        },
+        "2017Q4": {
+          "alerts": 121,
+          "alerts_per_month": 40.33,
+          "eligible_cases": 1639,
+          "alert_share_of_eligible": 0.0738,
+          "evaluable_cases": 1377,
+          "tp": 35,
+          "fp": 55,
+          "fn": 301,
+          "precision": 0.3889,
+          "recall": 0.1042,
+          "f1": 0.1643,
+          "truth_base_rate": 0.244,
+          "lift": 1.59
+        },
+        "2018Q1": {
+          "alerts": 198,
+          "alerts_per_month": 66.0,
+          "eligible_cases": 2152,
+          "alert_share_of_eligible": 0.092,
+          "evaluable_cases": 1882,
+          "tp": 31,
+          "fp": 132,
+          "fn": 280,
+          "precision": 0.1902,
+          "recall": 0.0997,
+          "f1": 0.1308,
+          "truth_base_rate": 0.1652,
+          "lift": 1.15
+        }
+      },
+      "valid_mean_f1": 0.1217,
+      "valid_max_alert_share": 0.092,
+      "valid": {
+        "alerts": 198,
+        "alerts_per_month": 66.0,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.092,
+        "evaluable_cases": 1882,
+        "tp": 31,
+        "fp": 132,
+        "fn": 280,
+        "precision": 0.1902,
+        "recall": 0.0997,
+        "f1": 0.1308,
+        "truth_base_rate": 0.1652,
+        "lift": 1.15
+      },
+      "test": {
+        "alerts": 101,
+        "alerts_per_month": 33.67,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0387,
+        "evaluable_cases": 1994,
+        "tp": 6,
+        "fp": 64,
+        "fn": 58,
+        "precision": 0.0857,
+        "recall": 0.0938,
+        "f1": 0.0896,
+        "truth_base_rate": 0.0321,
+        "lift": 2.67
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 30,
+          "alerts_per_month": 10.0,
+          "eligible_cases": 859,
+          "alert_share_of_eligible": 0.0349,
+          "evaluable_cases": 658,
+          "tp": 0,
+          "fp": 19,
+          "fn": 15,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0228,
+          "lift": 0.0
+        },
+        "poor": {
+          "alerts": 23,
+          "alerts_per_month": 7.67,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.0271,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 15,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 48,
+          "alerts_per_month": 16.0,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0534,
+          "evaluable_cases": 685,
+          "tp": 6,
+          "fp": 30,
+          "fn": 39,
+          "precision": 0.1667,
+          "recall": 0.1333,
+          "f1": 0.1481,
+          "truth_base_rate": 0.0657,
+          "lift": 2.54
+        }
+      }
+    }
+  },
+  "selected": {
+    "level": {
+      "detector": "beta_binomial_pairs",
+      "params": {
+        "tau": 0.99
+      },
+      "min_history": 30,
+      "description": "a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil",
+      "persistence": false
+    },
+    "trend": {
+      "detector": "binomial_bh_historique",
+      "params": {
+        "alpha": 0.05
+      },
+      "min_history": 30,
+      "description": "test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg",
+      "persistence": false
+    }
+  },
+  "persistence": {
+    "level": {
+      "base": {
+        "valid_mean_f1": 0.1959,
+        "valid_max_alert_share": 0.0708,
+        "valid_folds": {
+          "2017Q3": {
+            "alerts": 21,
+            "alerts_per_month": 7.0,
+            "eligible_cases": 1385,
+            "alert_share_of_eligible": 0.0152,
+            "evaluable_cases": 1256,
+            "tp": 8,
+            "fp": 10,
+            "fn": 130,
+            "precision": 0.4444,
+            "recall": 0.058,
+            "f1": 0.1026,
+            "truth_base_rate": 0.1099,
+            "lift": 4.05
+          },
+          "2017Q4": {
+            "alerts": 86,
+            "alerts_per_month": 28.67,
+            "eligible_cases": 1848,
+            "alert_share_of_eligible": 0.0465,
+            "evaluable_cases": 1560,
+            "tp": 48,
+            "fp": 22,
+            "fn": 280,
+            "precision": 0.6857,
+            "recall": 0.1463,
+            "f1": 0.2412,
+            "truth_base_rate": 0.2103,
+            "lift": 3.26
+          },
+          "2018Q1": {
+            "alerts": 174,
+            "alerts_per_month": 58.0,
+            "eligible_cases": 2459,
+            "alert_share_of_eligible": 0.0708,
+            "evaluable_cases": 2167,
+            "tp": 59,
+            "fp": 89,
+            "fn": 277,
+            "precision": 0.3986,
+            "recall": 0.1756,
+            "f1": 0.2438,
+            "truth_base_rate": 0.1551,
+            "lift": 2.57
+          }
+        },
+        "test": {
+          "alerts": 135,
+          "alerts_per_month": 45.0,
+          "eligible_cases": 2848,
+          "alert_share_of_eligible": 0.0474,
+          "evaluable_cases": 2214,
+          "tp": 23,
+          "fp": 89,
+          "fn": 51,
+          "precision": 0.2054,
+          "recall": 0.3108,
+          "f1": 0.2473,
+          "truth_base_rate": 0.0334,
+          "lift": 6.14
+        }
+      },
+      "persistent": {
+        "valid_mean_f1": 0.1099,
+        "valid_max_alert_share": 0.0382,
+        "valid_folds": {
+          "2017Q3": {
+            "alerts": 11,
+            "alerts_per_month": 3.67,
+            "eligible_cases": 1385,
+            "alert_share_of_eligible": 0.0079,
+            "evaluable_cases": 1256,
+            "tp": 4,
+            "fp": 4,
+            "fn": 134,
+            "precision": 0.5,
+            "recall": 0.029,
+            "f1": 0.0548,
+            "truth_base_rate": 0.1099,
+            "lift": 4.55
+          },
+          "2017Q4": {
+            "alerts": 27,
+            "alerts_per_month": 9.0,
+            "eligible_cases": 1848,
+            "alert_share_of_eligible": 0.0146,
+            "evaluable_cases": 1560,
+            "tp": 14,
+            "fp": 7,
+            "fn": 314,
+            "precision": 0.6667,
+            "recall": 0.0427,
+            "f1": 0.0802,
+            "truth_base_rate": 0.2103,
+            "lift": 3.17
+          },
+          "2018Q1": {
+            "alerts": 94,
+            "alerts_per_month": 31.33,
+            "eligible_cases": 2459,
+            "alert_share_of_eligible": 0.0382,
+            "evaluable_cases": 2167,
+            "tp": 40,
+            "fp": 35,
+            "fn": 296,
+            "precision": 0.5333,
+            "recall": 0.119,
+            "f1": 0.1946,
+            "truth_base_rate": 0.1551,
+            "lift": 3.44
+          }
+        },
+        "test": {
+          "alerts": 78,
+          "alerts_per_month": 26.0,
+          "eligible_cases": 2848,
+          "alert_share_of_eligible": 0.0274,
+          "evaluable_cases": 2214,
+          "tp": 18,
+          "fp": 46,
+          "fn": 56,
+          "precision": 0.2812,
+          "recall": 0.2432,
+          "f1": 0.2609,
+          "truth_base_rate": 0.0334,
+          "lift": 8.41
+        }
+      },
+      "adopted": false
+    },
+    "trend": {
+      "base": {
+        "valid_mean_f1": 0.1737,
+        "valid_max_alert_share": 0.092,
+        "valid_folds": {
+          "2017Q3": {
+            "alerts": 5,
+            "alerts_per_month": 1.67,
+            "eligible_cases": 1169,
+            "alert_share_of_eligible": 0.0043,
+            "evaluable_cases": 1059,
+            "tp": 2,
+            "fp": 2,
+            "fn": 121,
+            "precision": 0.5,
+            "recall": 0.0163,
+            "f1": 0.0315,
+            "truth_base_rate": 0.1161,
+            "lift": 4.3
+          },
+          "2017Q4": {
+            "alerts": 91,
+            "alerts_per_month": 30.33,
+            "eligible_cases": 1639,
+            "alert_share_of_eligible": 0.0555,
+            "evaluable_cases": 1377,
+            "tp": 53,
+            "fp": 28,
+            "fn": 283,
+            "precision": 0.6543,
+            "recall": 0.1577,
+            "f1": 0.2542,
+            "truth_base_rate": 0.244,
+            "lift": 2.68
+          },
+          "2018Q1": {
+            "alerts": 198,
+            "alerts_per_month": 66.0,
+            "eligible_cases": 2152,
+            "alert_share_of_eligible": 0.092,
+            "evaluable_cases": 1882,
+            "tp": 57,
+            "fp": 116,
+            "fn": 254,
+            "precision": 0.3295,
+            "recall": 0.1833,
+            "f1": 0.2355,
+            "truth_base_rate": 0.1652,
+            "lift": 1.99
+          }
+        },
+        "test": {
+          "alerts": 135,
+          "alerts_per_month": 45.0,
+          "eligible_cases": 2608,
+          "alert_share_of_eligible": 0.0518,
+          "evaluable_cases": 1994,
+          "tp": 9,
+          "fp": 106,
+          "fn": 55,
+          "precision": 0.0783,
+          "recall": 0.1406,
+          "f1": 0.1006,
+          "truth_base_rate": 0.0321,
+          "lift": 2.44
+        }
+      },
+      "persistent": {
+        "valid_mean_f1": 0.0843,
+        "valid_max_alert_share": 0.0432,
+        "valid_folds": {
+          "2017Q3": {
+            "alerts": 3,
+            "alerts_per_month": 1.0,
+            "eligible_cases": 1169,
+            "alert_share_of_eligible": 0.0026,
+            "evaluable_cases": 1059,
+            "tp": 1,
+            "fp": 1,
+            "fn": 122,
+            "precision": 0.5,
+            "recall": 0.0081,
+            "f1": 0.016,
+            "truth_base_rate": 0.1161,
+            "lift": 4.3
+          },
+          "2017Q4": {
+            "alerts": 14,
+            "alerts_per_month": 4.67,
+            "eligible_cases": 1639,
+            "alert_share_of_eligible": 0.0085,
+            "evaluable_cases": 1377,
+            "tp": 10,
+            "fp": 2,
+            "fn": 326,
+            "precision": 0.8333,
+            "recall": 0.0298,
+            "f1": 0.0575,
+            "truth_base_rate": 0.244,
+            "lift": 3.42
+          },
+          "2018Q1": {
+            "alerts": 93,
+            "alerts_per_month": 31.0,
+            "eligible_cases": 2152,
+            "alert_share_of_eligible": 0.0432,
+            "evaluable_cases": 1882,
+            "tp": 35,
+            "fp": 44,
+            "fn": 276,
+            "precision": 0.443,
+            "recall": 0.1125,
+            "f1": 0.1795,
+            "truth_base_rate": 0.1652,
+            "lift": 2.68
+          }
+        },
+        "test": {
+          "alerts": 55,
+          "alerts_per_month": 18.33,
+          "eligible_cases": 2608,
+          "alert_share_of_eligible": 0.0211,
+          "evaluable_cases": 1994,
+          "tp": 5,
+          "fp": 43,
+          "fn": 59,
+          "precision": 0.1042,
+          "recall": 0.0781,
+          "f1": 0.0893,
+          "truth_base_rate": 0.0321,
+          "lift": 3.25
+        }
+      },
+      "adopted": false
+    }
+  },
+  "severity": {
+    "rule": "élevée : q < 0,001 et alerte le mois précédent ; moyenne : q < 0,01 ou alerte le mois précédent ; faible : autres alertes",
+    "valid_all_folds": {
+      "élevée": {
+        "alerts_evaluable": 61,
+        "precision": 0.5902
+      },
+      "moyenne": {
+        "alerts_evaluable": 118,
+        "precision": 0.4746
+      },
+      "faible": {
+        "alerts_evaluable": 57,
+        "precision": 0.4035
+      }
+    },
+    "test": {
+      "élevée": {
+        "alerts_evaluable": 39,
+        "precision": 0.2821
+      },
+      "moyenne": {
+        "alerts_evaluable": 55,
+        "precision": 0.2182
+      },
+      "faible": {
+        "alerts_evaluable": 18,
+        "precision": 0.0
+      }
+    }
+  },
+  "strengths": {
+    "definition": "12 mois d'issues connues sous la référence, binomial unilatéral inférieur, BH q < 0.05 ; vérité : taux des 60 jours suivants ≤ référence (≥ 10 commandes)",
+    "alpha": 0.05,
+    "valid_2017Q3": {
+      "flagged": 69,
+      "flagged_per_month": 23.0,
+      "evaluable_flagged": 65,
+      "precision": 0.8923,
+      "base_rate": 0.5775,
+      "lift": 1.55
+    },
+    "valid_2017Q4": {
+      "flagged": 104,
+      "flagged_per_month": 34.7,
+      "evaluable_flagged": 94,
+      "precision": 0.734,
+      "base_rate": 0.4644,
+      "lift": 1.58
+    },
+    "valid_2018Q1": {
+      "flagged": 183,
+      "flagged_per_month": 61.0,
+      "evaluable_flagged": 144,
+      "precision": 0.8611,
+      "base_rate": 0.5264,
+      "lift": 1.64
+    },
+    "test": {
+      "flagged": 232,
+      "flagged_per_month": 77.3,
+      "evaluable_flagged": 148,
+      "precision": 0.8176,
+      "base_rate": 0.7708,
+      "lift": 1.06
+    }
+  },
+  "segmentation": {
+    "segments": "volume sur 12 mois (terciles) × région du vendeur (Sudeste, Sul, autres)",
+    "valid_2017Q3": {
+      "late": {
+        "shrunk_to_reference_logloss": 0.2467,
+        "shrunk_to_segment_logloss": 0.24596,
+        "relative": 0.997
+      },
+      "poor": {
+        "shrunk_to_reference_logloss": 0.3721,
+        "shrunk_to_segment_logloss": 0.37239,
+        "relative": 1.0008
+      },
+      "handover": {
+        "shrunk_to_reference_logloss": 0.18495,
+        "shrunk_to_segment_logloss": 0.18703,
+        "relative": 1.0112
+      }
+    },
+    "valid_2017Q4": {
+      "late": {
+        "shrunk_to_reference_logloss": 0.32511,
+        "shrunk_to_segment_logloss": 0.32486,
+        "relative": 0.9992
+      },
+      "poor": {
+        "shrunk_to_reference_logloss": 0.44597,
+        "shrunk_to_segment_logloss": 0.4459,
+        "relative": 0.9998
+      },
+      "handover": {
+        "shrunk_to_reference_logloss": 0.23727,
+        "shrunk_to_segment_logloss": 0.23673,
+        "relative": 0.9977
+      }
+    },
+    "valid_2018Q1": {
+      "late": {
+        "shrunk_to_reference_logloss": 0.39884,
+        "shrunk_to_segment_logloss": 0.40047,
+        "relative": 1.0041
+      },
+      "poor": {
+        "shrunk_to_reference_logloss": 0.46157,
+        "shrunk_to_segment_logloss": 0.46119,
+        "relative": 0.9992
+      },
+      "handover": {
+        "shrunk_to_reference_logloss": 0.17209,
+        "shrunk_to_segment_logloss": 0.17269,
+        "relative": 1.0035
+      }
+    },
+    "test": {
+      "late": {
+        "shrunk_to_reference_logloss": 0.18301,
+        "shrunk_to_segment_logloss": 0.18306,
+        "relative": 1.0003
+      },
+      "poor": {
+        "shrunk_to_reference_logloss": 0.33748,
+        "shrunk_to_segment_logloss": 0.33784,
+        "relative": 1.0011
+      },
+      "handover": {
+        "shrunk_to_reference_logloss": 0.18526,
+        "shrunk_to_segment_logloss": 0.18602,
+        "relative": 1.0041
+      }
+    },
+    "valid_mean_relative": 1.0014,
+    "conclusion": "aucun gain prédictif sur VALID : segments présentés comme descriptifs uniquement"
+  },
+  "injection_test": {
+    "start": "2018-04-01",
+    "months": [
+      "2018-04",
+      "2018-05",
+      "2018-06"
+    ],
+    "note": "issues 0 → 1 tirées au hasard pour les vendeurs choisis, achats ≥ début ; règle de persistance appliquée si retenue",
+    "by_metric": {
+      "late": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.16,
+            "2018-05": 0.2,
+            "2018-06": 0.2
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.1024
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.2,
+            "2018-05": 0.28,
+            "2018-06": 0.32
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.1024
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.28,
+            "2018-05": 0.48,
+            "2018-06": 0.52
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.1035
+        }
+      },
+      "poor": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.08,
+            "2018-05": 0.08,
+            "2018-06": 0.08
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.066
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.08,
+            "2018-05": 0.08,
+            "2018-06": 0.12
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.066
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.16,
+            "2018-05": 0.2,
+            "2018-06": 0.32
+          },
+          "median_delay_months": 1.5,
+          "false_alarm_rate_untouched": 0.066
+        }
+      },
+      "handover": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.0,
+            "2018-05": 0.0,
+            "2018-06": 0.04
+          },
+          "median_delay_months": 3.0,
+          "false_alarm_rate_untouched": 0.0547
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.04,
+            "2018-05": 0.08,
+            "2018-06": 0.16
+          },
+          "median_delay_months": 2.5,
+          "false_alarm_rate_untouched": 0.0568
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.2,
+            "2018-05": 0.28,
+            "2018-06": 0.48
+          },
+          "median_delay_months": 2.0,
+          "false_alarm_rate_untouched": 0.0579
+        }
+      }
+    }
+  },
+  "eligible_sellers_per_month": {
+    "2017-03": 31,
+    "2017-04": 42,
+    "2017-05": 84,
+    "2017-06": 106,
+    "2017-07": 133,
+    "2017-08": 147,
+    "2017-09": 175,
+    "2017-10": 185,
+    "2017-11": 186,
+    "2017-12": 227,
+    "2018-01": 250,
+    "2018-02": 256,
+    "2018-03": 294,
+    "2018-04": 311,
+    "2018-05": 311,
+    "2018-06": 313
+  },
+  "alert_history": {
+    "rows": 1426,
+    "by_status": {
+      "new": 526,
+      "resolved": 493,
+      "ongoing": 407
+    },
+    "file": "data/gold/seller_alert_history.csv"
+  },
+  "monthly_history": {
+    "rows": 48876,
+    "file": "data/model/bo3_monthly_history.csv.gz"
+  },
+  "selection_rule": "par détecteur : meilleur F1 moyen sur les 3 plis VALID parmi les réglages alertant au plus 10 % des cas éligibles dans CHAQUE pli ; même règle pour la famille et la persistance",
+  "truth_definition": "prospective : sur les achats des 60 jours suivant T (issues finales, ≥ 5 commandes), taux significativement supérieur (binomial unilatéral, p < 0,05) à la référence (« niveau ») ou à l'historique rétréci du vendeur (« tendance »)",
+  "runtime_seconds": 197.9
+}

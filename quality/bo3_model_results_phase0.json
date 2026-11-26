@@ -1,0 +1,1972 @@
+{
+  "ds3_1_peer_groups": {
+    "configs": {
+      "global": {
+        "label": "toute la marketplace",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24526,
+              "brier": 0.0603
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.2514,
+              "brier": 0.06036
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39772,
+              "brier": 0.11722
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39719,
+              "brier": 0.11677
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.2177,
+              "brier": 0.05249
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20246,
+              "brier": 0.05054
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39423,
+              "brier": 0.10795
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39884,
+              "brier": 0.10802
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46368,
+              "brier": 0.14293
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46157,
+              "brier": 0.14181
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18806,
+              "brier": 0.04405
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17209,
+              "brier": 0.04377
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17793,
+              "brier": 0.03895
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18301,
+              "brier": 0.04062
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34226,
+              "brier": 0.09526
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33748,
+              "brier": 0.09449
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19277,
+              "brier": 0.04559
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18526,
+              "brier": 0.04509
+            }
+          }
+        },
+        "stability": null,
+        "relative_logloss_vs_global": {
+          "train": 1.0,
+          "valid": 1.0,
+          "test": 1.0
+        }
+      },
+      "category": {
+        "label": "même catégorie principale",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24894,
+              "brier": 0.06043
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25286,
+              "brier": 0.06039
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39926,
+              "brier": 0.11749
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39778,
+              "brier": 0.11681
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.22179,
+              "brier": 0.05436
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20343,
+              "brier": 0.05071
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39821,
+              "brier": 0.10817
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39985,
+              "brier": 0.10809
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46436,
+              "brier": 0.14302
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46174,
+              "brier": 0.14179
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.19032,
+              "brier": 0.04444
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17311,
+              "brier": 0.04381
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17914,
+              "brier": 0.03923
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18316,
+              "brier": 0.04067
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34274,
+              "brier": 0.09549
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33745,
+              "brier": 0.09451
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19578,
+              "brier": 0.04592
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18666,
+              "brier": 0.04514
+            }
+          }
+        },
+        "stability": 0.946,
+        "relative_logloss_vs_global": {
+          "train": 1.0126,
+          "valid": 1.0079,
+          "test": 1.0079
+        }
+      },
+      "knn_k20": {
+        "label": "20 vendeurs les plus proches (k plus proches voisins)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24847,
+              "brier": 0.06046
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25263,
+              "brier": 0.0604
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39815,
+              "brier": 0.11726
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39755,
+              "brier": 0.11679
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.21874,
+              "brier": 0.05253
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.2032,
+              "brier": 0.05063
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40065,
+              "brier": 0.10839
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.4016,
+              "brier": 0.10817
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46701,
+              "brier": 0.14354
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46329,
+              "brier": 0.1421
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.1926,
+              "brier": 0.04458
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17376,
+              "brier": 0.04395
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17891,
+              "brier": 0.0392
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18322,
+              "brier": 0.04068
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34133,
+              "brier": 0.09511
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33717,
+              "brier": 0.09445
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19678,
+              "brier": 0.04596
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18657,
+              "brier": 0.04518
+            }
+          }
+        },
+        "stability": 0.592,
+        "relative_logloss_vs_global": {
+          "train": 1.0063,
+          "valid": 1.0159,
+          "test": 1.0079
+        }
+      },
+      "cluster_8": {
+        "label": "groupe KMeans (8 groupes)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24654,
+              "brier": 0.06036
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25164,
+              "brier": 0.06036
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39892,
+              "brier": 0.1175
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39753,
+              "brier": 0.11684
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.21895,
+              "brier": 0.05279
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20354,
+              "brier": 0.05068
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39545,
+              "brier": 0.10803
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39954,
+              "brier": 0.10805
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46389,
+              "brier": 0.14297
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46146,
+              "brier": 0.14179
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18872,
+              "brier": 0.04418
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17212,
+              "brier": 0.04379
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17794,
+              "brier": 0.03896
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18291,
+              "brier": 0.0406
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34217,
+              "brier": 0.09526
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33731,
+              "brier": 0.09446
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19343,
+              "brier": 0.0457
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18581,
+              "brier": 0.04511
+            }
+          }
+        },
+        "stability": 0.46,
+        "relative_logloss_vs_global": {
+          "train": 1.0047,
+          "valid": 1.0024,
+          "test": 1.0011
+        }
+      },
+      "knn_k10": {
+        "label": "10 vendeurs les plus proches (k plus proches voisins)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.2504,
+              "brier": 0.06051
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.2537,
+              "brier": 0.06041
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39937,
+              "brier": 0.11749
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39804,
+              "brier": 0.11687
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.22205,
+              "brier": 0.05298
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20467,
+              "brier": 0.05076
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40388,
+              "brier": 0.10858
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.4028,
+              "brier": 0.10825
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46991,
+              "brier": 0.14408
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46451,
+              "brier": 0.14234
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.19622,
+              "brier": 0.04493
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17369,
+              "brier": 0.04399
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18013,
+              "brier": 0.03948
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18304,
+              "brier": 0.04066
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34216,
+              "brier": 0.09539
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33753,
+              "brier": 0.09452
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.20122,
+              "brier": 0.04637
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18665,
+              "brier": 0.04516
+            }
+          }
+        },
+        "stability": 0.548,
+        "relative_logloss_vs_global": {
+          "train": 1.015,
+          "valid": 1.0271,
+          "test": 1.0186
+        }
+      },
+      "knn_k40": {
+        "label": "40 vendeurs les plus proches (k plus proches voisins)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.2469,
+              "brier": 0.06039
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25196,
+              "brier": 0.06039
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.3972,
+              "brier": 0.11708
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39719,
+              "brier": 0.11673
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.21671,
+              "brier": 0.05231
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20276,
+              "brier": 0.05056
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39975,
+              "brier": 0.10838
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.40107,
+              "brier": 0.10816
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46538,
+              "brier": 0.14324
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46257,
+              "brier": 0.14198
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18891,
+              "brier": 0.04418
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17317,
+              "brier": 0.04387
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17794,
+              "brier": 0.03901
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18311,
+              "brier": 0.04066
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34111,
+              "brier": 0.09503
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33713,
+              "brier": 0.09443
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.1948,
+              "brier": 0.04574
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18593,
+              "brier": 0.04513
+            }
+          }
+        },
+        "stability": 0.626,
+        "relative_logloss_vs_global": {
+          "train": 1.0003,
+          "valid": 1.0074,
+          "test": 1.0024
+        }
+      },
+      "cluster_5": {
+        "label": "groupe KMeans (5 groupes)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24603,
+              "brier": 0.06034
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25159,
+              "brier": 0.06036
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39828,
+              "brier": 0.11736
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.3974,
+              "brier": 0.11682
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.21824,
+              "brier": 0.05259
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20267,
+              "brier": 0.05057
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39448,
+              "brier": 0.10797
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39882,
+              "brier": 0.10802
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.4641,
+              "brier": 0.14302
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.4615,
+              "brier": 0.14181
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18832,
+              "brier": 0.0441
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17214,
+              "brier": 0.04377
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.1779,
+              "brier": 0.03895
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18302,
+              "brier": 0.04063
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34218,
+              "brier": 0.09525
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33738,
+              "brier": 0.09448
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19325,
+              "brier": 0.04565
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18556,
+              "brier": 0.04511
+            }
+          }
+        },
+        "stability": 0.638,
+        "relative_logloss_vs_global": {
+          "train": 1.0023,
+          "valid": 1.001,
+          "test": 1.0007
+        }
+      },
+      "cluster_12": {
+        "label": "groupe KMeans (12 groupes)",
+        "train": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.24664,
+              "brier": 0.06036
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2917,
+              "n_orders": 72130,
+              "logloss": 0.25144,
+              "brier": 0.06034
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39861,
+              "brier": 0.11743
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2942,
+              "n_orders": 72919,
+              "logloss": 0.39739,
+              "brier": 0.1168
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.21767,
+              "brier": 0.0527
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 2931,
+              "n_orders": 73055,
+              "logloss": 0.20283,
+              "brier": 0.05063
+            }
+          }
+        },
+        "valid": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39622,
+              "brier": 0.10808
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1403,
+              "n_orders": 32445,
+              "logloss": 0.39965,
+              "brier": 0.10807
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46396,
+              "brier": 0.14295
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1413,
+              "n_orders": 32864,
+              "logloss": 0.46155,
+              "brier": 0.14178
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.18906,
+              "brier": 0.04425
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1411,
+              "n_orders": 32978,
+              "logloss": 0.17236,
+              "brier": 0.04381
+            }
+          }
+        },
+        "test": {
+          "late": {
+            "peer_rate": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.17847,
+              "brier": 0.03908
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1311,
+              "n_orders": 27130,
+              "logloss": 0.18307,
+              "brier": 0.04064
+            }
+          },
+          "poor": {
+            "peer_rate": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.34235,
+              "brier": 0.09532
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1321,
+              "n_orders": 27356,
+              "logloss": 0.33746,
+              "brier": 0.09449
+            }
+          },
+          "handover": {
+            "peer_rate": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.19351,
+              "brier": 0.04566
+            },
+            "seller_shrunk_to_peers": {
+              "n_sellers": 1317,
+              "n_orders": 27384,
+              "logloss": 0.18535,
+              "brier": 0.0451
+            }
+          }
+        },
+        "stability": 0.368,
+        "relative_logloss_vs_global": {
+          "train": 1.0026,
+          "valid": 1.0037,
+          "test": 1.0024
+        }
+      }
+    },
+    "selected": "global",
+    "selection_rule": "perte log moyenne (taux des pairs → taux futur du vendeur) relative à « toute la marketplace », sur VALID"
+  },
+  "ds3_2_detectors": {
+    "regle_pairs": {
+      "family": "level",
+      "description": "taux récent > facteur × taux de référence (règle simple)",
+      "min_history": 30,
+      "params": {
+        "factor": 3.0
+      },
+      "valid": {
+        "alerts": 206,
+        "alerts_per_month": 68.67,
+        "eligible_cases": 2459,
+        "alert_share_of_eligible": 0.0838,
+        "evaluable_cases": 2167,
+        "tp": 55,
+        "fp": 112,
+        "fn": 281,
+        "precision": 0.3293,
+        "recall": 0.1637,
+        "f1": 0.2187,
+        "truth_base_rate": 0.1551,
+        "lift": 2.12
+      },
+      "train": {
+        "alerts": 188,
+        "alerts_per_month": 18.8,
+        "eligible_cases": 4056,
+        "alert_share_of_eligible": 0.0464,
+        "evaluable_cases": 3591,
+        "tp": 58,
+        "fp": 76,
+        "fn": 440,
+        "precision": 0.4328,
+        "recall": 0.1165,
+        "f1": 0.1835,
+        "truth_base_rate": 0.1387,
+        "lift": 3.12
+      },
+      "test": {
+        "alerts": 154,
+        "alerts_per_month": 51.33,
+        "eligible_cases": 2848,
+        "alert_share_of_eligible": 0.0541,
+        "evaluable_cases": 2214,
+        "tp": 23,
+        "fp": 82,
+        "fn": 51,
+        "precision": 0.219,
+        "recall": 0.3108,
+        "f1": 0.257,
+        "truth_base_rate": 0.0334,
+        "lift": 6.55
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 57,
+          "alerts_per_month": 19.0,
+          "eligible_cases": 935,
+          "alert_share_of_eligible": 0.061,
+          "evaluable_cases": 727,
+          "tp": 1,
+          "fp": 38,
+          "fn": 7,
+          "precision": 0.0256,
+          "recall": 0.125,
+          "f1": 0.0426,
+          "truth_base_rate": 0.011,
+          "lift": 2.33
+        },
+        "poor": {
+          "alerts": 22,
+          "alerts_per_month": 7.33,
+          "eligible_cases": 921,
+          "alert_share_of_eligible": 0.0239,
+          "evaluable_cases": 717,
+          "tp": 4,
+          "fp": 13,
+          "fn": 12,
+          "precision": 0.2353,
+          "recall": 0.25,
+          "f1": 0.2424,
+          "truth_base_rate": 0.0223,
+          "lift": 10.54
+        },
+        "handover": {
+          "alerts": 75,
+          "alerts_per_month": 25.0,
+          "eligible_cases": 992,
+          "alert_share_of_eligible": 0.0756,
+          "evaluable_cases": 770,
+          "tp": 18,
+          "fp": 31,
+          "fn": 32,
+          "precision": 0.3673,
+          "recall": 0.36,
+          "f1": 0.3636,
+          "truth_base_rate": 0.0649,
+          "lift": 5.66
+        }
+      }
+    },
+    "binomial_bh_pairs": {
+      "family": "level",
+      "description": "test binomial unilatéral vs taux de référence, correction de Benjamini-Hochberg",
+      "min_history": 80,
+      "params": {
+        "alpha": 0.05
+      },
+      "valid": {
+        "alerts": 118,
+        "alerts_per_month": 39.33,
+        "eligible_cases": 1183,
+        "alert_share_of_eligible": 0.0997,
+        "evaluable_cases": 1102,
+        "tp": 43,
+        "fp": 57,
+        "fn": 178,
+        "precision": 0.43,
+        "recall": 0.1946,
+        "f1": 0.2679,
+        "truth_base_rate": 0.2005,
+        "lift": 2.14
+      },
+      "train": {
+        "alerts": 58,
+        "alerts_per_month": 5.8,
+        "eligible_cases": 1540,
+        "alert_share_of_eligible": 0.0377,
+        "evaluable_cases": 1458,
+        "tp": 33,
+        "fp": 17,
+        "fn": 254,
+        "precision": 0.66,
+        "recall": 0.115,
+        "f1": 0.1958,
+        "truth_base_rate": 0.1968,
+        "lift": 3.35
+      },
+      "test": {
+        "alerts": 102,
+        "alerts_per_month": 34.0,
+        "eligible_cases": 1424,
+        "alert_share_of_eligible": 0.0716,
+        "evaluable_cases": 1187,
+        "tp": 17,
+        "fp": 73,
+        "fn": 22,
+        "precision": 0.1889,
+        "recall": 0.4359,
+        "f1": 0.2636,
+        "truth_base_rate": 0.0329,
+        "lift": 5.75
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 42,
+          "alerts_per_month": 14.0,
+          "eligible_cases": 466,
+          "alert_share_of_eligible": 0.0901,
+          "evaluable_cases": 388,
+          "tp": 2,
+          "fp": 37,
+          "fn": 1,
+          "precision": 0.0513,
+          "recall": 0.6667,
+          "f1": 0.0952,
+          "truth_base_rate": 0.0077,
+          "lift": 6.63
+        },
+        "poor": {
+          "alerts": 31,
+          "alerts_per_month": 10.33,
+          "eligible_cases": 469,
+          "alert_share_of_eligible": 0.0661,
+          "evaluable_cases": 390,
+          "tp": 3,
+          "fp": 24,
+          "fn": 5,
+          "precision": 0.1111,
+          "recall": 0.375,
+          "f1": 0.1714,
+          "truth_base_rate": 0.0205,
+          "lift": 5.42
+        },
+        "handover": {
+          "alerts": 29,
+          "alerts_per_month": 9.67,
+          "eligible_cases": 489,
+          "alert_share_of_eligible": 0.0593,
+          "evaluable_cases": 409,
+          "tp": 12,
+          "fp": 12,
+          "fn": 16,
+          "precision": 0.5,
+          "recall": 0.4286,
+          "f1": 0.4615,
+          "truth_base_rate": 0.0685,
+          "lift": 7.3
+        }
+      }
+    },
+    "beta_binomial_pairs": {
+      "family": "level",
+      "description": "a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil",
+      "min_history": 80,
+      "params": {
+        "tau": 0.99
+      },
+      "valid": {
+        "alerts": 115,
+        "alerts_per_month": 38.33,
+        "eligible_cases": 1183,
+        "alert_share_of_eligible": 0.0972,
+        "evaluable_cases": 1102,
+        "tp": 42,
+        "fp": 55,
+        "fn": 179,
+        "precision": 0.433,
+        "recall": 0.19,
+        "f1": 0.2642,
+        "truth_base_rate": 0.2005,
+        "lift": 2.16
+      },
+      "train": {
+        "alerts": 64,
+        "alerts_per_month": 6.4,
+        "eligible_cases": 1540,
+        "alert_share_of_eligible": 0.0416,
+        "evaluable_cases": 1458,
+        "tp": 37,
+        "fp": 20,
+        "fn": 250,
+        "precision": 0.6491,
+        "recall": 0.1289,
+        "f1": 0.2151,
+        "truth_base_rate": 0.1968,
+        "lift": 3.3
+      },
+      "test": {
+        "alerts": 95,
+        "alerts_per_month": 31.67,
+        "eligible_cases": 1424,
+        "alert_share_of_eligible": 0.0667,
+        "evaluable_cases": 1187,
+        "tp": 17,
+        "fp": 68,
+        "fn": 22,
+        "precision": 0.2,
+        "recall": 0.4359,
+        "f1": 0.2742,
+        "truth_base_rate": 0.0329,
+        "lift": 6.09
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 38,
+          "alerts_per_month": 12.67,
+          "eligible_cases": 466,
+          "alert_share_of_eligible": 0.0815,
+          "evaluable_cases": 388,
+          "tp": 2,
+          "fp": 33,
+          "fn": 1,
+          "precision": 0.0571,
+          "recall": 0.6667,
+          "f1": 0.1053,
+          "truth_base_rate": 0.0077,
+          "lift": 7.39
+        },
+        "poor": {
+          "alerts": 29,
+          "alerts_per_month": 9.67,
+          "eligible_cases": 469,
+          "alert_share_of_eligible": 0.0618,
+          "evaluable_cases": 390,
+          "tp": 3,
+          "fp": 23,
+          "fn": 5,
+          "precision": 0.1154,
+          "recall": 0.375,
+          "f1": 0.1765,
+          "truth_base_rate": 0.0205,
+          "lift": 5.62
+        },
+        "handover": {
+          "alerts": 28,
+          "alerts_per_month": 9.33,
+          "eligible_cases": 489,
+          "alert_share_of_eligible": 0.0573,
+          "evaluable_cases": 409,
+          "tp": 12,
+          "fp": 12,
+          "fn": 16,
+          "precision": 0.5,
+          "recall": 0.4286,
+          "f1": 0.4615,
+          "truth_base_rate": 0.0685,
+          "lift": 7.3
+        }
+      }
+    },
+    "observe_attendu": {
+      "family": "level",
+      "description": "observé / attendu (modèle entraîné sur TRAIN, recalé sur la marketplace à T), score z",
+      "min_history": 50,
+      "params": {
+        "z": 2.0
+      },
+      "valid": {
+        "alerts": 113,
+        "alerts_per_month": 37.67,
+        "eligible_cases": 1140,
+        "alert_share_of_eligible": 0.0991,
+        "evaluable_cases": 1034,
+        "tp": 22,
+        "fp": 79,
+        "fn": 210,
+        "precision": 0.2178,
+        "recall": 0.0948,
+        "f1": 0.1321,
+        "truth_base_rate": 0.2244,
+        "lift": 0.97
+      },
+      "train": {
+        "alerts": 64,
+        "alerts_per_month": 6.4,
+        "eligible_cases": 1676,
+        "alert_share_of_eligible": 0.0382,
+        "evaluable_cases": 1538,
+        "tp": 13,
+        "fp": 43,
+        "fn": 279,
+        "precision": 0.2321,
+        "recall": 0.0445,
+        "f1": 0.0747,
+        "truth_base_rate": 0.1899,
+        "lift": 1.22
+      },
+      "test": {
+        "alerts": 218,
+        "alerts_per_month": 72.67,
+        "eligible_cases": 1408,
+        "alert_share_of_eligible": 0.1548,
+        "evaluable_cases": 1110,
+        "tp": 8,
+        "fp": 170,
+        "fn": 11,
+        "precision": 0.0449,
+        "recall": 0.4211,
+        "f1": 0.0812,
+        "truth_base_rate": 0.0171,
+        "lift": 2.63
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 103,
+          "alerts_per_month": 34.33,
+          "eligible_cases": 705,
+          "alert_share_of_eligible": 0.1461,
+          "evaluable_cases": 554,
+          "tp": 1,
+          "fp": 84,
+          "fn": 3,
+          "precision": 0.0118,
+          "recall": 0.25,
+          "f1": 0.0225,
+          "truth_base_rate": 0.0072,
+          "lift": 1.63
+        },
+        "poor": {
+          "alerts": 115,
+          "alerts_per_month": 38.33,
+          "eligible_cases": 703,
+          "alert_share_of_eligible": 0.1636,
+          "evaluable_cases": 556,
+          "tp": 7,
+          "fp": 86,
+          "fn": 8,
+          "precision": 0.0753,
+          "recall": 0.4667,
+          "f1": 0.1296,
+          "truth_base_rate": 0.027,
+          "lift": 2.79
+        }
+      }
+    },
+    "regle_historique": {
+      "family": "trend",
+      "description": "taux récent > facteur × historique du vendeur (règle simple)",
+      "min_history": 30,
+      "params": {
+        "factor": 3.0
+      },
+      "valid": {
+        "alerts": 272,
+        "alerts_per_month": 90.67,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.1264,
+        "evaluable_cases": 1882,
+        "tp": 63,
+        "fp": 168,
+        "fn": 248,
+        "precision": 0.2727,
+        "recall": 0.2026,
+        "f1": 0.2325,
+        "truth_base_rate": 0.1652,
+        "lift": 1.65
+      },
+      "train": {
+        "alerts": 273,
+        "alerts_per_month": 27.3,
+        "eligible_cases": 3191,
+        "alert_share_of_eligible": 0.0856,
+        "evaluable_cases": 2797,
+        "tp": 80,
+        "fp": 143,
+        "fn": 399,
+        "precision": 0.3587,
+        "recall": 0.167,
+        "f1": 0.2279,
+        "truth_base_rate": 0.1713,
+        "lift": 2.09
+      },
+      "test": {
+        "alerts": 189,
+        "alerts_per_month": 63.0,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0725,
+        "evaluable_cases": 1994,
+        "tp": 13,
+        "fp": 118,
+        "fn": 51,
+        "precision": 0.0992,
+        "recall": 0.2031,
+        "f1": 0.1333,
+        "truth_base_rate": 0.0321,
+        "lift": 3.09
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 109,
+          "alerts_per_month": 36.33,
+          "eligible_cases": 859,
+          "alert_share_of_eligible": 0.1269,
+          "evaluable_cases": 658,
+          "tp": 4,
+          "fp": 69,
+          "fn": 11,
+          "precision": 0.0548,
+          "recall": 0.2667,
+          "f1": 0.0909,
+          "truth_base_rate": 0.0228,
+          "lift": 2.4
+        },
+        "poor": {
+          "alerts": 19,
+          "alerts_per_month": 6.33,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.0224,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 13,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 61,
+          "alerts_per_month": 20.33,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0679,
+          "evaluable_cases": 685,
+          "tp": 9,
+          "fp": 36,
+          "fn": 36,
+          "precision": 0.2,
+          "recall": 0.2,
+          "f1": 0.2,
+          "truth_base_rate": 0.0657,
+          "lift": 3.04
+        }
+      }
+    },
+    "binomial_bh_historique": {
+      "family": "trend",
+      "description": "test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg",
+      "min_history": 30,
+      "params": {
+        "alpha": 0.05
+      },
+      "valid": {
+        "alerts": 198,
+        "alerts_per_month": 66.0,
+        "eligible_cases": 2152,
+        "alert_share_of_eligible": 0.092,
+        "evaluable_cases": 1882,
+        "tp": 57,
+        "fp": 116,
+        "fn": 254,
+        "precision": 0.3295,
+        "recall": 0.1833,
+        "f1": 0.2355,
+        "truth_base_rate": 0.1652,
+        "lift": 1.99
+      },
+      "train": {
+        "alerts": 110,
+        "alerts_per_month": 11.0,
+        "eligible_cases": 3191,
+        "alert_share_of_eligible": 0.0345,
+        "evaluable_cases": 2797,
+        "tp": 56,
+        "fp": 42,
+        "fn": 423,
+        "precision": 0.5714,
+        "recall": 0.1169,
+        "f1": 0.1941,
+        "truth_base_rate": 0.1713,
+        "lift": 3.34
+      },
+      "test": {
+        "alerts": 135,
+        "alerts_per_month": 45.0,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0518,
+        "evaluable_cases": 1994,
+        "tp": 9,
+        "fp": 106,
+        "fn": 55,
+        "precision": 0.0783,
+        "recall": 0.1406,
+        "f1": 0.1006,
+        "truth_base_rate": 0.0321,
+        "lift": 2.44
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 80,
+          "alerts_per_month": 26.67,
+          "eligible_cases": 859,
+          "alert_share_of_eligible": 0.0931,
+          "evaluable_cases": 658,
+          "tp": 5,
+          "fp": 63,
+          "fn": 10,
+          "precision": 0.0735,
+          "recall": 0.3333,
+          "f1": 0.1205,
+          "truth_base_rate": 0.0228,
+          "lift": 3.23
+        },
+        "poor": {
+          "alerts": 34,
+          "alerts_per_month": 11.33,
+          "eligible_cases": 850,
+          "alert_share_of_eligible": 0.04,
+          "evaluable_cases": 651,
+          "tp": 0,
+          "fp": 32,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0061,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 21,
+          "alerts_per_month": 7.0,
+          "eligible_cases": 899,
+          "alert_share_of_eligible": 0.0234,
+          "evaluable_cases": 685,
+          "tp": 4,
+          "fp": 11,
+          "fn": 41,
+          "precision": 0.2667,
+          "recall": 0.0889,
+          "f1": 0.1333,
+          "truth_base_rate": 0.0657,
+          "lift": 4.06
+        }
+      }
+    },
+    "cusum_historique": {
+      "family": "trend",
+      "description": "CUSUM de Bernoulli (cote ×2) sur les 90 derniers jours vs historique",
+      "min_history": 50,
+      "params": {
+        "h": 4.0
+      },
+      "valid": {
+        "alerts": 128,
+        "alerts_per_month": 42.67,
+        "eligible_cases": 1587,
+        "alert_share_of_eligible": 0.0807,
+        "evaluable_cases": 1427,
+        "tp": 38,
+        "fp": 74,
+        "fn": 228,
+        "precision": 0.3393,
+        "recall": 0.1429,
+        "f1": 0.2011,
+        "truth_base_rate": 0.1864,
+        "lift": 1.82
+      },
+      "train": {
+        "alerts": 60,
+        "alerts_per_month": 6.0,
+        "eligible_cases": 2148,
+        "alert_share_of_eligible": 0.0279,
+        "evaluable_cases": 1939,
+        "tp": 37,
+        "fp": 18,
+        "fn": 346,
+        "precision": 0.6727,
+        "recall": 0.0966,
+        "f1": 0.1689,
+        "truth_base_rate": 0.1975,
+        "lift": 3.41
+      },
+      "test": {
+        "alerts": 82,
+        "alerts_per_month": 27.33,
+        "eligible_cases": 2030,
+        "alert_share_of_eligible": 0.0404,
+        "evaluable_cases": 1584,
+        "tp": 6,
+        "fp": 73,
+        "fn": 45,
+        "precision": 0.0759,
+        "recall": 0.1176,
+        "f1": 0.0923,
+        "truth_base_rate": 0.0322,
+        "lift": 2.36
+      },
+      "test_by_metric": {
+        "late": {
+          "alerts": 39,
+          "alerts_per_month": 13.0,
+          "eligible_cases": 669,
+          "alert_share_of_eligible": 0.0583,
+          "evaluable_cases": 520,
+          "tp": 3,
+          "fp": 35,
+          "fn": 6,
+          "precision": 0.0789,
+          "recall": 0.3333,
+          "f1": 0.1277,
+          "truth_base_rate": 0.0173,
+          "lift": 4.56
+        },
+        "poor": {
+          "alerts": 30,
+          "alerts_per_month": 10.0,
+          "eligible_cases": 668,
+          "alert_share_of_eligible": 0.0449,
+          "evaluable_cases": 523,
+          "tp": 0,
+          "fp": 30,
+          "fn": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "truth_base_rate": 0.0057,
+          "lift": 0.0
+        },
+        "handover": {
+          "alerts": 13,
+          "alerts_per_month": 4.33,
+          "eligible_cases": 693,
+          "alert_share_of_eligible": 0.0188,
+          "evaluable_cases": 541,
+          "tp": 3,
+          "fp": 8,
+          "fn": 36,
+          "precision": 0.2727,
+          "recall": 0.0769,
+          "f1": 0.12,
+          "truth_base_rate": 0.0721,
+          "lift": 3.78
+        }
+      }
+    }
+  },
+  "selected": {
+    "level": {
+      "detector": "binomial_bh_pairs",
+      "params": {
+        "alpha": 0.05
+      },
+      "min_history": 80,
+      "description": "test binomial unilatéral vs taux de référence, correction de Benjamini-Hochberg"
+    },
+    "trend": {
+      "detector": "binomial_bh_historique",
+      "params": {
+        "alpha": 0.05
+      },
+      "min_history": 30,
+      "description": "test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg"
+    }
+  },
+  "injection_test": {
+    "start": "2018-04-01",
+    "months": [
+      "2018-04",
+      "2018-05",
+      "2018-06"
+    ],
+    "note": "issues 0 → 1 tirées au hasard pour les vendeurs choisis, achats ≥ début",
+    "by_metric": {
+      "late": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.2,
+            "2018-05": 0.2,
+            "2018-06": 0.2
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.0978
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.28,
+            "2018-05": 0.28,
+            "2018-06": 0.4
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.0978
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.28,
+            "2018-05": 0.44,
+            "2018-06": 0.48
+          },
+          "median_delay_months": 1.0,
+          "false_alarm_rate_untouched": 0.1001
+        }
+      },
+      "poor": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.0,
+            "2018-05": 0.0,
+            "2018-06": 0.04
+          },
+          "median_delay_months": 3.0,
+          "false_alarm_rate_untouched": 0.0579
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.04,
+            "2018-05": 0.04,
+            "2018-06": 0.08
+          },
+          "median_delay_months": 2.0,
+          "false_alarm_rate_untouched": 0.0603
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.12,
+            "2018-05": 0.24,
+            "2018-06": 0.32
+          },
+          "median_delay_months": 2.0,
+          "false_alarm_rate_untouched": 0.0603
+        }
+      },
+      "handover": {
+        "n_injected_sellers": 25,
+        "+5_points": {
+          "detected_by_month": {
+            "2018-04": 0.0,
+            "2018-05": 0.04,
+            "2018-06": 0.08
+          },
+          "median_delay_months": 2.5,
+          "false_alarm_rate_untouched": 0.0466
+        },
+        "+10_points": {
+          "detected_by_month": {
+            "2018-04": 0.04,
+            "2018-05": 0.08,
+            "2018-06": 0.16
+          },
+          "median_delay_months": 2.5,
+          "false_alarm_rate_untouched": 0.0476
+        },
+        "+20_points": {
+          "detected_by_month": {
+            "2018-04": 0.12,
+            "2018-05": 0.16,
+            "2018-06": 0.36
+          },
+          "median_delay_months": 3.0,
+          "false_alarm_rate_untouched": 0.0476
+        }
+      }
+    }
+  },
+  "eligible_sellers_per_month": {
+    "2017-03": 2,
+    "2017-04": 6,
+    "2017-05": 22,
+    "2017-06": 31,
+    "2017-07": 44,
+    "2017-08": 56,
+    "2017-09": 65,
+    "2017-10": 79,
+    "2017-11": 88,
+    "2017-12": 104,
+    "2018-01": 120,
+    "2018-02": 123,
+    "2018-03": 144,
+    "2018-04": 154,
+    "2018-05": 155,
+    "2018-06": 157
+  },
+  "alert_history": {
+    "rows": 1187,
+    "by_status": {
+      "new": 450,
+      "resolved": 423,
+      "ongoing": 314
+    },
+    "file": "data/gold/seller_alert_history.csv"
+  },
+  "selection_rule": "par détecteur : meilleur F1 sur VALID parmi les réglages alertant au plus 10 % des cas éligibles ; puis meilleur détecteur par famille selon la même règle",
+  "truth_definition": "prospective : sur les achats des 60 jours suivant T (issues finales, ≥ 5 commandes), taux significativement supérieur (binomial unilatéral, p < 0,05) au taux des pairs (famille « niveau ») ou à l'historique rétréci du vendeur (famille « tendance »)",
+  "runtime_seconds": 62.5
+}

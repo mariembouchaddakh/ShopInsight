@@ -1,0 +1,290 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/bricolage-grotesque";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --color-ink: #132238;
+    --color-navy: #132238;
+    --color-butter: #F6E08D;
+    --color-butter-hover: #EACD65;
+    --color-burgundy: #8B1E3F;
+    --color-burgundy-tint: #FDF2F5;
+    --color-sage: #CFE5D8;
+    --color-forest: #1B4332;
+    --color-forest-mark: #2F8F5B;
+    --color-amber-tint: #FEF6E4;
+    --color-amber-ink: #8A5A00;
+    --color-navy-tint: #E8EEF7;
+    --color-navy-soft: #1E3A66;
+    --color-plum: #5B3F9E;
+    --color-plum-tint: #F1EDFA;
+    --font-heading: var(--font-display);
+    --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', sans-serif;
+    --font-sans: 'Geist Variable', sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Palette « direction » ShopInsight : bleu marine, jaune beurre, bordeaux, vert pastel.
+   Contrastes WCAG AA vérifiés (texte ≥ 4,5:1) : marine/albâtre 15,2 · ardoise/blanc 7,6 · marine/beurre 12,2 ·
+   bordeaux/rose 8,2 · forêt/sauge 8,4 · blanc cassé/marine 15,3. Le jaune beurre n'est JAMAIS une couleur de texte sur fond clair.
+   Couleurs de données (graphiques) : lib/format.ts, validées daltonisme (dataviz).
+   ------------------------------------------------------------------------------------------------ */
+:root {
+    --background: #F8F9FA;
+    --foreground: #132238;
+    --card: #FFFFFF;
+    --card-foreground: #132238;
+    --popover: #FFFFFF;
+    --popover-foreground: #132238;
+    --primary: #F6E08D;
+    --primary-foreground: #132238;
+    --secondary: #F1F5F9;
+    --secondary-foreground: #132238;
+    --muted: #F1F5F9;
+    --muted-foreground: #475569;
+    --accent: #F1F5F9;
+    --accent-foreground: #132238;
+    --destructive: #8B1E3F;
+    --border: #E2E8F0;
+    --input: #CBD5E1;
+    --ring: #132238;
+    --chart-1: #2F6BB0;
+    --chart-2: #B08418;
+    --chart-3: #7357B8;
+    --chart-4: #2F8F5B;
+    --chart-5: #A8325A;
+    --radius: 0.75rem;
+    --sidebar: #132238;
+    --sidebar-foreground: #F8FAFC;
+    --sidebar-primary: #F6E08D;
+    --sidebar-primary-foreground: #132238;
+    --sidebar-accent: #F6E08D;
+    --sidebar-accent-foreground: #132238;
+    --sidebar-border: rgb(255 255 255 / 8%);
+    --sidebar-ring: #F6E08D;
+    /* couleurs de marque */
+    --brand-navy: #132238;
+    --brand-navy-2: #23395B;
+    --brand-butter: #F6E08D;
+    --brand-butter-hover: #EACD65;
+    --brand-burgundy: #8B1E3F;
+    --brand-sage: #CFE5D8;
+    --brand-forest: #1B4332;
+    --brand-ink: #132238;
+}
+
+.dark {
+    --background: #0D1828;
+    --foreground: #F8FAFC;
+    --card: #132238;
+    --card-foreground: #F8FAFC;
+    --popover: #132238;
+    --popover-foreground: #F8FAFC;
+    --primary: #F6E08D;
+    --primary-foreground: #132238;
+    --secondary: #1C2E48;
+    --secondary-foreground: #F8FAFC;
+    --muted: #1C2E48;
+    --muted-foreground: #B7BDC6;
+    --accent: #1C2E48;
+    --accent-foreground: #F8FAFC;
+    --destructive: #E8879F;
+    --border: rgb(255 255 255 / 10%);
+    --input: rgb(255 255 255 / 15%);
+    --ring: #F6E08D;
+    --sidebar: #0A1422;
+    --sidebar-foreground: #F8FAFC;
+    --sidebar-primary: #F6E08D;
+    --sidebar-primary-foreground: #132238;
+    --sidebar-accent: #F6E08D;
+    --sidebar-accent-foreground: #132238;
+    --sidebar-border: rgb(255 255 255 / 8%);
+    --sidebar-ring: #F6E08D;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* lueurs douces de vitrine (fixes, très discrètes) */
+    background-image:
+      radial-gradient(60rem 30rem at 100% -10%, rgb(246 224 141 / 18%), transparent 70%),
+      radial-gradient(40rem 26rem at -10% 110%, rgb(207 229 216 / 22%), transparent 70%);
+    background-attachment: fixed;
+  }
+  h1, h2, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: rgb(246 224 141 / 70%);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(71 85 105 / 35%) transparent;
+  }
+}
+
+/* ---------------------------------------------- mouvements ------------------------------------- */
+@keyframes si-page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes si-pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes si-spin { to { transform: rotate(1turn); } }
+@keyframes si-breathe {
+  0%, 100% { box-shadow: 0 10px 30px -8px rgb(19 34 56 / 55%), 0 0 0 0 rgb(246 224 141 / 55%); }
+  50% { box-shadow: 0 14px 36px -8px rgb(19 34 56 / 65%), 0 0 0 10px rgb(246 224 141 / 0%); }
+}
+@keyframes si-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+}
+@keyframes si-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes si-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes si-sparkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.1) rotate(20deg); }
+}
+@keyframes si-badge {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  60% { transform: scale(0.95); }
+}
+@keyframes si-ribbon {
+  from { background-position: 0% 0; }
+  to { background-position: 200% 0; }
+}
+
+@utility page-enter {
+  animation: si-page-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@utility pop-in {
+  animation: si-pop-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+/* cascade d'apparition des enfants directs */
+@utility stagger {
+  & > * { animation: si-page-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  & > *:nth-child(2) { animation-delay: 60ms; }
+  & > *:nth-child(3) { animation-delay: 120ms; }
+  & > *:nth-child(4) { animation-delay: 180ms; }
+  & > *:nth-child(5) { animation-delay: 240ms; }
+  & > *:nth-child(n + 6) { animation-delay: 300ms; }
+}
+/* carte qui se soulève au survol */
+@utility lift {
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -14px rgb(19 34 56 / 28%);
+  }
+}
+/* dégradé de marque animé (marine profond → marine clair, reflet beurre) */
+@utility brand-gradient {
+  background-image: linear-gradient(120deg, var(--brand-navy) 0%, var(--brand-navy-2) 55%, #2E4A70 85%, #3B5677 100%);
+  background-size: 200% 200%;
+  animation: si-gradient 8s ease-in-out infinite;
+}
+/* ruban de marque en haut de page */
+@utility brand-ribbon {
+  background-image: linear-gradient(90deg, var(--brand-butter), var(--brand-sage), var(--brand-navy-2), var(--brand-burgundy), var(--brand-butter));
+  background-size: 200% 100%;
+  animation: si-ribbon 12s linear infinite;
+}
+@utility text-brand {
+  background-image: linear-gradient(110deg, var(--brand-butter), #FFF3C4 60%, var(--brand-butter));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ------------------------------------- assistant (lanceur vivant) ------------------------------- */
+.si-launcher {
+  /* respiration + dégradé qui glisse (les deux animations combinées, sinon l'une annule l'autre) */
+  background-size: 200% 200%;
+  animation: si-breathe 3.2s ease-in-out infinite, si-gradient 8s ease-in-out infinite;
+}
+.si-launcher::before {
+  /* anneau lumineux qui tourne autour du lanceur */
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  padding: 3px;
+  background: conic-gradient(from 0deg, var(--brand-butter), transparent 30%, var(--brand-sage) 55%, transparent 75%, var(--brand-butter));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: si-spin 4s linear infinite;
+  pointer-events: none;
+}
+.si-bob { animation: si-bob 3.6s ease-in-out infinite; transform-origin: 50% 80%; }
+.si-eye { animation: si-blink 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.si-sparkle { animation: si-sparkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.si-badge { animation: si-badge 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

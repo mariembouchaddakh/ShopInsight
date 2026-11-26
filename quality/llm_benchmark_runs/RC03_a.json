@@ -1,0 +1,307 @@
+{
+  "case_id": "RC03",
+  "category": "persistent",
+  "slot": "a",
+  "model": "baidu/ernie-5.5-flash-preview:free",
+  "analysis": {
+    "model": "baidu/ernie-5.5-flash-preview:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Profil : 745 commandes mono-vendeur sur 12 mois ; catégorie « autre » 91 % ; destinations SP 41 %, autre 32 %, RJ 18 % ; prix médian 159.94 R$ ; délai promis moyen 34.1 jours ; segment descriptif grand volume, Sudeste.",
+          "type": "fait",
+          "preuves": [
+            "sel:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Sur les 90 derniers jours : 152 commandes, dont 42 avec un problème déjà connu à la décision.",
+          "type": "fait",
+          "preuves": [
+            "ord:seller:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "10 commandes multi-vendeurs sur 12 mois (1.3 % de son activité) : exclues des taux, leur retard et leur avis ne sont pas attribués à ce vendeur.",
+          "type": "fait",
+          "preuves": [
+            "ctx:multi:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Décision du paquet : une alerte niveau, sévérité élevée, sur la remise tardive au transporteur ; pas d'alerte sur le retard de livraison ni sur les avis 1-2 étoiles.",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover",
+            "alr:7c67e144:2018-06:late",
+            "alr:7c67e144:2018-06:poor"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Cette remise tardive est au-dessus de la limite haute à 99,8 % ; alerte niveau sévérité élevée, déjà en alerte 9 mois de décision auparavant (dernière : 2018-05, niveau).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover",
+            "alr:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 11 événements observés contre 4.2 attendus compte tenu des destinations, produits et promesses (ratio 2.61, z = 3.4, n = 124), alors que le taux affiché reste dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "mdl:expected:7c67e144:2018-06:late",
+            "kpi:seller:7c67e144:2018-06:late"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Remise tardive au transporteur en repli : 25.4 % (2018-03, n = 232) → 16.6 % (2018-04, n = 223) → 15.3 % (2018-05, n = 216) → 15.3 % (2018-06, n = 131).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles en baisse continue : 31.9 % (2018-03, n = 166) → 28.5 % (2018-04, n = 186) → 24.2 % (2018-05, n = 198) → 20.8 % (2018-06, n = 125).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte tendance en 2018-06 sur les trois indicateurs : remise tardive 15.3 % contre 21.4 % d'historique du vendeur, avis 20.8 % contre 27.7 %, retard 8.9 % contre 10.6 %.",
+          "type": "fait",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover",
+            "alr:7c67e144:2018-06:poor",
+            "alr:7c67e144:2018-06:late"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Référence : toute la marketplace (1375 autres vendeurs). La similarité ne repose que sur l'activité (catégories, destinations, volume, prix, port, poids, délai), jamais sur les retards ou les avis.",
+          "type": "fait",
+          "preuves": [
+            "peer:7c67e144:2018-06"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 15.3 % contre 5.1 % (n = 66579), ratio ×2.97, au-dessus de la limite haute à 99,8 % ; taux du vendeur rétréci vers la marketplace : 20.3 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 8.9 % contre 7.9 % (n = 64686), ratio ×1.12, dans l'intervalle attendu. Avis 1-2 étoiles : 20.8 % contre 14.3 % (n = 64638), ratio ×1.46, dans l'intervalle attendu.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:late",
+            "kpi:seller:7c67e144:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Aucun point fort détecté sur 12 mois : les trois taux (10.4 %, 26.9 %, 20.8 %) ne sont pas significativement sous la référence.",
+          "type": "fait",
+          "preuves": [
+            "alr:strength:7c67e144:2018-06"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "La remise tardive au transporteur pourrait relever de la préparation des commandes (stock, capacité, jours non ouvrés) ; à confirmer avec le vendeur.",
+          "type": "hypothese",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover",
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Les retards de livraison pourraient être liés aux destinations hors SP (autre 32 %, RJ 18 %) et au délai promis moyen de 34.1 jours ; possible part du transporteur, à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "sel:7c67e144:2018-06",
+            "mdl:expected:7c67e144:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Les avis 1-2 étoiles pourraient porter sur l'expérience de livraison (« Livraison et délais », 78 avis) plus que sur le produit ; à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "mdl:aspects:seller:7c67e144:2018-06",
+            "kpi:seller:7c67e144:2018-06:poor"
+          ]
+        },
+        {
+          "texte": "Les 41 avis « Article erroné, manquant ou incomplet » pourraient signaler des écarts de préparation ; un lien possible avec les remises tardives reste à établir.",
+          "type": "hypothese",
+          "preuves": [
+            "mdl:aspects:seller:7c67e144:2018-06"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "Olist n'enregistre pas pourquoi une commande est remise tardivement, en retard ou mal notée : aucune cause n'est établie par ces données.",
+          "type": "inconnu",
+          "preuves": [
+            "alr:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Aucune donnée de publicité, campagne, promotion ou marketing n'existe dans Olist ; leur effet éventuel ne peut pas être évalué.",
+          "type": "inconnu",
+          "preuves": []
+        },
+        {
+          "texte": "Sur 152 commandes récentes, les issues connues sont n = 124 (retard), n = 125 (avis), n = 131 (remise) ; les commandes sans issue connue ne sont pas comptées et leur issue reste inconnue.",
+          "type": "inconnu",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:late",
+            "kpi:seller:7c67e144:2018-06:poor",
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "La référence de limites (ctx:limites) n'est pas présente dans le paquet ; les seuils exacts des détecteurs ne sont pas détaillés ici.",
+          "type": "inconnu",
+          "preuves": []
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur 15.3 % contre 5.1 % (alerte niveau, sévérité élevée).",
+        "action": "(Support vendeurs) Vérifier avec le vendeur ses délais de préparation et le respect de la date limite de remise au transporteur, sur les commandes concernées.",
+        "priorite": "haute",
+        "impact": "Moins de commandes remises hors délai, donc moins de retards de livraison en aval.",
+        "direction_attendue": "baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Causes opérationnelles (stock, capacité, jours non ouvrés) non enregistrées par Olist.",
+        "preuves": [
+          "alr:7c67e144:2018-06:handover",
+          "kpi:seller:7c67e144:2018-06:handover"
+        ]
+      },
+      {
+        "faiblesse": "Avis 1-2 étoiles 20.8 % contre 14.3 %, avec « Livraison et délais » en tête (78 avis).",
+        "action": "Prendre contact avec le vendeur avant toute sanction et revoir avec lui les délais promis (moyenne 34.1 jours) au regard de ses destinations.",
+        "priorite": "moyenne",
+        "impact": "Réduction des avis négatifs liés à la livraison et des retards associés.",
+        "direction_attendue": "baisse du taux d'avis 1-2 étoiles",
+        "information_manquante": "Motifs exacts des avis : méthode de lecture d'avis non validée, verbatims non disponibles.",
+        "preuves": [
+          "kpi:seller:7c67e144:2018-06:poor",
+          "mdl:aspects:seller:7c67e144:2018-06"
+        ]
+      },
+      {
+        "faiblesse": "Retard de livraison : 11 événements contre 4.2 attendus (ratio 2.61, z = 3.4).",
+        "action": "Suivre mensuellement le retard de livraison et la remise tardive, puis mesurer l'effet de l'action avec des vendeurs comparables non contactés avant de la généraliser.",
+        "priorite": "moyenne",
+        "impact": "Détection précoce d'une dégradation et action proportionnée à son effet réel.",
+        "direction_attendue": "baisse du taux de retard de livraison",
+        "information_manquante": "Répartition des retards entre préparation vendeur et transport.",
+        "preuves": [
+          "mdl:expected:7c67e144:2018-06:late",
+          "kpi:seller:7c67e144:2018-06:late"
+        ]
+      },
+      {
+        "faiblesse": "Avis « Article erroné, manquant ou incomplet » (41 avis) et « Retour, échange, remboursement » (33 avis).",
+        "action": "Demander au vendeur un contrôle de conformité et de complétude des colis avant expédition.",
+        "priorite": "basse",
+        "impact": "Moins de litiges, de retours et d'avis négatifs sur le contenu de la commande.",
+        "direction_attendue": "baisse des avis négatifs sur article erroné, manquant ou incomplet",
+        "information_manquante": "Lien entre ces avis et la préparation des commandes non établi par les données.",
+        "preuves": [
+          "mdl:aspects:seller:7c67e144:2018-06"
+        ]
+      }
+    ],
+    "resume": "Vendeur 7c67e144 (État SP), décision fin 2018-06 : 745 commandes mono-vendeur sur 12 mois, prix médian 159.94 R$, délai promis moyen 34.1 jours. Remise tardive au transporteur à 15.3 % sur 90 jours (n = 131) contre 5.1 % pour la marketplace (n = 66579), ratio ×2.97 : c'est la seule alerte du paquet, niveau élevé. Retard de livraison 8.9 % (n = 124) et avis 1-2 étoiles 20.8 % (n = 125), sans alerte.",
+    "rejected": [
+      {
+        "section": "faiblesses",
+        "item": {
+          "texte": "Remise tardive au transporteur : 15.3 % sur 90 jours (n = 131 ; IC 95 % 10.1 % – 22.4 %) ; 20.8 % sur 12 mois (n = 723).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:handover"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 95"
+        ]
+      },
+      {
+        "section": "faiblesses",
+        "item": {
+          "texte": "Avis 1-2 étoiles : 20.8 % sur 90 jours (n = 125 ; IC 95 % 14.6 % – 28.7 %) ; 26.9 % sur 12 mois (n = 714). Aspects les plus critiqués sur 367 avis écrits : « Livraison et délais » (78 avis), « Article erroné, manquant ou incomplet » (41 avis), « Retour, échange, remboursement » (33 avis).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:7c67e144:2018-06:poor",
+            "mdl:aspects:seller:7c67e144:2018-06"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 95"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 28,
+      "items_valid": 26,
+      "items_rejected": 2,
+      "grounding_rate": 0.929
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "baidu/ernie-5.5-flash-preview:free",
+      "model_returned": "baidu/ernie-5.5-flash-preview:free",
+      "latency_s": 26.09,
+      "usage": {
+        "prompt_tokens": 11483,
+        "completion_tokens": 7695,
+        "total_tokens": 19178
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 26.24,
+      "package_chars": 29674
+    }
+  },
+  "error": null,
+  "judge": {
+    "scores": {
+      "adherence_preuves": 4,
+      "coherence_factuelle": 4,
+      "profondeur_analytique": 4,
+      "separation_faits_hypotheses": 5,
+      "pertinence_recommandations": 4,
+      "actionnabilite": 4,
+      "completude": 4,
+      "clarte": 5
+    },
+    "complete": true,
+    "causal": true,
+    "hallucination": true,
+    "comment": "L'analyse est bien structurée et sépare clairement faits, hypothèses et inconnues. Toutefois, elle invoque une preuve inexistante (alr:strength:7c67e144:2018-06) et émet une affirmation causale non étayée dans l'impact de l'action 1 (lien direct entre remise tardive et retards en aval).",
+    "call": {
+      "latency_s": 12.55,
+      "usage": {
+        "prompt_tokens": 12178,
+        "completion_tokens": 208,
+        "total_tokens": 12386
+      },
+      "cost": 0.0,
+      "cached": false
+    }
+  },
+  "judge_error": null
+}

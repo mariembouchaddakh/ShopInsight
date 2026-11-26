@@ -1,7 +1,11 @@
-# Dépendances de src/translate_reviews.py (en plus de requirements.txt)
+# Dépendances de la traduction des avis : src/translate_reviews.py et traduction à la demande de l'API (en plus de requirements.txt).
+# À installer dans le MÊME environnement que celui qui lance l'API (.venv), sinon les extraits restent en portugais.
 # Version CPU de PyTorch, plus légère :
 #   pip install torch --index-url https://download.pytorch.org/whl/cpu
 torch
 transformers>=4.40
 sentencepiece
 sacremoses
+# regex est une dépendance de transformers. La version 2026.11.19, trop récente, est bloquée par la stratégie de contrôle
+# des applications de Windows (« DLL load failed ») ; on fixe une version reconnue.
+regex==2026.4.4

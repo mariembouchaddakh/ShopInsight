@@ -1,5 +1,5 @@
 {
-  "source_archive_sha256": null,
+  "source_archive_sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
   "raw_files_match_expected_sha256": true,
   "orders_analysis_rows": 99441,
   "orders_model_base_rows": 99441,
@@ -19,6 +19,6 @@
     "zip_prefixes": 19015,
     "zip_prefixes_without_valid_point": 5
   },
-  "quality_checks": "37/37",
+  "quality_checks": "39/39",
   "quality_checks_passed": true
 }

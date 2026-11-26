@@ -247,8 +247,14 @@ class DataStore:
                     "month": meta.get("purchase_month"), "state": meta.get("customer_state"),
                     "category": meta.get("primary_category"), "is_late": meta.get("is_late"),
                     "has_message": d.get("has_message", bool(d.get("text"))),
+                    # BO4 point-in-time retrieval needs the timestamp of each
+                    # individual review, not the order-level selected review.
+                    "review_created_at": d.get("review_created_at") or meta.get("review_created_at"),
+                    "review_answered_at": d.get("review_answered_at") or meta.get("review_answered_at"),
                 })
         df = pd.DataFrame(rows)
+        for c in ("review_created_at", "review_answered_at"):
+            df[c] = pd.to_datetime(df[c], errors="coerce", utc=True).dt.tz_localize(None)
         df["full_pt"] = (df["title_pt"].str.strip() + ". " + df["text_pt"].str.strip()).str.strip(". ").str.strip()
         df["full_fr"] = (df["title_fr"].str.strip() + ". " + df["text_fr"].str.strip()).str.strip(". ").str.strip()
         self._cache["reviews"] = df

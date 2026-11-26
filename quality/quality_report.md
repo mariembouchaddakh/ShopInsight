@@ -1,6 +1,6 @@
 # Rapport de qualité des données
 
-Statut global : **RÉUSSI** — 37/37 contrôles réussis.
+Statut global : **RÉUSSI** — 39/39 contrôles réussis.
 
 | Catégorie | Contrôle | Observé | Attendu | Résultat |
 |---|---|---:|---:|---|
@@ -41,6 +41,8 @@ Statut global : **RÉUSSI** — 37/37 contrôles réussis.
 | Dates (signalées) | flag_delivery_date_on_undelivered_status | 6 | 6 | OK |
 | Géolocalisation | geo_centroids_outside_brazil | 0 | 0 | OK |
 | Géolocalisation | customers_with_geo | 99162 | information | OK |
+| Remise au transporteur | late_handover_label_only_when_eligible | 97657 étiquetées / 97657 éligibles | égalité | OK |
+| Remise au transporteur | shipping_limit_matches_raw | 98666 | 98666 | OK |
 
 ## Règles appliquées
 

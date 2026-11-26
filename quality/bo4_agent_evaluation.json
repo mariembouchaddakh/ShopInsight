@@ -1,0 +1,16 @@
+{
+  "status": "evaluated",
+  "scenarios": 60,
+  "rates": {
+    "factual_correctness": 1.0,
+    "evidence_citation_valid": 1.0,
+    "temporal_integrity": 1.0,
+    "uncertainty_communication": 1.0
+  },
+  "hallucination_rejection": true,
+  "latency_ms": {
+    "mean": 881.5410866654323,
+    "p95": 612.743030003912
+  },
+  "note": "Deterministic historical replay on real Olist data; no external LLM or fabricated labels."
+}

@@ -1,0 +1,305 @@
+{
+  "case_id": "RC08",
+  "category": "recent",
+  "slot": "a",
+  "model": "baidu/ernie-5.5-flash-preview:free",
+  "analysis": {
+    "model": "baidu/ernie-5.5-flash-preview:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Retard de livraison : 9.5 % sur les 90 derniers jours (n = 190 issues connues sur 241 commandes ; IC 95 % 6.1 % – 14.5 %) ; 6.0 % sur 12 mois (n = 1017).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 22.9 % sur les 90 derniers jours (n = 188 issues connues sur 241 commandes ; IC 95 % 17.4 % – 29.4 %) ; 17.3 % sur 12 mois (n = 1024).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:poor"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 0.0 % sur les 90 derniers jours (n = 235 issues connues sur 241 commandes ; IC 95 % 0.0 % – 1.6 %) ; 0.4 % sur 12 mois (n = 1080).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:handover"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "Alerte tendance sur le retard de livraison : 9.5 % sur 90 jours (n = 190) contre 5.3 % (historique du vendeur sur les achats de T-365 à T-90 jours, rétréci vers la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:6560211a:2018-04:late"
+          ]
+        },
+        {
+          "texte": "Alerte niveau (par rapport à la marketplace), sévérité faible — avis 1-2 étoiles : 22.9 % sur 90 jours (n = 188) contre 14.7 % (taux de la marketplace).",
+          "type": "fait",
+          "preuves": [
+            "alr:6560211a:2018-04:poor"
+          ]
+        },
+        {
+          "texte": "Évolution défavorable sur 90 jours : retard de livraison 6.2 % (2018-01, n = 340) → 5.7 % (2018-02, n = 263) → 5.6 % (2018-03, n = 215) → 9.5 % (2018-04, n = 190) ; avis 1-2 étoiles 15.2 % (n = 328) → 14.7 % (n = 251) → 16.7 % (n = 215) → 22.9 % (n = 188).",
+          "type": "fait",
+          "preuves": [
+            "kpi:history:6560211a:2018-04"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Remise tardive au transporteur : 0.4 % sur 12 mois (n = 1080) contre 5.7 % pour la marketplace, écart significatif (point fort).",
+          "type": "fait",
+          "preuves": [
+            "alr:strength:6560211a:2018-04"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 0.0 % sur 90 jours (n = 235) contre 5.7 % pour la marketplace ; ratio ×0.00 ; position sous la limite basse à 95 %.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:handover"
+          ]
+        },
+        {
+          "texte": "Pas d'alerte niveau ni d'alerte tendance sur la remise tardive au transporteur : 0.0 % contre 5.7 % (marketplace) et 0.0 % contre 0.6 % (historique rétréci).",
+          "type": "fait",
+          "preuves": [
+            "alr:6560211a:2018-04:handover"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Retard de livraison — comparaison à la marketplace : 9.5 % contre 8.1 % pour l'ensemble des autres vendeurs (n = 57775) ; ratio ×1.18 ; position : dans l'intervalle attendu ; taux du vendeur rétréci vers la marketplace : 6.0 % ; pas d'alerte niveau.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:late",
+            "alr:6560211a:2018-04:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles — comparaison à la marketplace : 22.9 % contre 14.7 % pour l'ensemble des autres vendeurs (n = 57709) ; ratio ×1.56 ; position : au-dessus de la limite haute à 95 % ; taux du vendeur rétréci vers la marketplace : 17.2 % ; pas d'alerte tendance (22.9 % contre 16.0 % d'historique rétréci).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:poor",
+            "alr:6560211a:2018-04:poor"
+          ]
+        },
+        {
+          "texte": "Observé / attendu compte tenu des destinations, produits et promesses : retard de livraison 18 événements contre 18.7 attendus (ratio 0.96, z = -0.2, n = 190) ; avis 1-2 étoiles 43 événements contre 34.8 attendus (ratio 1.24, z = 1.5, n = 188).",
+          "type": "fait",
+          "preuves": [
+            "mdl:expected:6560211a:2018-04:late",
+            "mdl:expected:6560211a:2018-04:poor"
+          ]
+        },
+        {
+          "texte": "Référence : toute la marketplace (1235 autres vendeurs) ; catégories principales des vendeurs à l'activité la plus proche : watches_gifts (10), computers_accessories (2), housewares (1), health_beauty (1) ; la similarité ne repose que sur l'activité, jamais sur les retards ou les avis.",
+          "type": "fait",
+          "preuves": [
+            "peer:6560211a:2018-04"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "Le retard de livraison pourrait provenir du transport aval plutôt que de la préparation de la commande, puisque la remise tardive au transporteur est à 0.0 % sur 90 jours (n = 235) ; à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "kpi:seller:6560211a:2018-04:handover",
+            "alr:6560211a:2018-04:late"
+          ]
+        },
+        {
+          "texte": "Les avis 1-2 étoiles pourraient être liés en partie aux délais : « Livraison et délais » est l'aspect le plus critiqué (54 avis), devant « Qualité et état du produit » (34 avis) et « Vendeur et service » (25 avis) ; possible, à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "mdl:aspects:seller:6560211a:2018-04"
+          ]
+        },
+        {
+          "texte": "La hausse simultanée du retard de livraison et des avis 1-2 étoiles en 2018-04 pourrait refléter un événement ponctuel (destinations, transporteur, saisonnalité) plutôt qu'une dérive durable ; à vérifier sur les mois suivants.",
+          "type": "hypothese",
+          "preuves": [
+            "kpi:history:6560211a:2018-04"
+          ]
+        },
+        {
+          "texte": "Les 23 commandes multi-vendeurs (2.1 % de l'activité) pourraient masquer une part du problème, mais elles sont exclues des taux ; à vérifier.",
+          "type": "hypothese",
+          "preuves": [
+            "ctx:multi:6560211a:2018-04"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "Olist n'enregistre pas pourquoi une commande est en retard ou mal notée : aucune cause n'est établie par les données.",
+          "type": "inconnu",
+          "preuves": []
+        },
+        {
+          "texte": "Données manquantes : aucune information sur la publicité, les campagnes, les promotions ou le marketing du vendeur ; ces sujets ne peuvent pas être analysés.",
+          "type": "inconnu",
+          "preuves": []
+        },
+        {
+          "texte": "Inconnu : la part des retards et des mauvais avis attribuable aux transporteurs et aux destinations n'est pas décomposée dans le paquet.",
+          "type": "inconnu",
+          "preuves": []
+        },
+        {
+          "texte": "Inconnu : l'effet des 23 commandes multi-vendeurs (2.1 % de l'activité) sur les taux n'est pas mesurable, elles sont exclues.",
+          "type": "inconnu",
+          "preuves": [
+            "ctx:multi:6560211a:2018-04"
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Alerte tendance sur le retard de livraison (9.5 % contre 5.3 %)",
+        "action": "Examiner les transporteurs et les destinations de ce vendeur ; utiliser l'agent BO1 pour surveiller ses commandes en cours.",
+        "priorite": "haute",
+        "impact": "Réduction des retards de livraison et des avis 1-2 étoiles associés.",
+        "direction_attendue": "baisse du taux de retard de livraison",
+        "information_manquante": "Répartition des retards par transporteur et par destination ; causes non enregistrées par Olist.",
+        "preuves": [
+          "alr:6560211a:2018-04:late"
+        ]
+      },
+      {
+        "faiblesse": "Alerte niveau sur les avis 1-2 étoiles (22.9 % contre 14.7 %)",
+        "action": "Traiter les délais (remise au transporteur, agent BO1) et contrôler la préparation et les fiches produit (agent BO2).",
+        "priorite": "haute",
+        "impact": "Amélioration de la satisfaction client et baisse des avis négatifs.",
+        "direction_attendue": "baisse du taux d'avis 1-2 étoiles",
+        "information_manquante": "Détail des 34 avis « Qualité et état du produit » et des 25 avis « Vendeur et service » ; méthode d'analyse des aspects non validée.",
+        "preuves": [
+          "alr:6560211a:2018-04:poor",
+          "mdl:aspects:seller:6560211a:2018-04"
+        ]
+      }
+    ],
+    "resume": "Vendeur 6560211a, décision fin 2018-04 : retard de livraison à 9.5 % sur 90 jours (n = 190) contre 8.1 % pour la marketplace, avec une alerte tendance (9.5 % contre 5.3 % d'historique rétréci). Avis 1-2 étoiles à 22.9 % (n = 188) contre 14.7 % pour la marketplace, avec une alerte niveau de sévérité faible. Remise tardive au transporteur à 0.0 % sur 90 jours (n = 235) contre 5.7 % pour la marketplace, point fort sur 12 mois (0.4 %, n = 1080).",
+    "rejected": [
+      {
+        "section": "situation",
+        "item": {
+          "texte": "Vendeur de l'État SP : 1087 commandes mono-vendeur sur les 12 mois avant le 2018-05-01 ; catégories watches_gifts 77 %, autre 22 % ; destinations SP 43 %, autre 36 %, MG 11 % ; prix médian 49.99 R$, délai promis moyen 21.8 jours.",
+          "type": "fait",
+          "preuves": [
+            "sel:6560211a:2018-04"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 11"
+        ]
+      },
+      {
+        "section": "faiblesses",
+        "item": {
+          "texte": "49 commandes des 90 derniers jours ont un problème déjà connu à la décision (sur 241) ; exemples : a85de20f… (2018-04-08, ES, watches_gifts, note 1/5), cb23b55f… (2018-04-03, MS, fashion_bags_accessories, note 1/5), 7bbc66a9… (2018-03-21, SP, livrée 2 j après la date promise, note 1/5).",
+          "type": "fait",
+          "preuves": [
+            "ord:seller:6560211a:2018-04",
+            "ord:a85de20f557d7c93da92888cde9b7aef",
+            "ord:cb23b55fbda69bd2ff574bf553b47e8c",
+            "ord:7bbc66a921e0671f689e2bb419d3cf09"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 21"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Écarts observés sans cause enregistrée",
+          "action": "Prendre contact avec le vendeur avant toute sanction.",
+          "priorite": "moyenne",
+          "impact": "Échange factuel avec le vendeur, sans présumer d'une cause.",
+          "direction_attendue": "retour à la normale des taux de retard de livraison et d'avis 1-2 étoiles",
+          "information_manquante": "Explications du vendeur ; causes non enregistrées par Olist.",
+          "preuves": []
+        },
+        "problems": [
+          "action sans preuve citée"
+        ]
+      },
+      {
+        "section": "actions",
+        "item": {
+          "faiblesse": "Absence de mesure d'impact des actions",
+          "action": "Mesurer l'effet de toute action par comparaison avec des vendeurs comparables non contactés avant de la généraliser.",
+          "priorite": "basse",
+          "impact": "Décision fondée sur des résultats observés plutôt que sur une hypothèse.",
+          "direction_attendue": "baisse du taux de retard de livraison et du taux d'avis 1-2 étoiles",
+          "information_manquante": "Groupe de comparaison et suivi dans le temps.",
+          "preuves": []
+        },
+        "problems": [
+          "action sans preuve citée"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 28,
+      "items_valid": 24,
+      "items_rejected": 4,
+      "grounding_rate": 0.857
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "baidu/ernie-5.5-flash-preview:free",
+      "model_returned": "baidu/ernie-5.5-flash-preview:free",
+      "latency_s": 39.31,
+      "usage": {
+        "prompt_tokens": 10970,
+        "completion_tokens": 10891,
+        "total_tokens": 21861
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 2,
+      "wall_s": 39.44,
+      "package_chars": 28203
+    }
+  },
+  "error": null,
+  "judge": {
+    "scores": {
+      "adherence_preuves": 5,
+      "coherence_factuelle": 5,
+      "profondeur_analytique": 4,
+      "separation_faits_hypotheses": 5,
+      "pertinence_recommandations": 4,
+      "actionnabilite": 4,
+      "completude": 5,
+      "clarte": 5
+    },
+    "complete": true,
+    "causal": false,
+    "hallucination": false,
+    "comment": "Analyse fidèle et structurée, avec une séparation rigoureuse faits/hypothèses et des inconnues bien identifiées. Les recommandations sont pertinentes mais restent génériques, sans cible opérationnelle précise ni seuil de déclenchement.",
+    "call": {
+      "latency_s": 34.95,
+      "usage": {
+        "prompt_tokens": 11411,
+        "completion_tokens": 180,
+        "total_tokens": 11591
+      },
+      "cost": 0.0,
+      "cached": false
+    }
+  },
+  "judge_error": null
+}

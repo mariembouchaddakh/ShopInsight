@@ -42,6 +42,11 @@ def main() -> None:
         orders.loc[delivered, "order_delivered_customer_date"].dt.normalize()
         > orders.loc[delivered, "order_estimated_delivery_date"].dt.normalize()
     )
+    items["shipping_limit_date"] = pd.to_datetime(items["shipping_limit_date"])
+    limit = items.groupby("order_id")["shipping_limit_date"].max()
+    carrier = orders.set_index("order_id")["order_delivered_carrier_date"]
+    h = pd.concat([carrier, limit], axis=1, join="inner").dropna()
+    late_handover = h["order_delivered_carrier_date"].dt.normalize() > h["shipping_limit_date"].dt.normalize()
     sellers_per_order = items.groupby("order_id")["seller_id"].nunique()
     multi_ids = set(sellers_per_order[sellers_per_order > 1].index)
     no_item_ids = set(orders["order_id"]) - set(items["order_id"])
@@ -75,6 +80,7 @@ def main() -> None:
         "period_flag_present_in_all_kpi_tables": all("is_complete_period" in t.columns and t["is_complete_period"].notna().all() for t in [monthly, state, category, seller]),
         "date_flags_recomputed_match": int(a["flag_carrier_before_approval"].sum()) == int((orders["order_delivered_carrier_date"] < orders["order_approved_at"]).sum())
         and int(a["flag_delivered_before_carrier"].sum()) == int((orders["order_delivered_customer_date"] < orders["order_delivered_carrier_date"]).sum()),
+        "late_handover_recomputed_matches": int(a["handover_label_eligible"].sum()) == len(h) and int(a["is_late_handover"].sum()) == int(late_handover.sum()),
         "geo_centroids_inside_brazil": bool(
             geo.loc[geo["is_within_brazil"], "latitude"].between(-33.8, 5.3).all()
             and geo.loc[geo["is_within_brazil"], "longitude"].between(-74.0, -34.7).all()
@@ -93,6 +99,8 @@ def main() -> None:
             "review_documents_with_message": int(msg.sum()),
             "incomplete_months": monthly.loc[~monthly["is_complete_period"], "purchase_month"].tolist(),
             "orders_with_date_issue": int(a["flag_any_date_issue"].sum()),
+            "handover_eligible": len(h),
+            "late_handover_orders": int(late_handover.sum()),
         },
     }
     (p / "quality" / "independent_validation.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")

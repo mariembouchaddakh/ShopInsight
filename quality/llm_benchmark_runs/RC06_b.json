@@ -1,0 +1,216 @@
+{
+  "case_id": "RC06",
+  "category": "recent",
+  "slot": "b",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "analysis": {
+    "model": "nvidia/nemotron-3.5-super-vl:free",
+    "sections": {
+      "situation": [
+        {
+          "texte": "Vendeur de l'État PR : 73 commandes mono-vendeur sur 12 mois, catégorie bed_bath_table à 100 %, prix médian 119,9 R$, délai promis moyen 28,9 jours, segment grand volume Sul.",
+          "type": "fait",
+          "preuves": [
+            "sel:54965bbe:2018-06"
+          ]
+        },
+        {
+          "texte": "Remise tardive au transporteur : 38,1 % sur 90 jours (n = 21) contre 5,3 % marketplace (n = 67234), ratio ×7,24, au-dessus de la limite haute à 99,8 %. Alerte niveau sévérité moyenne.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:handover",
+            "alr:54965bbe:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "Retard de livraison : 0,0 % sur 90 jours (n = 18) contre 7,9 % marketplace ; pas d'alerte niveau ni tendance.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:late",
+            "alr:54965bbe:2018-06:late"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : 28,6 % sur 90 jours (n = 14) contre 14,4 % marketplace ; pas d'alerte niveau ni tendance.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:poor",
+            "alr:54965bbe:2018-06:poor"
+          ]
+        }
+      ],
+      "faiblesses": [
+        {
+          "texte": "3 avis 1-2 étoiles sur 3 commandes de juin 2018 cumulent remise tardive au transporteur et note faible (1/5 ou 2/5).",
+          "type": "fait",
+          "preuves": [
+            "ord:71d7141d917163379d3bd485bb9a4265",
+            "ord:adf119c06ea77cd7d347b943780c37de",
+            "ord:77265921b538b8258ca73fd168e46ab2"
+          ]
+        },
+        {
+          "texte": "Aspects les plus critiqués sur 36 avis : « Livraison et délais » (14 avis négatifs), « Article erroné, manquant ou incomplet » (5 avis négatifs), « Vendeur et service » (4 avis négatifs).",
+          "type": "fait",
+          "preuves": [
+            "mdl:aspects:seller:54965bbe:2018-06"
+          ]
+        }
+      ],
+      "points_forts": [
+        {
+          "texte": "Retard de livraison : 0,0 % sur 90 jours (n = 18) contre 7,9 % marketplace ; évolution de 53,7 % (janvier 2018) à 0,0 % (juin 2018).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:late",
+            "kpi:history:54965bbe:2018-06"
+          ]
+        },
+        {
+          "texte": "Avis 1-2 étoiles : évolution de 59,5 % (janvier 2018) à 28,6 % (juin 2018) sur 90 jours.",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:poor",
+            "kpi:history:54965bbe:2018-06"
+          ]
+        }
+      ],
+      "comparaison": [
+        {
+          "texte": "Remise tardive au transporteur : 38,1 % contre 5,3 % marketplace (ratio ×7,24) ; retard de livraison 0,0 % contre 7,9 % ; avis 1-2 étoiles 28,6 % contre 14,4 % (ratio ×1,98).",
+          "type": "fait",
+          "preuves": [
+            "kpi:seller:54965bbe:2018-06:handover",
+            "kpi:seller:54965bbe:2018-06:late",
+            "kpi:seller:54965bbe:2018-06:poor"
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "texte": "La remise tardive au transporteur pourrait être liée à des problèmes de stock, de capacité de préparation ou de jours non ouvrés, à vérifier avec le vendeur.",
+          "type": "hypothese",
+          "preuves": [
+            "alr:54965bbe:2018-06:handover"
+          ]
+        },
+        {
+          "texte": "La baisse du retard de livraison et des avis négatifs depuis janvier 2018 pourrait indiquer une amélioration opérationnelle récente, à confirmer sur la durée.",
+          "type": "hypothese",
+          "preuves": [
+            "kpi:history:54965bbe:2018-06"
+          ]
+        }
+      ],
+      "inconnues": [
+        {
+          "texte": "Olist ne contient aucune donnée de publicité, campagne, promotion ou marketing ; ces informations manqueraient pour expliquer les variations de performance.",
+          "type": "inconnu",
+          "preuves": [
+            "ctx:limites"
+          ]
+        },
+        {
+          "texte": "La cause exacte de la remise tardive au transporteur n'est pas enregistrée dans Olist (stock, transporteur, organisation interne non connues).",
+          "type": "inconnu",
+          "preuves": [
+            "alr:54965bbe:2018-06:handover"
+          ]
+        }
+      ]
+    },
+    "actions": [
+      {
+        "faiblesse": "Remise tardive au transporteur à 38,1 % sur 90 jours contre 5,3 % marketplace.",
+        "action": "Vérifier avec le vendeur ses délais de préparation (stock, capacité, jours non ouvrés) avant toute sanction.",
+        "priorite": "haute",
+        "impact": "Baisse du taux de remise tardive au transporteur vers le niveau marketplace.",
+        "direction_attendue": "Baisse du taux de remise tardive au transporteur",
+        "information_manquante": "Cause exacte de la remise tardive (stock, transporteur, organisation interne).",
+        "preuves": [
+          "alr:54965bbe:2018-06:handover",
+          "kpi:seller:54965bbe:2018-06:handover"
+        ]
+      },
+      {
+        "faiblesse": "Avis 1-2 étoiles à 28,6 % sur 90 jours, liés à la livraison et aux articles erronés/manquants.",
+        "action": "Prendre contact avec le vendeur pour comprendre les retours clients sur « Livraison et délais » et « Article erroné, manquant ou incomplet ».",
+        "priorite": "moyenne",
+        "impact": "Réduction du taux d'avis 1-2 étoiles.",
+        "direction_attendue": "Baisse du taux d'avis 1-2 étoiles",
+        "information_manquante": "Détail des motifs d'insatisfaction au-delà des aspects NLP non validés.",
+        "preuves": [
+          "kpi:seller:54965bbe:2018-06:poor",
+          "mdl:aspects:seller:54965bbe:2018-06"
+        ]
+      }
+    ],
+    "resume": "Vendeur 54965bbe (PR, bed_bath_table, 73 commandes 12 mois) : alerte niveau moyenne sur remise tardive au transporteur à 38,1 % sur 90 jours contre 5,3 % pour la marketplace. Retard de livraison à 0,0 % et avis 1-2 étoiles à 28,6 % sur 90 jours sans alerte, en forte amélioration depuis janvier 2018.",
+    "rejected": [
+      {
+        "section": "faiblesses",
+        "item": {
+          "texte": "Remise tardive au transporteur : 38,1 % sur 90 jours, bien au-dessus de la référence 5,3 % ; déjà en alerte 3 mois auparavant (2017-11, 2017-12, 2018-01).",
+          "type": "fait",
+          "preuves": [
+            "alr:54965bbe:2018-06:handover",
+            "kpi:seller:54965bbe:2018-06:handover"
+          ]
+        },
+        "problems": [
+          "chiffre non sourcé : 11"
+        ]
+      }
+    ],
+    "stats": {
+      "items_total": 17,
+      "items_valid": 16,
+      "items_rejected": 1,
+      "grounding_rate": 0.941
+    },
+    "schema_ok": true,
+    "call": {
+      "model_requested": "nvidia/nemotron-3.5-super-vl:free",
+      "model_returned": "nvidia/nemotron-3.5-super-vl:free",
+      "latency_s": 21.13,
+      "usage": {
+        "prompt_tokens": 12542,
+        "completion_tokens": 2010,
+        "total_tokens": 14552
+      },
+      "cost": 0.0,
+      "cached": false,
+      "attempts": 1,
+      "wall_s": 21.21,
+      "package_chars": 28246
+    }
+  },
+  "error": null,
+  "judge": {
+    "scores": {
+      "adherence_preuves": 5,
+      "coherence_factuelle": 5,
+      "profondeur_analytique": 4,
+      "separation_faits_hypotheses": 5,
+      "pertinence_recommandations": 4,
+      "actionnabilite": 4,
+      "completude": 4,
+      "clarte": 5
+    },
+    "complete": true,
+    "causal": false,
+    "hallucination": false,
+    "comment": "Analyse fidèle aux preuves, structurée et claire, avec séparation rigoureuse faits/hypothèses et citations d'identifiants. Points faibles : la section « inconnues » introduit une limite générique (publicité/marketing) non directement pertinente ici, et les actions auraient pu intégrer la mesure d'effet recommandée par le rapport déterministe.",
+    "call": {
+      "latency_s": 13.93,
+      "usage": {
+        "prompt_tokens": 10162,
+        "completion_tokens": 207,
+        "total_tokens": 10369
+      },
+      "cost": 0.0,
+      "cached": false
+    }
+  },
+  "judge_error": null
+}

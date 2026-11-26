@@ -1,0 +1,73 @@
+{
+  "n_cases": 60,
+  "cases_by_group": {
+    "en_alerte": 20,
+    "eligible_sans_alerte": 20,
+    "petit_volume": 20
+  },
+  "checks_passed": {
+    "C1_structure": "60/60",
+    "C2_citations": "60/60",
+    "C3_pas_d_information_future": "60/60",
+    "C4_pairs_passes": "60/60",
+    "C5_chiffres_exacts": "60/60",
+    "C6_pas_de_causalite": "60/60",
+    "C7_effectifs_affiches": "60/60"
+  },
+  "success_rate": 1.0,
+  "failures": [],
+  "model_summary": {
+    "selected": {
+      "level": {
+        "detector": "beta_binomial_pairs",
+        "params": {
+          "tau": 0.99
+        },
+        "min_history": 30,
+        "description": "a posteriori bêta-binomial (a priori = référence) : P(taux > référence) > seuil",
+        "persistence": false
+      },
+      "trend": {
+        "detector": "binomial_bh_historique",
+        "params": {
+          "alpha": 0.05
+        },
+        "min_history": 30,
+        "description": "test binomial unilatéral vs historique rétréci du vendeur, correction de Benjamini-Hochberg",
+        "persistence": false
+      }
+    },
+    "test": {
+      "level": {
+        "alerts": 135,
+        "alerts_per_month": 45.0,
+        "eligible_cases": 2848,
+        "alert_share_of_eligible": 0.0474,
+        "evaluable_cases": 2214,
+        "tp": 23,
+        "fp": 89,
+        "fn": 51,
+        "precision": 0.2054,
+        "recall": 0.3108,
+        "f1": 0.2473,
+        "truth_base_rate": 0.0334,
+        "lift": 6.14
+      },
+      "trend": {
+        "alerts": 135,
+        "alerts_per_month": 45.0,
+        "eligible_cases": 2608,
+        "alert_share_of_eligible": 0.0518,
+        "evaluable_cases": 1994,
+        "tp": 9,
+        "fp": 106,
+        "fn": 55,
+        "precision": 0.0783,
+        "recall": 0.1406,
+        "f1": 0.1006,
+        "truth_base_rate": 0.0321,
+        "lift": 2.44
+      }
+    }
+  }
+}

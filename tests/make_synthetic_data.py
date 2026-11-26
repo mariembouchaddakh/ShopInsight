@@ -81,11 +81,16 @@ def main() -> None:
     price = np.exp(rng.normal(4.3, .8, n)).round(2)
     freight = (8 + dist / 60 + rng.normal(0, 3, n)).clip(4, None).round(2)
 
-    o = pd.DataFrame({"order_id": ids, "order_purchase_timestamp": ts, "order_estimated_delivery_date": est, "order_delivered_customer_date": delivered,
+    approved = ts + pd.to_timedelta(rng.integers(1, 24, n), unit="h")
+    carrier = approved + pd.to_timedelta((actual * rng.uniform(.1, .45, n)).clip(1), unit="D")
+    o = pd.DataFrame({"order_id": ids, "order_purchase_timestamp": ts, "order_approved_at": approved,
+                      "order_delivered_carrier_date": carrier, "order_estimated_delivery_date": est, "order_delivered_customer_date": delivered,
                       "review_answer_timestamp": np.where(has_rev, ans, pd.NaT), "purchase_month": month_str, "customer_state": state, "primary_category": cat,
                       "item_count": rng.integers(1, 3, n), "seller_count": np.where(rng.random(n) < .013, 2, 1), "item_price_total": price,
                       "freight_total": freight, "single_seller_id": sellers[sidx], "is_late": late.astype(int), "late_days": np.where(late, actual - promised, np.nan),
-                      "review_score": np.where(has_rev, score, np.nan), "order_status": "delivered", "late_label_eligible": True,
+                      "review_score": np.where(has_rev, score, np.nan), "order_status": "delivered", "delivery_duration_days": actual,
+                      "promised_days": promised, "distance_km": dist, "product_weight_mean_g": rng.gamma(2, 400, n),
+                      "late_label_eligible": True,
                       "poor_review_label_eligible": has_rev, "is_poor_review": np.where(has_rev, poor.astype(int), np.nan)})
     o.to_csv(out / "data/silver/orders_analysis.csv.gz", index=False, compression="gzip")
 
@@ -154,6 +159,8 @@ def main() -> None:
         else:
             t = rng.choice(POS)
         rec = {"review_id": oid(i, "r"), "order_id": ids[i], "review_score": int(score[i]), "title": None, "text": t, "has_message": True, "has_title": False,
+               "review_created_at": pd.Timestamp(delivered[i] + pd.Timedelta(days=1)).isoformat(),
+               "review_answered_at": pd.Timestamp(ans[i]).isoformat(),
                "metadata": {"purchase_month": m, "customer_state": state[i], "primary_category": cat[i], "is_late": int(late[i]), "delivery_duration_days": float(actual[i])}}
         recs.append(rec)
         rf = dict(rec); rf.update({"text_original_pt": t, "text_fr": fr(t), "title_original_pt": None, "title_fr": None, "translation_status": "traduit"})
