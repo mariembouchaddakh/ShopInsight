@@ -297,3 +297,16 @@ python src/evaluate_bo4.py --project-dir .
 python src/evaluate_bo4_agent.py --project-dir . --scenarios 60
 python src/run_agents.py bo4 --order <order_id> --as-of 2018-06-01 --ask "Quand arrivera ma commande ?"
 ```
+
+## OM5 : monitoring autonome des KPI et reporting multi-agent
+
+OM5 ajoute un rapport global marketplace distinct des audits vendeur BO3 : KPI `as_of` ou rétrospectifs, comparaisons mensuelles, détection statistique, analyse des États/catégories, sélection dynamique de BO1/BO2/BO3, preuves validées et exports PDF/CSV/JSON. Le workflow fonctionne sans clé API et sans LLM.
+
+```powershell
+python src/run_om5.py --month 2018-03 --mode as_of --with-agents
+python src/evaluate_om5.py --project-dir .
+python -m uvicorn backend.app.main:app --port 8000
+# interface : http://localhost:5173/om5
+```
+
+Endpoints : `/api/om5/meta`, `/kpis`, `/trends`, `/anomalies`, `/segments`, `/report`, `/report.pdf`, `/kpis.csv`, `/evidence.csv`. Documentation : [architecture](docs/OM5_ARCHITECTURE.md), [fondements mathématiques](docs/OM5_MATHEMATICAL_FOUNDATIONS.md), [audit](docs/OM5_TECHNICAL_AUDIT.md) et [guide d'intégration](docs/OM5_INTEGRATION_GUIDE.md).

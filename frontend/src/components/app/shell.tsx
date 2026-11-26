@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Bell, Bot, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
+import { Activity, Bell, Bot, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { AssistantWidget } from "@/components/assistant/assistant-widget"
@@ -11,7 +11,7 @@ import { MonthPicker } from "./month"
 
 // Navigation par domaine métier (et non par agent technique) : ce que le responsable veut piloter.
 const NAV = [
-  { group: "Pilotage", items: [{ to: "/", label: "Tableau de bord", icon: Gauge }] },
+  { group: "Pilotage", items: [{ to: "/", label: "Tableau de bord", icon: Gauge }, { to: "/om5", label: "Monitoring autonome", icon: Activity }] },
   {
     group: "Vendeurs",
     items: [
@@ -29,7 +29,7 @@ function ApiStatus() {
   const location = useLocation()
   const h = useQuery({ queryKey: ["health"], queryFn: api.health, refetchInterval: (q) => (q.state.data && Object.values(q.state.data.agents).every((a) => a.state === "ready") ? 60_000 : 3_000) })
   const agents = h.data?.agents ?? {}
-  const current = location.pathname.startsWith("/bo4") ? "bo4" : location.pathname.startsWith("/bo2") ? "bo2" : location.pathname.startsWith("/bo1") ? "bo1" : "bo3"
+  const current = location.pathname.startsWith("/om5") ? "om5" : location.pathname.startsWith("/bo4") ? "bo4" : location.pathname.startsWith("/bo2") ? "bo2" : location.pathname.startsWith("/bo1") ? "bo1" : "bo3"
   const state = agents[current]?.state
   const loading = state === "loading" || state === "not_loaded" || !state
   const errored = h.isError || state === "error"

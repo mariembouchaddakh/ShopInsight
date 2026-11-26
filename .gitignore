@@ -1,6 +1,7 @@
 # Données (≈ 200 Mo) : reconstruites par src/prepare_data.py à partir de l'archive Olist
 data/
 *.zip
+reports/
 # Python / Jupyter
 __pycache__/
 *.pyc

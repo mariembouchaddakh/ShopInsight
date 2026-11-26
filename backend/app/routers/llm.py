@@ -29,7 +29,7 @@ def model_id(request: Request, slot: str) -> str:
     s = request.app.state.settings
     mid = {"a": s.llm_model_a, "b": s.llm_model_b, "judge": s.llm_judge_model}[slot]
     if not mid:
-        raise HTTPException(503, f"Aucun modèle configuré pour « {slot} » (LLM_MODEL_A / LLM_MODEL_B / LLM_JUDGE_MODEL dans .env).")
+        raise HTTPException(503, f"Aucun modèle configuré pour « {slot} » (LLM_MODEL_A / LLM_MODEL_B / LLM_JUDGE_MODEL dans .env) ; l'audit déterministe reste disponible.")
     return mid
 
 
