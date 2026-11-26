@@ -22,7 +22,7 @@ const NAV = [
     ],
   },
   { group: "Commandes & livraisons", items: [{ to: "/bo1", label: "Commandes à risque", icon: PackageSearch }] },
-  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }, { to: "/bo4", label: "BO4 — Assistant client", icon: Bot }] },
+  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }, { to: "/bo4", label: "Assistant client", icon: Bot }] },
 ]
 
 function ApiStatus() {

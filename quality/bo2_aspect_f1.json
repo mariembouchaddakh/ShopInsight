@@ -1,0 +1,51 @@
+{
+  "status": "provisoire",
+  "reference": "500 avis stratifiés (100 par note) annotés à l'aveugle par un LLM (Claude) selon le guide d'annotation",
+  "human_check": {
+    "n_reviews": 40,
+    "kappa_llm_vs_annotator_b": 0.63,
+    "kappa_llm_vs_annotator_c": 0.64,
+    "kappa_between_humans": 0.46
+  },
+  "target_f1": 0.7,
+  "per_aspect": {
+    "livraison": {
+      "f1_detection": 0.83,
+      "f1_negative": 0.58
+    },
+    "qualite_produit": {
+      "f1_detection": 0.59,
+      "f1_negative": 0.67
+    },
+    "article_errone_ou_manquant": {
+      "f1_detection": 0.52,
+      "f1_negative": 0.55
+    },
+    "vendeur_service": {
+      "f1_detection": 0.61,
+      "f1_negative": 0.57
+    },
+    "emballage": {
+      "f1_detection": 0.75,
+      "f1_negative": 0.29
+    },
+    "conformite_annonce": {
+      "f1_detection": 0.54,
+      "f1_negative": 0.33
+    },
+    "prix_valeur": {
+      "f1_detection": 0.82,
+      "f1_negative": 0.35
+    },
+    "retour_remboursement": {
+      "f1_detection": 0.8,
+      "f1_negative": 0.57
+    },
+    "satisfaction_globale": {
+      "f1_detection": 0.58,
+      "f1_negative": 0.52
+    }
+  },
+  "macro_f1_detection": 0.67,
+  "macro_f1_negative": 0.49
+}

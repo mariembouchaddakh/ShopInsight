@@ -501,6 +501,57 @@ export class ApiError extends Error {
 
 type Params = Record<string, string | number | boolean | null | undefined>
 
+// ---- Données des graphiques BO1 / BO2 (endpoints /overview)
+export interface Bo1Overview {
+  month: string
+  target: "late" | "poor"
+  n_orders: number
+  top10pct_size: number
+  top10_recall_test: number
+  top10_precision_test: number
+  test_prevalence: number
+  pr_auc_test: number
+  histogram: { band: string; orders: number }[]
+  deciles: { decile: number; observed_rate: number }[]
+  states: { state: string; orders: number; share_top: number; share_month: number }[]
+  listing: { order_id: string; state: string; category: string; promised_days: number; percentile: number; score: number }[]
+  check: { n_labelled: number; base_rate: number; precision_top10pct: number; captured: number; positives: number; split: string } | null
+  series: { month: string; orders: number; rate: number | null }[]
+}
+
+export interface Bo2Aspect {
+  aspect: string
+  label: string
+  negative: number
+  positive: number
+  negative_share: number | null
+  positive_share: number | null
+}
+
+export interface Bo2Overview {
+  month: string
+  state: string | null
+  category: string | null
+  n_reviews: number
+  share_rated_1_2: number | null
+  scores: { score: number; reviews: number }[]
+  aspects: Bo2Aspect[]
+  vs_baseline: { aspect: string; label: string; rate: number; baseline_rate: number; alert: boolean; q: number; count: number }[]
+  baseline_months: string[]
+  alerts: string[]
+  trend: ({ month: string; n: number } & Record<string, number | string>)[]
+  labels: Record<string, string>
+  validation: {
+    status: string
+    reference: string
+    human_check: { n_reviews: number; kappa_llm_vs_annotator_b: number; kappa_llm_vs_annotator_c: number; kappa_between_humans: number }
+    target_f1: number
+    per_aspect: Record<string, { f1_detection: number; f1_negative: number }>
+    macro_f1_detection: number
+    macro_f1_negative: number
+  } | null
+}
+
 function url(path: string, params?: Params): string {
   const q = new URLSearchParams()
   for (const [k, v] of Object.entries(params ?? {})) if (v !== undefined && v !== null && v !== "") q.set(k, String(v))
@@ -539,6 +590,8 @@ export const api = {
     request<ReportResponse>("/api/bo3/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) }),
   bo1Triage: (p: { month: string; target: "late" | "poor"; top_k?: number }) => request<ReportResponse>("/api/bo1/triage", undefined, p),
   bo1Diagnosis: (orderId: string) => request<ReportResponse>(`/api/bo1/orders/${orderId}/diagnosis`),
+  bo1Overview: (p: { month: string; target: "late" | "poor"; top_k?: number }) => request<Bo1Overview>("/api/bo1/overview", undefined, p),
+  bo2Overview: (p: { month?: string; state?: string; category?: string }) => request<Bo2Overview>("/api/bo2/overview", undefined, p),
   bo2Report: (p: { month?: string; state?: string; category?: string }) => request<ReportResponse>("/api/bo2/report", undefined, p),
   bo2DefaultMonth: () => request<{ month: string }>("/api/bo2/default-month"),
   bo4Context: (orderId: string, asOf?: string) => request<ToolResponse<BO4Context>>(`/api/bo4/orders/${orderId}/context`, undefined, { as_of: asOf }),
@@ -562,6 +615,7 @@ export const api = {
   brief: (month?: string) => request<ToolResponse<Brief>>("/api/bo3/brief", undefined, { month }),
   om5Report: (month: string, mode: Om5Mode, include_agents = true) =>
     request<Om5ReportResponse>("/api/om5/report", undefined, { month, mode, include_agents }),
+  om5Anomalies: (month: string, mode: Om5Mode) => request<{ month: string; mode: Om5Mode; anomalies: Om5Anomaly[] }>("/api/om5/anomalies", undefined, { month, mode }),
   om5Kpis: (month: string, mode: Om5Mode) => request<{ month: string; mode: Om5Mode; kpis: Om5Kpi[] }>("/api/om5/kpis", undefined, { month, mode }),
   om5Trends: (mode: Om5Mode) => request<{ mode: Om5Mode; rows: Record<string, number | string | boolean | null>[] }>("/api/om5/trends", undefined, { mode }),
 }

@@ -144,7 +144,7 @@ class VoiceOfCustomerAgent:
                          "late_share_among_negative": float((neg_late["is_late"] == 1).mean()) if len(neg_late) >= 10 else None,
                          "n_negative_with_delivery_status": int(len(neg_late))})
         payload = {"month": month, "state": state, "category": category, "n_reviews": int(n), "aspects": rows,
-                   "method": "baseline mots-clés (portugais) + polarité de phrase / note ; NON validée (pas d'échantillon annoté)"}
+                   "method": "baseline mots-clés (portugais) + polarité de phrase / note ; F1 de détection provisoire 0,67 en moyenne (500 avis annotés, quality/bo2_aspect_f1.json)"}
         self.ctx.update({"month": month, "state": state, "category": category})
         self.log.add(f"mdl:aspects:{self._tag(month, state, category)}", ESTIMATE, "bo2_nlp.LexiconAspectModel", payload)
         return to_native(payload)
@@ -289,7 +289,7 @@ class VoiceOfCustomerAgent:
             rep.actions.append(Line("Une majorité des critiques de livraison vient de commandes réellement en retard : coordonner avec l'agent BO1 (commandes à risque) pour intervenir avant la livraison.", [a_id]))
         # LIMITES
         rep.caveats += [
-            "Analyse par mots-clés portugais + note (baseline DS2.1) : non évaluée faute d'échantillon annoté ; indicatif, à remplacer par le modèle évalué en F1 par aspect.",
+            "Analyse par mots-clés portugais + note (baseline DS2.1) : F1 de détection provisoire de 0,67 en moyenne sur 500 avis annotés (objectif 0,70), plus faible sur la qualité, les articles manquants et la conformité ; indicatif.",
             "Seuls les clients qui écrivent sont représentés (≈ 43 % des avis) et ils sont plus souvent mécontents que l'ensemble.",
             "Les extraits français sont des traductions automatiques ; l'original portugais fait foi. " + (f"{pct(vol['share_to_check'])} des textes de ce périmètre sont marqués « à vérifier »." if vol["share_to_check"] else ""),
             "Associations observées dans des avis historiques (2016–2018), pas de causes.",

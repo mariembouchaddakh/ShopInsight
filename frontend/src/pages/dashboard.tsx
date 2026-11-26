@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Bell, Map as MapIcon, MessageCircle, PhoneCall, Store } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip as RTooltip, XAxis, YAxis } from "recharts"
+import { AgentsSummary } from "@/components/app/agents-summary"
 import { useDecisionMonth } from "@/components/app/month"
 import { openAssistant } from "@/components/assistant/assistant-widget"
 import { CountUp } from "@/components/brand/count-up"
@@ -46,9 +47,9 @@ export function DashboardPage() {
         <LogoMark size={220} handle="rgb(246 224 141 / 60%)" className="pointer-events-none absolute -right-10 -bottom-16 rotate-12 opacity-20" />
         <p className="text-xs font-semibold tracking-[0.16em] text-butter uppercase">Tableau de bord · fin {month ? monthLabel(month) : "…"}</p>
         <h1 className="mt-2 max-w-2xl text-3xl leading-tight font-bold md:text-4xl">
-          <span className="sr-only">Tableau de bord — </span>Bonjour 👋 Voici l'état de vos vendeurs ce mois-ci.</h1>
+          <span className="sr-only">Tableau de bord — </span>Bonjour 👋 Voici l'état de la marketplace ce mois-ci.</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85">
-          Taux calculés avec les seules informations connues à la fin du mois ; les commandes partagées entre plusieurs vendeurs sont exclues.
+          Commandes, avis, vendeurs et indicateurs clés, calculés avec les seules informations connues à la fin du mois.
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           <Link to={`/bo3/sellers?month=${month ?? ""}`}>
@@ -61,6 +62,9 @@ export function DashboardPage() {
           </Button>
         </div>
       </section>
+      <AgentsSummary month={month} />
+
+      <h2 className="pt-2 text-lg font-semibold">Vendeurs : taux de référence de la marketplace</h2>
       <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {METRICS.map((k) => {
           const p = at(k)

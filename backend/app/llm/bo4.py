@@ -133,7 +133,7 @@ def _customer_tool_result(name: str, result: dict) -> dict:
     if name == "get_order_timeline":
         return {"as_of": result.get("as_of"), "events": result.get("events", [])}
     if name == "predict_delivery_interval":
-        return {key: result.get(key) for key in ("as_of", "p10_date", "p90_date", "valid_current_estimate", "state", "message")}
+        return {key: result.get(key) for key in ("as_of", "p10_date", "window_start_date", "p90_date", "valid_current_estimate", "state", "message")}
     if name == "find_similar_orders":
         cases = [{"delivery_duration_days": round(float(case["delivery_duration_days"]), 1)
                   if case.get("delivery_duration_days") is not None else None,

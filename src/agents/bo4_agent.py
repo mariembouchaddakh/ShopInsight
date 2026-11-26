@@ -211,6 +211,8 @@ class CustomerAssistantAgent:
             anchor = pd.to_datetime(r.get("order_purchase_timestamp")); dates = {q.replace("_days", "_date"): (anchor + pd.Timedelta(days=v)).isoformat()
                                                                    for q, v in pred.items() if q in ("p10_days", "p50_days", "p90_days")}
             expired = t > pd.Timestamp(dates["p90_date"])
+            # La fenêtre montrée au client ne commence jamais avant la date de la question (p10 peut déjà être passé).
+            dates["window_start_date"] = max(t, pd.Timestamp(dates["p10_date"])).isoformat()
             out = {"order_id": order_id, "as_of": t.isoformat(), **pred, **dates, "valid_current_estimate": not expired,
                    "state": "expired" if expired else "approval_time_estimate"}
             if expired: out["message"] = "L'intervalle calculé à l'approbation est expiré. Aucun délai restant validé n'est disponible."
@@ -319,9 +321,9 @@ class CustomerAssistantAgent:
                     "fr": f"Au {_fr_date(ctx['as_of'])}, votre commande est {status}. Les données historiques ne donnent pas sa position exacte en temps réel."}[language]
         elif intent == "delivery_eta" and eta:
             if eta.get("valid_current_estimate"):
-                text = {"pt": f"A estimativa calculada na aprovação vai de {_fr_date(eta['p10_date'])} a {_fr_date(eta['p90_date'])}, com mediana em {_fr_date(eta['p50_date'])}.",
-                        "en": f"The approval-time estimate runs from {_fr_date(eta['p10_date'])} to {_fr_date(eta['p90_date'])}, with a median of {_fr_date(eta['p50_date'])}.",
-                        "fr": f"La livraison est estimée entre le {_fr_date(eta['p10_date'])} et le {_fr_date(eta['p90_date'])}. Cette fenêtre statistique reste indicative et ne constitue pas une garantie."}[language]
+                text = {"pt": f"A estimativa calculada na aprovação vai de {_fr_date(eta.get('window_start_date', eta['p10_date']))} a {_fr_date(eta['p90_date'])}, com mediana em {_fr_date(eta['p50_date'])}.",
+                        "en": f"The approval-time estimate runs from {_fr_date(eta.get('window_start_date', eta['p10_date']))} to {_fr_date(eta['p90_date'])}, with a median of {_fr_date(eta['p50_date'])}.",
+                        "fr": f"La livraison est estimée entre le {_fr_date(eta.get('window_start_date', eta['p10_date']))} et le {_fr_date(eta['p90_date'])}. Cette fenêtre statistique reste indicative et ne constitue pas une garantie."}[language]
             else:
                 if eta.get("state") == "expired" and ctx:
                     promise = "La date promise est dépassée." if ctx.get("promised_date_exceeded") else "La date promise n'est pas encore dépassée."
