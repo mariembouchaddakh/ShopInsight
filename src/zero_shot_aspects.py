@@ -5,14 +5,19 @@ pour chaque aspect, si deux hypothèses rédigées en portugais en découlent : 
 Aucun entraînement : le modèle n'a jamais vu nos avis ni nos étiquettes.
 
 Décision par aspect : p = max(P(critique), P(éloge)) ; aspect mentionné si p >= seuil ; polarité = l'hypothèse la plus probable.
-Le seuil (un seul pour tous les aspects) est choisi sur la moitié A des 500 avis annotés ; les résultats sont donnés sur la
-moitié B, jamais utilisée pour régler quoi que ce soit (A/B : parité du crc32 de review_id).
+Tout réglage se fait sur la moitié A des 500 avis annotés ; les résultats sont donnés sur la moitié B, jamais utilisée pour
+régler quoi que ce soit (A/B : parité du crc32 de review_id). Trois variantes sont comparées à la baseline mots-clés :
+  zero_shot          un seuil unique (choisi sur A) ;
+  zero_shot_aspect   un seuil par aspect (choisi sur A) ;
+  hybride            par aspect, on garde sur A le meilleur de : mots-clés seuls, zero-shot seul, ou union (mots-clés,
+                     complétés par le zero-shot quand les mots-clés ne trouvent rien).
 
 Entrées : quality/annotated_reviews.csv (500 avis annotés), et optionnellement des fichiers annotés par des humains (--human).
 Sorties : quality/bo2_zero_shot_predictions.csv, quality/bo2_zero_shot.json
 
   python src/zero_shot_aspects.py --project-dir .                         # CPU : ~15 min ; GPU (Colab) : ~1 min
   python src/zero_shot_aspects.py --project-dir . --human annotation_BO2/retours/B_1_essai_40_avis_annote.csv
+  python src/zero_shot_aspects.py --project-dir . --reuse      # réévalue à partir des probabilités déjà calculées
 """
 from __future__ import annotations
 
@@ -83,11 +88,17 @@ def nli_scores(texts: list[str], model_name: str, batch: int, device: str) -> np
     return out.reshape(len(texts), len(ASPECTS), 2)
 
 
-def decide(p: np.ndarray, threshold: float) -> np.ndarray:
-    """p (n, 9, 2) -> étiquettes (n, 9) : -1 critique, 1 éloge, NaN non mentionné."""
+def decide(p: np.ndarray, threshold) -> np.ndarray:
+    """p (n, 9, 2) -> étiquettes (n, 9) : -1 critique, 1 éloge, NaN non mentionné. threshold : un nombre ou un seuil par aspect."""
     best = p.max(axis=2)
     lab = np.where(p[:, :, 0] >= p[:, :, 1], -1.0, 1.0)
-    return np.where(best >= threshold, lab, np.nan)
+    th = np.array([threshold[a] for a in ASPECTS]) if isinstance(threshold, dict) else threshold
+    return np.where(best >= th, lab, np.nan)
+
+
+def union(kw: pd.DataFrame, zs: pd.DataFrame) -> pd.DataFrame:
+    """Mots-clés d'abord ; le zero-shot ne complète que les aspects que les mots-clés n'ont pas trouvés."""
+    return pd.DataFrame({a: np.where(kw[a].notna(), kw[a].astype(float), zs[a].astype(float)) for a in ASPECTS}, index=kw.index)
 
 
 def prf(g: np.ndarray, p: np.ndarray) -> dict:
@@ -126,6 +137,7 @@ def main() -> None:
     ap.add_argument("--model", default=MODEL)
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--device", default=None, help="cpu ou cuda (défaut : cuda si disponible)")
+    ap.add_argument("--reuse", action="store_true", help="réutilise quality/bo2_zero_shot_predictions.csv au lieu de relancer le modèle")
     ap.add_argument("--human", type=Path, nargs="*", default=[], help="fichiers d'essai annotés par des humains (format outil d'annotation)")
     args = ap.parse_args()
     project = args.project_dir.resolve()
@@ -142,57 +154,80 @@ def main() -> None:
     for _, h in humans:
         texts.update({r: t for r, t in zip(h["review_id"], h["text_pt"].fillna("")) if r not in texts})
     ids = list(texts)
-    print(f"{len(ids)} avis, modèle {args.model}, {device}", file=sys.stderr)
-    t0 = time.time()
-    P = nli_scores([texts[i] for i in ids], args.model, args.batch, device)
-    elapsed = time.time() - t0
+    pred_path = project / "quality/bo2_zero_shot_predictions.csv"
+    if args.reuse and pred_path.exists():
+        old = pd.read_csv(pred_path, dtype={"review_id": str}).set_index("review_id")
+        ids = [i for i in ids if i in old.index]
+        P = np.stack([np.stack([old.loc[ids, f"p_neg_{a}"].values, old.loc[ids, f"p_pos_{a}"].values], axis=1) for a in ASPECTS], axis=1)
+        elapsed = 0.0
+    else:
+        print(f"{len(ids)} avis, modèle {args.model}, {device}", file=sys.stderr)
+        t0 = time.time()
+        P = nli_scores([texts[i] for i in ids], args.model, args.batch, device)
+        elapsed = time.time() - t0
     pos = {r: k for k, r in enumerate(ids)}
+    base = baseline_predictions(project, ids)
 
-    # Seuil choisi sur la moitié A (F1 de détection moyen), puis figé
-    A = gold[gold["partie"] == "A"]
-    grid = np.round(np.arange(0.30, 0.96, 0.05), 2)
-    scores = []
-    for th in grid:
-        pa = pd.DataFrame(decide(P[[pos[r] for r in A["review_id"]]], th), columns=ASPECTS)
-        scores.append(evaluate(A.reset_index(drop=True), pa)["macro"]["detection"])
-    th = float(grid[int(np.argmax(scores))])
+    # ---- Réglages, sur la moitié A uniquement
+    A = gold[gold["partie"] == "A"].reset_index(drop=True)
+    PA = P[[pos[r] for r in A["review_id"]]]
+    grid = [0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 0.97, 0.98, 0.99, 0.995, 0.998]
+    macro_A = [evaluate(A, pd.DataFrame(decide(PA, g), columns=ASPECTS))["macro"]["detection"] for g in grid]
+    th = float(grid[int(np.argmax(macro_A))])
+    th_aspect = {a: float(max(grid, key=lambda g, a=a: evaluate(A, pd.DataFrame(decide(PA, g), columns=ASPECTS))[a]["detection"]["f1"]))
+                 for a in ASPECTS}
 
-    pred = pd.DataFrame(decide(P, th), columns=ASPECTS)
+    pred = pd.DataFrame(decide(P, th_aspect), columns=ASPECTS)
     pred.insert(0, "review_id", ids)
     for k, a in enumerate(ASPECTS):
         pred[f"p_neg_{a}"] = P[:, k, 0].round(4)
         pred[f"p_pos_{a}"] = P[:, k, 1].round(4)
-    pred.to_csv(project / "quality/bo2_zero_shot_predictions.csv", index=False)
+    pred.to_csv(pred_path, index=False)
+    zs1 = pd.DataFrame(decide(P, th), columns=ASPECTS, index=ids)
     zs = pred.set_index("review_id")[ASPECTS]
 
-    out = {"model": args.model, "device": device, "seconds": round(elapsed), "threshold": th, "threshold_grid_on_A": dict(zip(map(float, grid), scores)),
-           "hypotheses_pt": HYPOTHESES,
-           "note": "Zero-shot : aucun entraînement. Seuil unique choisi sur la moitié A ; résultats à présenter = moitié B. Référence = étiquettes LLM (provisoires) et, à part, annotations humaines."}
-    base = baseline_predictions(project, ids)
-    for name, sub in (("B", gold[gold["partie"] == "B"]), ("tous_500", gold)):
-        sub = sub.reset_index(drop=True)
-        out[f"reference_llm_{name}"] = {"n": int(len(sub)), "zero_shot": evaluate(sub, zs.loc[sub["review_id"]].reset_index(drop=True))}
+    choice = {}
+    if base is not None:
+        a_ids = [r for r in A["review_id"] if r in base.index]
+        A2 = A[A["review_id"].isin(a_ids)].reset_index(drop=True)
+        kwA, zsA = base.loc[A2["review_id"]].reset_index(drop=True), zs.loc[A2["review_id"]].reset_index(drop=True)
+        cand = {"mots_cles": evaluate(A2, kwA), "zero_shot": evaluate(A2, zsA), "union": evaluate(A2, union(kwA, zsA))}
+        choice = {a: max(cand, key=lambda c, a=a: cand[c][a]["detection"]["f1"]) for a in ASPECTS}
+
+    def hybrid(rids: list[str]) -> pd.DataFrame:
+        kw, z = base.loc[rids], zs.loc[rids]
+        u = union(kw, z)
+        return pd.DataFrame({a: {"mots_cles": kw, "zero_shot": z, "union": u}[choice[a]][a].values for a in ASPECTS}).reset_index(drop=True)
+
+    out = {"model": args.model, "device": device, "seconds": round(elapsed), "threshold_global": th, "threshold_per_aspect": th_aspect,
+           "macro_detection_on_A_by_global_threshold": dict(zip(map(str, grid), macro_A)), "hybrid_choice_on_A": choice, "hypotheses_pt": HYPOTHESES,
+           "note": "Zero-shot : aucun entraînement. Seuils et choix de l'hybride réglés sur la moitié A ; résultats à présenter = moitié B. "
+                   "Référence = étiquettes LLM (provisoires) et, à part, annotations humaines (40 avis d'essai)."}
+
+    def compare(sub: pd.DataFrame) -> dict:
+        sub = sub.drop_duplicates("review_id").reset_index(drop=True)
+        rids = list(sub["review_id"])
+        r = {"n": len(sub), "zero_shot": evaluate(sub, zs1.loc[rids].reset_index(drop=True)),
+             "zero_shot_aspect": evaluate(sub, zs.loc[rids].reset_index(drop=True))}
         if base is not None:
             s2 = sub[sub["review_id"].isin(base.index)].reset_index(drop=True)
-            out[f"reference_llm_{name}"]["baseline_mots_cles"] = evaluate(s2, base.loc[s2["review_id"]].reset_index(drop=True))
-            out[f"reference_llm_{name}"]["n_baseline"] = int(len(s2))
+            r["n_baseline"] = len(s2)
+            r["baseline_mots_cles"] = evaluate(s2, base.loc[s2["review_id"]].reset_index(drop=True))
+            r["hybride"] = evaluate(s2, hybrid(list(s2["review_id"])))
+        return r
+
+    out["reference_llm_B"] = compare(gold[gold["partie"] == "B"])
+    out["reference_llm_tous_500"] = compare(gold)
     for stem, h in humans:
-        h = h.drop_duplicates("review_id").reset_index(drop=True)
-        out[f"reference_humaine_{stem}"] = {"n": int(len(h)), "zero_shot": evaluate(h, zs.loc[h["review_id"]].reset_index(drop=True))}
-        if base is not None:
-            h2 = h[h["review_id"].isin(base.index)].reset_index(drop=True)
-            if len(h2):
-                out[f"reference_humaine_{stem}"]["baseline_mots_cles"] = evaluate(h2, base.loc[h2["review_id"]].reset_index(drop=True))
-                out[f"reference_humaine_{stem}"]["n_baseline"] = int(len(h2))
+        out[f"reference_humaine_{stem}"] = compare(h)
     (project / "quality/bo2_zero_shot.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    print(f"\nSeuil choisi sur A : {th}   ({elapsed:.0f} s)")
+    print(f"\nSeuil global (A) : {th} ; seuils par aspect (A) : {th_aspect}\nHybride (A) : {choice}\n")
     for key in [k for k in out if k.startswith("reference_")]:
         r = out[key]
-        line = f"{key:45s} n={r['n']:3d}  zero-shot détection {r['zero_shot']['macro']['detection']:.2f} / critiques {r['zero_shot']['macro']['negative']:.2f}"
-        if "baseline_mots_cles" in r:
-            line += f"   |  mots-clés détection {r['baseline_mots_cles']['macro']['detection']:.2f} / critiques {r['baseline_mots_cles']['macro']['negative']:.2f} (n={r['n_baseline']})"
-        print(line)
+        cells = "  ".join(f"{m} {r[m]['macro']['detection']:.2f}/{r[m]['macro']['negative']:.2f}"
+                          for m in ("baseline_mots_cles", "zero_shot", "zero_shot_aspect", "hybride") if m in r)
+        print(f"{key:45s} n={r['n']:3d}  (F1 détection / critiques)  {cells}")
 
 
 if __name__ == "__main__":
