@@ -48,6 +48,7 @@ STOP = set("""a o as os um uma uns umas de do da dos das em no na nos nas por pa
 foi ser sao era eu me meu minha meus minhas voce vc ele ela eles elas isso isto este esta esse essa aquele aquela como quando onde pois entao tambem
 tem ter tinha comprei recebi produto produtos pedido compra loja lojas super mto q pra pro nao sim ate la aqui ainda s""".split())
 
+#avis ->phrase ->norm->detction aspects->polarite->rslt
 
 def _sentences(text: str) -> list[str]:
     parts = re.split(r"[.!?;\n]+|\bmas\b|\bporem\b|\bcontudo\b|\bentretanto\b", norm_text_keep_sep(text))
@@ -82,7 +83,7 @@ def score_polarity(score: int) -> int:
 class AspectModel(Protocol):
     def predict(self, text: str, score: int) -> dict[str, int]: ...
 
-
+#Elle identifie les aspects à partir de mots-clés portugais et détermine leur polarité.
 @dataclass
 class LexiconAspectModel:
     """Baseline DS2.1 : un aspect est détecté par mot-clé ; sa polarité est celle de la phrase (lexique + négation),
@@ -132,7 +133,7 @@ def baseline_months(an: pd.DataFrame, month: str, n_base: int = 12, min_reviews:
     ok = [m for m in sorted(counts.index) if counts[m] >= min_reviews and m < month]
     return ok[-n_base:]
 
-
+#Son principe est de comparer le mois étudié aux douze mois précédents.
 def emerging_aspects(an: pd.DataFrame, month: str, n_base: int = 12, min_base_months: int = 3, min_count: int = 15, q_max: float = 0.05,
                      min_abs_gain: float = 0.02, min_lift: float = 1.3, min_reviews: int = 150) -> dict:
     """Part des avis écrits qui critiquent un aspect, mois cible vs historique robuste.
