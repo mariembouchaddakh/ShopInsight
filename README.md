@@ -227,15 +227,16 @@ Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_diction
 
 OM5 ajoute un rapport global marketplace distinct des audits vendeur BO3 : KPI `as_of` ou rétrospectifs, comparaisons mensuelles, détection statistique, analyse des États/catégories, sélection dynamique de BO1/BO2/BO3, preuves validées et exports PDF/CSV/JSON. Le workflow fonctionne sans clé API et sans LLM.
 
-OM5 est désormais orchestré par un vrai `langgraph.graph.StateGraph`. Gemini Flash est une couche de rédaction facultative: tous les KPI, anomalies, segments, activations d'agents et scores de priorité restent déterministes. La sortie JSON Gemini est validée par Pydantic puis contrôlée contre le journal de preuves; une seule correction est permise avant repli automatique.
+OM5 est orchestré par un vrai `langgraph.graph.StateGraph`. Groq Cloud avec `openai/gpt-oss-120b` est le fournisseur de rédaction par défaut; Gemini reste configurable. Tous les KPI, anomalies, segments, activations d'agents et scores de priorité restent déterministes. La sortie JSON Schema stricte est validée par Pydantic puis contrôlée contre le journal de preuves; une seule correction est permise avant repli automatique.
 
 ```env
-GEMINI_API_KEY=
-GEMINI_MODEL=gemini-2.5-flash
+GROQ_API_KEY=
+GROQ_MODEL=openai/gpt-oss-120b
+OM5_LLM_PROVIDER=groq
 OM5_LLM_ENABLED=true
 ```
 
-Ne jamais committer `.env`. Le modèle est configurable; vérifier les identifiants supportés dans la [documentation officielle Gemini](https://ai.google.dev/gemini-api/docs/models). Le graphe compilé est exporté dans `docs/om5_graph.mmd` et le déroulé d'évaluation dans `docs/OM5_PRESENTATION_GUIDE.md`.
+Ne jamais committer `.env`. Le modèle est configurable; voir les [modèles Groq](https://console.groq.com/docs/models) et les [Structured Outputs](https://console.groq.com/docs/structured-outputs). Le graphe compilé est exporté dans `docs/om5_graph.mmd` et le déroulé d'évaluation dans `docs/OM5_PRESENTATION_GUIDE.md`.
 
 ```powershell
 python src/run_om5.py --month 2018-03 --mode as_of --with-agents

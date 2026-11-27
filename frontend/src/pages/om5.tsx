@@ -43,8 +43,8 @@ export function Om5Page() {
 
       {report.isLoading || kpis.isLoading ? <LoadingBlock rows={6} /> : (
         <>
-          <Card className={meta?.generation_mode === "gemini" ? "border-amber-300 bg-amber-50/30" : ""}>
-            <CardHeader><div className="flex flex-wrap items-center justify-between gap-2"><CardTitle className="flex items-center gap-2"><Sparkles className="size-4" /> Synthèse exécutive</CardTitle><div className="flex gap-2"><Badge variant={meta?.generation_mode === "gemini" ? "default" : "outline"}>{meta?.generation_mode === "gemini" ? `Gemini · ${meta.llm_model}` : "Rapport déterministe"}</Badge><Badge variant={meta?.validation_status === "valid" ? "default" : "outline"}>Validation: {meta?.validation_status ?? "—"}</Badge>{meta?.partial && <Badge variant="destructive">Partiel</Badge>}</div></div></CardHeader>
+          <Card className={meta?.generation_mode !== "deterministic" ? "border-amber-300 bg-amber-50/30" : ""}>
+            <CardHeader><div className="flex flex-wrap items-center justify-between gap-2"><CardTitle className="flex items-center gap-2"><Sparkles className="size-4" /> Synthèse exécutive</CardTitle><div className="flex gap-2"><Badge variant={meta?.generation_mode !== "deterministic" ? "default" : "outline"}>{meta?.generation_mode !== "deterministic" ? `${meta?.llm_provider?.toUpperCase()} · ${meta?.llm_model}` : "Rapport déterministe"}</Badge><Badge variant={meta?.validation_status === "valid" ? "default" : "outline"}>Validation: {meta?.validation_status ?? "—"}</Badge>{meta?.partial && <Badge variant="destructive">Partiel</Badge>}</div></div></CardHeader>
             <CardContent><p className="max-w-5xl leading-7">{report.data?.report.narrative}</p>{meta?.fallback_used && <p className="mt-3 text-xs text-muted-foreground">Repli activé: {meta.fallback_reason}</p>}<p className="mt-3 text-xs text-muted-foreground">Données Olist historiques 2016–2018 · ceci n'est pas un suivi temps réel.</p></CardContent>
           </Card>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">

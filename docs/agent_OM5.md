@@ -6,7 +6,7 @@ L'entrée publique reste `ReportingAgent.run(month, mode, include_agents)`. `OM5
 
 Routage: BO1 pour `late_rate`, `late_handover_rate`, `delivery_duration_mean_days`; BO2 pour `late_rate`, `poor_review_rate`, `average_review_score`; BO3 pour `late_rate`, `poor_review_rate`, `late_handover_rate`.
 
-Gemini ne choisit ni outil ni agent. Il rédige à partir du contexte validé et ne peut modifier les tables KPI ni les scores. Une sortie acceptée porte `generation_mode=gemini` et `validation_status=valid`; sinon le rapport déterministe est finalisé avec la cause du repli.
+Le LLM ne choisit ni outil ni agent. Il rédige à partir du contexte validé et ne peut modifier les tables KPI ni les scores. Avec Groq, une sortie acceptée porte `llm_provider=groq`, `generation_mode=groq` et `validation_status=valid`; sinon le rapport déterministe est finalisé avec la cause du repli.
 
 `ReportingAgent` est l'orchestrateur global ShopInsight. Ses calculs restent déterministes; il n'utilise pas de LLM pour calculer, détecter ou décider qu'une anomalie existe.
 

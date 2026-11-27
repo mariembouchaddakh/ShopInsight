@@ -1,6 +1,6 @@
 # Audit technique OM5
 
-## Upgrade LangGraph et Gemini
+## Upgrade LangGraph et couche LLM Groq
 
 L'orchestration manuelle a été remplacée par un `StateGraph` compilé, sans modification des détecteurs MAD, tests de proportions, correction BH, Wilson, règles temporelles ou formule de priorité. La validation générative rejette preuves inconnues, nombres non supportés, période ou mode incohérents, scores altérés, causalités non étayées et conclusions attribuées à un collaborateur absent.
 
@@ -8,7 +8,7 @@ Les tests automatisés emploient un faux générateur sans coût. Ils couvrent l
 
 Limite: Olist ne fournit ni vérité terrain d'anomalie métier ni mesure d'impact causal. L'évaluation mesure cohérence, routage, grounding et robustesse, pas un gain commercial.
 
-Résultats reproductibles et essai réel Gemini: [`quality/om5_langgraph_evaluation.md`](../quality/om5_langgraph_evaluation.md). L'essai réel n'a pas produit de texte accepté par le garde-fou; le repli déterministe a réussi. Ce résultat est déclaré sans fabrication.
+Résultats reproductibles et essais réels Groq: [`quality/om5_langgraph_evaluation.md`](../quality/om5_langgraph_evaluation.md). Les rapports de juillet 2017 et mars 2018 ont été acceptés par le garde-fou avec `validation_status=valid`, `evidence_valid=true` et sans repli.
 
 ## Portée de l'audit
 

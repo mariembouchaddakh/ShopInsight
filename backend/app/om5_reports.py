@@ -38,7 +38,8 @@ def report_pdf(payload: dict[str, Any]) -> bytes:
     styles.add(ParagraphStyle(name="Small", parent=styles["BodyText"], fontSize=7.5, leading=10, textColor=colors.HexColor("#536174")))
     evidence = meta.get("evidence", []); kpis = [x.get("payload", {}) for x in evidence if str(x.get("id", "")).startswith("om5:kpi:")]
     period = kpis[0].get("period", "—") if kpis else "—"; mode = kpis[0].get("mode", "—") if kpis else "—"
-    generation = "Gemini Flash · sortie validée" if meta.get("generation_mode") == "gemini" else "Repli déterministe"
+    generation = (f"{str(meta.get('llm_provider')).upper()} · {meta.get('llm_model')} · sortie validée"
+                  if meta.get("generation_mode") != "deterministic" else "Repli déterministe")
     story = [Spacer(1, 30*mm), Paragraph("SHOPINSIGHT", styles["Cover"]), Spacer(1, 7*mm),
              Paragraph("RAPPORT DE PILOTAGE MARKETPLACE", ParagraphStyle("Sub", parent=styles["Heading1"], alignment=TA_CENTER, textColor=navy)),
              Spacer(1, 15*mm), _table([["Période", period], ["Mode temporel", mode], ["Génération", generation], ["Périmètre", "Olist · historique 2016–2018"]], [42*mm, 105*mm], navy, pale, first_col=True),
@@ -66,14 +67,28 @@ def report_pdf(payload: dict[str, Any]) -> bytes:
     else:
         story.append(Paragraph("Aucune dégradation statistiquement signalée pour cette période.", styles["BI"]))
     generated=meta.get("generated_content") or {}; sections=generated.get("sections", {})
-    for title,key in (("Analyse géographique et catégories","geographic_and_category_insights"),("Investigations BO1 · BO2 · BO3","multi_agent_findings"),("Impact métier","business_impact")):
-        if sections.get(key):
-            story.append(Paragraph(title,styles["Section"])); story.extend(Paragraph("• "+x.get("text",""),styles["BI"]) for x in sections[key])
+    insight_groups: dict[str, list[dict[str, Any]]] = {}
+    for item in generated.get("insights", []):
+        insight_groups.setdefault(item.get("section", "health"), []).append(item)
+    generated_sections = [
+        ("Santé marketplace et interprétation des KPI", insight_groups.get("health", []) + insight_groups.get("kpi", [])),
+        ("Comparaisons et interprétation statistique", insight_groups.get("comparison", []) + insight_groups.get("anomaly", []) + insight_groups.get("statistics", [])),
+        ("Analyse géographique et catégories", insight_groups.get("segments", []) or sections.get("geographic_and_category_insights", [])),
+        ("Investigations BO1 · BO2 · BO3", insight_groups.get("agents", []) or sections.get("multi_agent_findings", [])),
+        ("Impact métier", insight_groups.get("impact", []) or sections.get("business_impact", [])),
+        ("Limites de l'analyse", insight_groups.get("limitations", []) or sections.get("data_quality_and_limitations", [])),
+    ]
+    for title, items in generated_sections:
+        if items:
+            story.append(Paragraph(title,styles["Section"])); story.extend(Paragraph("• "+x.get("text",""),styles["BI"]) for x in items)
     recs=meta.get("contextual_recommendations") or meta.get("recommendations",[]); story.append(Paragraph("Recommandations prioritaires",styles["Section"]))
     if recs:
         rows=[["Score","Action","Responsable","Échéance","Preuves"]]
         for x in recs:
-            refs=x.get("evidence_ids",[x.get("evidence_id","")]); rows.append([x.get("priority_score","—"),Paragraph(x.get("title") or x.get("recommendation",""),styles["Small"]),x.get("responsible_team","Équipe métier"),x.get("timeframe","À définir"),Paragraph(" · ".join(refs),styles["Small"])])
+            refs=x.get("evidence_ids",[x.get("evidence_id","")])
+            title=x.get("title") or x.get("recommendation",""); detail=x.get("description","")
+            action=f"<b>{title}</b>" + (f"<br/>{detail}" if detail else "")
+            rows.append([x.get("priority_score","—"),Paragraph(action,styles["Small"]),x.get("responsible_team","Équipe métier"),x.get("timeframe","À définir"),Paragraph(" · ".join(refs),styles["Small"])])
         story.append(_table(rows,[18*mm,57*mm,31*mm,27*mm,38*mm],navy,pale,header=True))
     story.append(Paragraph("Qualité, limites et méthodologie",styles["Section"])); story.extend(Paragraph("• "+x,styles["BI"]) for x in report.get("caveats",[]))
     story.append(Paragraph("Références de preuve",styles["Section"])); story.extend(Paragraph(f"<b>{x.get('id','')}</b> — {x.get('source','')}",styles["Small"]) for x in evidence)

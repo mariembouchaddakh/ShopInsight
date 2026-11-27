@@ -52,7 +52,7 @@ def validate_report(report: Report, log: EvidenceLog) -> tuple[bool, list[str]]:
 def validate_generated_report(payload: dict[str, Any], log: EvidenceLog, month: str, mode: str,
                               kpis: dict[str, Any], priorities: list[dict[str, Any]],
                               available_agents: set[str]) -> tuple[bool, list[str]]:
-    """Reject unsupported Gemini claims before generated text reaches users."""
+    """Reject unsupported LLM claims before generated text reaches users."""
     problems: list[str] = []
     if payload.get("period") != month:
         problems.append(f"période incohérente: {payload.get('period')} != {month}")
@@ -65,8 +65,15 @@ def validate_generated_report(payload: dict[str, Any], log: EvidenceLog, month: 
     for value in sections.values() if isinstance(sections, dict) else []:
         if isinstance(value, list):
             claims.extend(x for x in value if isinstance(x, dict))
-    claims.append({"text": payload.get("executive_summary", ""),
-                   "evidence_ids": payload.get("executive_summary_evidence_ids", [])})
+    claims.extend(x for x in payload.get("insights", []) if isinstance(x, dict))
+    summary = payload.get("executive_summary", "")
+    if isinstance(summary, dict):
+        claims.append(summary)
+        summary_refs = summary.get("evidence_ids", [])
+        if not 2 <= len(summary_refs) <= 5:
+            problems.append("la synthèse exécutive doit citer entre deux et cinq preuves")
+    else:
+        claims.append({"text": summary, "evidence_ids": payload.get("executive_summary_evidence_ids", [])})
     unsupported_causal = re.compile(r"\b(cause|causé|provoque|entraîne|responsable de|prouve que)\b", re.I)
     has_number = re.compile(r"(?<![\w:])[-+]?\d+(?:[.,]\d+)?\s*%?")
     for idx, item in enumerate(claims):
@@ -94,17 +101,34 @@ def validate_generated_report(payload: dict[str, Any], log: EvidenceLog, month: 
             ok, errors = verify_narrative(cleaned, cited)
             if not ok:
                 problems.extend(f"incohérence numérique: {x}" for x in errors)
+    recommendation_metrics: list[str] = []
+    expected_recommendation_refs = {x["metric_id"]: x.get("evidence_id") for x in priorities}
+    collaborator_prefixes = tuple(f"om5:{name}:result:" for name in available_agents)
     for rec in payload.get("recommendations", []):
         refs = rec.get("evidence_ids", [])
         if not refs or any(x not in known for x in refs):
             problems.append(f"référence invalide dans recommandation: {rec.get('title', '?')}")
         metric = rec.get("related_anomaly")
+        recommendation_metrics.append(metric)
         if not allowed_scores and metric == "none" and rec.get("priority_score") == 0:
             pass
         elif metric not in allowed_scores:
             problems.append(f"anomalie inconnue dans recommandation: {metric}")
         elif rec.get("priority_score") != allowed_scores[metric]:
             problems.append(f"score modifié par le LLM pour {metric}")
+        elif expected_recommendation_refs.get(metric) not in refs:
+            problems.append(f"preuve de priorité absente pour {metric}")
+        if collaborator_prefixes and not any(str(ref).startswith(collaborator_prefixes) for ref in refs):
+            problems.append(f"preuve collaborateur absente pour {metric}")
+    insights = payload.get("insights", [])
+    sections_seen = [x.get("section") for x in insights if isinstance(x, dict)]
+    if len(insights) > 7 or len(sections_seen) != len(set(sections_seen)):
+        problems.append("les insights doivent être limités à sept et uniques par section")
+    if available_agents and "agents" not in sections_seen:
+        problems.append("l'insight agents est requis lorsque des collaborateurs ont été exécutés")
+    expected_metrics = set(allowed_scores) or {"none"}
+    if set(recommendation_metrics) != expected_metrics or len(recommendation_metrics) != len(expected_metrics):
+        problems.append(f"couverture des recommandations incohérente: {recommendation_metrics} != {sorted(expected_metrics)}")
     text_blob = str(payload).lower()
     for name in {"bo1", "bo2", "bo3"} - available_agents:
         if re.search(rf"\b{name}\b.*(?:a conclu|confirme|montre|indique)", text_blob):

@@ -1,12 +1,12 @@
 # Guide d'intégration OM5 pour Mariem
 
-## Activation de Gemini
+## Activation de Groq ou Gemini
 
-Copier `.env.example` vers `.env`, renseigner `GEMINI_API_KEY`, sélectionner un modèle Flash compatible avec les sorties structurées dans `GEMINI_MODEL`, puis mettre `OM5_LLM_ENABLED=true`. La clé est lue uniquement par `Settings`, masquée dans `repr` et jamais renvoyée par l'API.
+Copier `.env.example` vers `.env`, renseigner `GROQ_API_KEY`, conserver `GROQ_MODEL=openai/gpt-oss-120b`, puis mettre `OM5_LLM_PROVIDER=groq` et `OM5_LLM_ENABLED=true`. Pour Gemini, utiliser `OM5_LLM_PROVIDER=gemini`, `GEMINI_API_KEY` et `GEMINI_MODEL`. Les clés sont lues uniquement par `Settings`, masquées dans `repr` et jamais renvoyées par l'API.
 
 Sans clé, avec une clé invalide, un quota épuisé, un timeout, une erreur réseau, un JSON invalide ou un modèle indisponible, OM5 reste opérationnel et expose `fallback_used`, `fallback_reason` et `generation_mode=deterministic`.
 
-Les contrats existants `/api/om5/report`, `/report.pdf`, `/kpis.csv` et `/evidence.csv` sont préservés. Le rapport est mis en cache cinq minutes par période, mode et activation des agents afin que le téléchargement PDF ne rappelle pas Gemini.
+Les contrats existants `/api/om5/report`, `/report.pdf`, `/kpis.csv` et `/evidence.csv` sont préservés. Le rapport est mis en cache cinq minutes par période, mode et activation des agents afin que le téléchargement PDF ne rappelle pas le fournisseur LLM.
 
 ## Branches et fichiers
 

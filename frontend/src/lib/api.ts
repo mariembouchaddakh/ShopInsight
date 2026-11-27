@@ -460,7 +460,7 @@ export interface Om5ReportResponse {
     segments: Record<string, unknown>
     calls_used: number
     call_budget: number
-    generation_mode: "gemini" | "deterministic"
+    generation_mode: "groq" | "gemini" | "deterministic"
     llm_provider: string | null
     llm_model: string | null
     llm_latency_ms: number | null
@@ -491,9 +491,10 @@ export interface Om5ContextualRecommendation {
   evidence_ids: string[]
 }
 export interface Om5GeneratedContent {
-  executive_summary: string
-  executive_summary_evidence_ids: string[]
-  sections: Record<string, { text: string; evidence_ids: string[] }[]>
+  executive_summary: string | { text: string; evidence_ids: string[] }
+  executive_summary_evidence_ids?: string[]
+  insights?: { section: string; text: string; evidence_ids: string[] }[]
+  sections?: Record<string, { text: string; evidence_ids: string[] }[]>
   recommendations: Om5ContextualRecommendation[]
 }
 

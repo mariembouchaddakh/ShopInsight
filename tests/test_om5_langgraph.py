@@ -1,4 +1,4 @@
-"""LangGraph, Gemini validation and fallback tests (no paid API calls)."""
+"""LangGraph, provider-independent validation and fallback tests (no paid API calls)."""
 from __future__ import annotations
 
 import sys
@@ -14,29 +14,28 @@ from agents.om5_validation import validate_generated_report  # noqa: E402
 
 
 def structured(context, bad_ref: bool = False, bad_score: bool = False):
-    ids = [x["id"] for x in context["evidence_catalog"]]
+    ids = context["allowed_evidence_ids"]
     ref = "missing:evidence" if bad_ref else ids[0]
-    empty_sections = {k: [] for k in ("marketplace_health", "key_performance_indicators", "performance_comparisons",
-        "anomalies_and_severity", "statistical_interpretation", "geographic_and_category_insights",
-        "multi_agent_findings", "business_impact", "data_quality_and_limitations")}
     recommendations = []
-    for item in context["priority_scores"]:
+    for item in context["recommendation_slots"]:
         recommendations.append({"title": "Investigation ciblée", "description": "Vérifier le signal avec l'équipe métier.",
-            "business_justification": "Le détecteur statistique justifie une revue humaine.", "related_anomaly": item["metric_id"],
+            "business_justification": "Le détecteur statistique justifie une revue humaine.", "related_anomaly": "none" if item["metric_id"] == "none" else item["metric_id"],
             "relevant_segment_or_seller": None, "priority_level": "haute", "priority_score": item["priority_score"] + (1 if bad_score else 0),
             "responsible_team": "Opérations", "timeframe": "Sous 7 jours", "expected_qualitative_benefit": "Diagnostic plus précis",
-            "evidence_ids": [item["evidence_id"]]})
+            "evidence_ids": item["evidence_ids"]})
     if not recommendations:
         recommendations = [{"title": "Maintenir la surveillance", "description": "Poursuivre la revue mensuelle.",
             "business_justification": "Aucune dégradation n'est signalée.", "related_anomaly": "none", "relevant_segment_or_seller": None,
             "priority_level": "basse", "priority_score": 0, "responsible_team": "Pilotage", "timeframe": "Mois prochain",
             "expected_qualitative_benefit": "Détection précoce", "evidence_ids": [ref]}]
-    return {"period": context["period"], "temporal_mode": context["temporal_mode"], "executive_summary": "Synthèse fondée sur les preuves disponibles.",
-            "executive_summary_evidence_ids": [ref], "sections": empty_sections, "recommendations": recommendations}
+    return {"period": context["period"], "temporal_mode": context["temporal_mode"],
+            "executive_summary": {"text": "Synthèse fondée sur les preuves disponibles.",
+                                  "evidence_ids": [ref] if bad_ref else ids[:2]},
+            "insights": [], "recommendations": recommendations}
 
 
 class FakeGenerator:
-    provider = "google-gemini"; model = "gemini-test-flash"
+    provider = "groq"; model = "openai/gpt-oss-test"
     def __init__(self, sequence=None, error=None):
         self.sequence = list(sequence or []); self.error = error; self.calls = 0
     def generate(self, context, validation_errors=None):
@@ -51,8 +50,8 @@ class TestGeneratedValidation(unittest.TestCase):
     def test_numerical_inconsistency_rejected(self):
         log = EvidenceLog(); evidence_id = "om5:kpi:as_of:2018-03:order_count"
         log.add(evidence_id, "fait", "gold", {"value": 10, "period": "2018-03"})
-        payload = {"period": "2018-03", "temporal_mode": "as_of", "executive_summary": "777 commandes observées.",
-            "executive_summary_evidence_ids": [evidence_id], "sections": {},
+        payload = {"period": "2018-03", "temporal_mode": "as_of",
+            "executive_summary": {"text": "777 commandes observées.", "evidence_ids": [evidence_id]}, "insights": [],
             "recommendations": [{"title": "Suivre", "related_anomaly": "none", "priority_score": 0, "evidence_ids": [evidence_id]}]}
         ok, problems = validate_generated_report(payload, log, "2018-03", "as_of", {}, [], set())
         self.assertFalse(ok); self.assertTrue(any("numérique" in x for x in problems))
@@ -81,7 +80,7 @@ class TestLangGraphOM5(unittest.TestCase):
     def test_valid_structured_generation(self):
         generator = FakeGenerator()
         report = ReportingAgent(ROOT, report_generator=generator).run("2018-03", "as_of", False)
-        self.assertEqual(report.meta["generation_mode"], "gemini")
+        self.assertEqual(report.meta["generation_mode"], "groq")
         self.assertEqual(report.meta["validation_status"], "valid")
         self.assertFalse(report.meta["fallback_used"]); self.assertEqual(generator.calls, 1)
 
@@ -98,4 +97,4 @@ class TestLangGraphOM5(unittest.TestCase):
         generator = FakeGenerator(error=TimeoutError("quota or timeout"))
         report = ReportingAgent(ROOT, report_generator=generator).run("2018-03", "as_of", False)
         self.assertTrue(report.meta["fallback_used"]); self.assertIn("TimeoutError", report.meta["fallback_reason"])
-        self.assertEqual(generator.calls, 1)
+        self.assertEqual(generator.calls, 2)

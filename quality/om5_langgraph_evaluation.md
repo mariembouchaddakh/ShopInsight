@@ -1,9 +1,11 @@
-# Évaluation OM5 LangGraph + Gemini
+# Évaluation OM5 LangGraph + Groq
 
-Le 27 novembre 2026, la suite complète a passé **92/92 tests** en 299,78 s, puis le test de cohérence numérique ajouté ensuite a passé séparément (**93 cas réussis au total, aucun échec**). Le build frontend passe, le lint ne contient aucune erreur et l'audit npm de production ne relève aucune vulnérabilité.
+Le 27 novembre 2026, les appels réels ont utilisé le SDK Python officiel Groq, le modèle `openai/gpt-oss-120b` et un JSON Schema strict. Les calculs, détecteurs, scores et activations d'agents sont restés déterministes. La régression complète passe avec 93 tests en 249,56 s; le build frontend passe, le lint ne contient aucune erreur et l'audit npm ne relève aucune vulnérabilité.
 
-Sur les données Olist authentiques, juillet 2017 suit le chemin sans anomalie (3 appels analytiques, aucune collaboration inutile, PDF de 3 pages). Mars 2018 détecte trois anomalies et active séquentiellement BO1, BO2 et BO3 (8 appels, preuves valides, PDF de 4 pages).
+Sur les données Olist authentiques, juillet 2017 suit le chemin sans anomalie et sans collaborateur. La génération Groq a été acceptée en 2 680,8 ms: `generation_mode=groq`, `validation_status=valid`, `evidence_valid=true`, `fallback_used=false`. Le PDF contient la synthèse et la recommandation de surveillance générées.
 
-L'essai réel `gemini-2.5-flash` a été exécuté. Le service a successivement produit un délai dépassé, un JSON tronqué puis des JSON structurés rejetés par le contrôle de preuves/nombres. Dans tous les cas, aucun contenu non validé n'a été affiché et le repli déterministe a abouti. Les chemins Gemini valides, la correction bornée et les erreurs sont couverts par des réponses simulées dans les tests automatisés.
+Mars 2018 détecte trois anomalies et exécute BO1, BO2 et BO3. La génération Groq a été acceptée en 4 292,5 ms sans correction: mêmes quatre statuts de succès. Les recommandations citent à la fois la preuve d'anomalie et les résultats collaborateurs; les scores 100,0, 100,0 et 76,2 sont réinjectés depuis le calcul déterministe, jamais générés par le modèle.
 
-La comparaison de latence n'est pas un benchmark strict entre commits, car les caches et mois diffèrent. L'overhead du graphe est négligeable devant les calculs Olist et les collaborateurs; le coût réseau Gemini n'existe que lorsqu'il est activé. La validité des preuves déterministes reste à 100 %, tandis que la nouvelle architecture ajoute une barrière dédiée aux textes générés.
+Un essai intermédiaire a exposé deux échecs réels: `json_validate_failed` pour un champ `priority_level` omis par la génération, puis une limite TPM lors de la correction. Le schéma n'a pas été assoupli. Le pipeline transmet désormais l'erreur structurée à l'unique correction autorisée, conserve le repli pour les échecs persistants et limite la complétion à 2 200 tokens. Les deux scénarios finaux passent sans repli.
+
+Les PDF finaux sont sous `reports/om5-groq-demo/`. Les limites demeurent celles du dataset: Olist est historique, ne fournit pas de vérité terrain d'anomalie métier et ne permet pas d'attribuer un impact causal.

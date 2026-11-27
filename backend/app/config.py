@@ -38,6 +38,9 @@ class Settings:
     cors_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")
     _openrouter_api_key: str | None = field(default=None, repr=False)
     om5_llm_enabled: bool = False
+    om5_llm_provider: str = "groq"
+    groq_model: str = "openai/gpt-oss-120b"
+    _groq_api_key: str | None = field(default=None, repr=False)
     gemini_model: str = "gemini-2.5-flash"
     _gemini_api_key: str | None = field(default=None, repr=False)
 
@@ -49,13 +52,18 @@ class Settings:
     def gemini_api_key(self) -> str | None:
         return self._gemini_api_key
 
+    @property
+    def groq_api_key(self) -> str | None:
+        return self._groq_api_key
+
     def public(self) -> dict:
         """Configuration montrable (aucun secret)."""
         return {"project_dir": str(self.project_dir), "warmup": self.warmup, "llm_budget_usd": self.llm_budget_usd,
                 "llm_free_only": self.llm_free_only, "llm_models": {"a": self.llm_model_a, "b": self.llm_model_b, "judge": self.llm_judge_model},
                 "llm_fallback_models": list(self.llm_fallback_models),
                 "openrouter_key_configured": bool(self._openrouter_api_key),
-                "om5_llm_enabled": self.om5_llm_enabled, "gemini_model": self.gemini_model,
+                "om5_llm_enabled": self.om5_llm_enabled, "om5_llm_provider": self.om5_llm_provider,
+                "groq_model": self.groq_model, "groq_key_configured": bool(self._groq_api_key), "gemini_model": self.gemini_model,
                 "gemini_key_configured": bool(self._gemini_api_key)}
 
 
@@ -70,5 +78,8 @@ def load_settings() -> Settings:
                     llm_fallback_models=tuple(dict.fromkeys(m.strip() for m in env.get("LLM_FALLBACK_MODELS", "").split(",") if m.strip())),
                     _openrouter_api_key=env.get("OPENROUTER_API_KEY") or None,
                     om5_llm_enabled=env.get("OM5_LLM_ENABLED", "false").lower() in {"1", "true", "yes"},
+                    om5_llm_provider=env.get("OM5_LLM_PROVIDER", "groq"),
+                    groq_model=env.get("GROQ_MODEL", "openai/gpt-oss-120b"),
+                    _groq_api_key=env.get("GROQ_API_KEY") or None,
                     gemini_model=env.get("GEMINI_MODEL", "gemini-2.5-flash"),
                     _gemini_api_key=env.get("GEMINI_API_KEY") or None)

@@ -13,7 +13,7 @@ graph TD;
   agent_execution(agent_execution)
   consolidation(consolidation)
   prioritization(prioritization)
-  gemini_generation(gemini_generation)
+  llm_generation(llm_generation)
   validation(validation)
   deterministic_fallback(deterministic_fallback)
   final_report(final_report)
@@ -27,10 +27,10 @@ graph TD;
   planner --> agent_execution;
   agent_execution --> consolidation;
   consolidation --> prioritization;
-  prioritization --> gemini_generation;
-  gemini_generation --> validation;
+  prioritization --> llm_generation;
+  llm_generation --> validation;
   validation -. final .-> final_report;
-  validation -. retry .-> gemini_generation;
+  validation -. retry .-> llm_generation;
   validation -. fallback .-> deterministic_fallback;
   deterministic_fallback --> final_report;
   final_report --> __end__;

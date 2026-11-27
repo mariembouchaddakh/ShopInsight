@@ -34,12 +34,14 @@ def _node(agent: "ReportingAgent", name: str, fn):
             agent.trace.append({"kind": "node", "tool": name, "status": "ok", "duration_ms": round(1000 * (time.perf_counter() - t0), 1)})
             return update
         except Exception as exc:  # graph must always reach a usable report
-            if name != "gemini_generation":
+            if name != "llm_generation":
                 agent.partial = True
             agent.trace.append({"kind": "node", "tool": name, "status": "error", "error": f"{type(exc).__name__}: {exc}",
                                 "duration_ms": round(1000 * (time.perf_counter() - t0), 1)})
-            if name == "gemini_generation":
-                return {"generated_report": None, "fallback_reason": f"{type(exc).__name__}: {exc}", "validation_errors": [str(exc)],
+            if name == "llm_generation":
+                errors = list(state.get("validation_errors", [])) + [str(exc)]
+                return {"generated_report": None, "fallback_reason": f"{type(exc).__name__}: {exc}", "validation_errors": errors,
+                        "retry_counter": state.get("retry_counter", 0) + 1,
                         "llm_provider": getattr(agent.report_generator, "provider", None),
                         "llm_model": getattr(agent.report_generator, "model", None)}
             raise
@@ -110,13 +112,14 @@ def build_om5_graph(agent: "ReportingAgent", generator: ReportGenerator | None =
             report.actions = [Line(x["recommendation"], [x["evidence_id"]]) for x in actions] or report.actions
         return {"priority_scores": actions, "deterministic_report": report}
 
-    def gemini(state: OM5State):
+    def llm_generate(state: OM5State):
         if generator is None:
-            return {"generated_report": None, "fallback_reason": "Gemini désactivé ou clé absente"}
+            return {"generated_report": None, "fallback_reason": "LLM désactivé, fournisseur non configuré ou clé absente"}
         context = agent.generation_context(state)
         generated, latency = generator.generate(context, state.get("validation_errors") or None)
         return {"generated_report": generated, "llm_provider": generator.provider, "llm_model": generator.model,
-                "llm_latency_ms": latency, "generation_mode": "gemini"}
+                "llm_latency_ms": latency, "generation_mode": generator.provider,
+                "fallback_reason": None, "validation_errors": []}
 
     def validation(state: OM5State):
         generated = state.get("generated_report")
@@ -131,7 +134,7 @@ def build_om5_graph(agent: "ReportingAgent", generator: ReportGenerator | None =
     def validation_route(state: OM5State) -> str:
         if state.get("validation_status") == "valid":
             return "final"
-        if generator is not None and state.get("generated_report") is not None and state.get("retry_counter", 0) <= 1:
+        if generator is not None and state.get("retry_counter", 0) <= 1:
             return "retry"
         return "fallback"
 
@@ -143,8 +146,9 @@ def build_om5_graph(agent: "ReportingAgent", generator: ReportGenerator | None =
         report = state.get("deterministic_report") or Report(title=f"OM5 — Pilotage marketplace {state['month']}")
         generated = state.get("generated_report")
         if generated:
-            report.narrative = generated.get("executive_summary", report.narrative)
-            report.narrative_source = "gemini"
+            summary = generated.get("executive_summary", report.narrative)
+            report.narrative = summary.get("text", report.narrative) if isinstance(summary, dict) else summary
+            report.narrative_source = state.get("llm_provider") or "llm"
             report.actions = [Line(x["description"], x.get("evidence_ids", [])) for x in generated.get("recommendations", [])]
         ok, problems = validate_report(report, agent.log)
         metadata = {
@@ -170,14 +174,14 @@ def build_om5_graph(agent: "ReportingAgent", generator: ReportGenerator | None =
     for name, fn in (("kpi", kpi), ("comparisons", comparisons), ("anomaly_detection", anomalies),
                      ("segment_analysis", segments), ("planner", planner), ("agent_execution", execute),
                      ("consolidation", consolidation), ("prioritization", prioritization),
-                     ("gemini_generation", gemini), ("validation", validation),
+                     ("llm_generation", llm_generate), ("validation", validation),
                      ("deterministic_fallback", fallback), ("final_report", final)):
         graph.add_node(name, _node(agent, name, fn))
     graph.add_edge(START, "kpi"); graph.add_edge("kpi", "comparisons"); graph.add_edge("comparisons", "anomaly_detection")
     graph.add_conditional_edges("anomaly_detection", route, {"segments": "segment_analysis", "consolidation": "consolidation"})
     graph.add_edge("segment_analysis", "planner"); graph.add_edge("planner", "agent_execution"); graph.add_edge("agent_execution", "consolidation")
-    graph.add_edge("consolidation", "prioritization"); graph.add_edge("prioritization", "gemini_generation"); graph.add_edge("gemini_generation", "validation")
-    graph.add_conditional_edges("validation", validation_route, {"final": "final_report", "retry": "gemini_generation", "fallback": "deterministic_fallback"})
+    graph.add_edge("consolidation", "prioritization"); graph.add_edge("prioritization", "llm_generation"); graph.add_edge("llm_generation", "validation")
+    graph.add_conditional_edges("validation", validation_route, {"final": "final_report", "retry": "llm_generation", "fallback": "deterministic_fallback"})
     graph.add_edge("deterministic_fallback", "final_report"); graph.add_edge("final_report", END)
     return graph.compile()
 

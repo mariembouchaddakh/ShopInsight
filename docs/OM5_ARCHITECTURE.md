@@ -6,7 +6,7 @@
 
 `ReportingAgent.run(month, mode, include_agents)` initialise `OM5State`, puis invoque un `StateGraph` compilé. Les nœuds KPI, comparaisons et détection utilisent les fonctions historiques existantes. Le routeur saute segments et collaborateurs en l'absence d'anomalie. Le planificateur applique les règles BO1/BO2/BO3; les appels passent séquentiellement par `AgentRegistry.call_public`.
 
-Après consolidation, le score `100 × (0,45 × amplitude + 0,35 × confiance + 0,20 × volume)` est figé. `GeminiOM5Generator` reçoit un contexte JSON compact. Le validateur accepte la sortie, la renvoie une fois pour correction ou route vers le repli déterministe.
+Après consolidation, le score `100 × (0,45 × amplitude + 0,35 × confiance + 0,20 × volume)` est figé. Le générateur configuré reçoit un contexte JSON compact. `GroqOM5Generator` utilise le SDK officiel et un JSON Schema strict compatible avec `openai/gpt-oss-120b`; `GeminiOM5Generator` reste disponible. Le validateur accepte la sortie, la renvoie une fois pour correction ou route vers le repli déterministe.
 
 Fichiers: `om5_state.py` (état), `om5_graph.py` (graphe), `om5_generator.py` (SDK et Pydantic), `om5_prompts.py` (grounding), `om5_validation.py` (contrôles métier), `om5_reports.py` (présentation PDF).
 

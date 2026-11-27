@@ -208,18 +208,63 @@ class ReportingAgent:
 
     def generation_context(self, state: dict[str, Any]) -> dict[str, Any]:
         """Compact evidence-grounded payload; never sends raw Olist tables."""
-        insights = {name: state.get(f"{name}_results") for name in ("bo1", "bo2", "bo3") if state.get(f"{name}_results")}
+        tracked = {"order_count", "item_price_total", "late_rate", "poor_review_rate", "average_review_score",
+                   "active_seller_count", "alerted_seller_count"}
+        kpis = [{key: row.get(key) for key in ("metric_id", "label", "value", "unit", "numerator", "denominator",
+                                                       "quality_status", "evidence_id")}
+                for row in (state.get("kpi_values") or {}).get("kpis", []) if row["metric_id"] in tracked]
+        comparison_block = state.get("historical_comparisons") or {}
+        comparisons = [{**{key: row.get(key) for key in ("metric_id", "label", "unit", "value", "previous_period",
+                                                                      "previous_value", "absolute_change", "relative_change_pct",
+                                                                      "percentage_point_change", "year_over_year")},
+                        "evidence_id": comparison_block.get("evidence_id")}
+                       for row in comparison_block.get("comparisons", []) if row["metric_id"] in tracked]
+        all_anomalies = state.get("detected_anomalies", [])
+        active = [{key: row.get(key) for key in ("metric_id", "label", "value", "baseline", "method", "robust_z",
+                                                          "q_value", "sample_size", "severity", "evidence_id")}
+                  for row in all_anomalies if row.get("anomaly")]
+        segments = {}
+        for metric, block in state.get("segment_analysis", {}).items():
+            segments[metric] = {"evidence_id": block["evidence_id"],
+                                "state": block.get("segments", {}).get("state", [])[:3],
+                                "category": block.get("segments", {}).get("category", [])[:3]}
+        collaborators = {}
+        for name in ("bo1", "bo2", "bo3"):
+            block = state.get(f"{name}_results")
+            if not block:
+                continue
+            result = block.get("result", {})
+            if name in {"bo1", "bo2"}:
+                collaborators[name] = {"evidence_id": block["evidence_id"], "title": result.get("title"),
+                                       "summary": result.get("narrative"),
+                                       "key_findings": [x.get("text") for x in (result.get("facts", []) + result.get("estimates", []))[:4]]}
+            else:
+                alerts = result.get("alerts", {})
+                collaborators[name] = {"evidence_id": block["evidence_id"], "overview": result.get("overview", {}),
+                                       "alert_count": alerts.get("n_alerts"), "alerted_sellers": alerts.get("n_alerted_sellers"),
+                                       "top_sellers": [x.get("seller_id") for x in alerts.get("listing", [])[:3]],
+                                       "category_summary": result.get("categories", {}).get("categories_with_most_alerted_sellers", [])[:3]}
+        collaborator_refs = [x["evidence_id"] for x in collaborators.values()]
+        slots = [{"metric_id": x["metric_id"], "priority_score": x["priority_score"], "severity": x["severity"],
+                  "evidence_ids": [x["evidence_id"], *collaborator_refs]} for x in state.get("priority_scores", [])]
+        if not slots and all_anomalies:
+            slots = [{"metric_id": "none", "priority_score": 0, "severity": "none",
+                      "evidence_ids": [x["evidence_id"] for x in all_anomalies[:3]]}]
+        allowed = {x["evidence_id"] for x in kpis}
+        allowed.update(x["evidence_id"] for x in active)
+        allowed.update(x["evidence_id"] for x in all_anomalies[:3] if not active)
+        if comparison_block.get("evidence_id"):
+            allowed.add(comparison_block["evidence_id"])
+        allowed.update(x["evidence_id"] for x in segments.values())
+        allowed.update(x["evidence_id"] for x in collaborators.values())
         return to_native({
             "period": state["month"], "temporal_mode": state["mode"],
             "historical_dataset": "Olist 2016-2018; replay historique, pas temps réel",
-            "kpis": (state.get("kpi_values") or {}).get("kpis", []),
-            "comparisons": (state.get("historical_comparisons") or {}).get("comparisons", []),
-            "anomalies": state.get("detected_anomalies", []),
-            "segments": state.get("segment_analysis", {}), "collaborators": insights,
-            "priority_scores": state.get("priority_scores", []),
-            "limitations": ["corrélation non causale", "données historiques", "rapport potentiellement partiel" if self.partial else "collaborateurs disponibles"],
-            "evidence_catalog": [{"id": ev.id, "kind": ev.kind, "source": ev.source}
-                                 for ev in self.log.with_prefix("")],
+            "kpis": kpis, "comparisons": comparisons,
+            "anomaly_status": "detected" if active else "none_detected", "active_anomalies": active,
+            "segments": segments, "collaborators": collaborators, "recommendation_slots": slots,
+            "allowed_evidence_ids": sorted(allowed),
+            "limitations": ["corrélation non causale", "données historiques", "rapport partiel" if self.partial else "rapport analytique complet"],
         })
 
     def _report(self, month: str, mode: str, kpis: dict[str, Any] | None, comparisons: dict[str, Any] | None,

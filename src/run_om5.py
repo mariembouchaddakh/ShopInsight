@@ -22,10 +22,12 @@ from backend.app.serialization import evidence_snapshot  # noqa: E402
 
 def build_agent(project_dir: Path, with_agents: bool):
     from backend.app.config import load_settings
-    from backend.app.llm.om5_generator import GeminiOM5Generator
+    from backend.app.llm.om5_generator import create_generator
     from backend.app.registry import AgentRegistry
     settings = replace(load_settings(), project_dir=project_dir, warmup=False)
-    generator = GeminiOM5Generator(settings.gemini_api_key, settings.gemini_model) if settings.om5_llm_enabled and settings.gemini_api_key else None
+    generator = create_generator(settings.om5_llm_provider, groq_api_key=settings.groq_api_key,
+                                 groq_model=settings.groq_model, gemini_api_key=settings.gemini_api_key,
+                                 gemini_model=settings.gemini_model) if settings.om5_llm_enabled else None
     if not with_agents:
         return ReportingAgent(project_dir, report_generator=generator)
     registry = AgentRegistry(settings)
