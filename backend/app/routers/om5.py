@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import json
+import time
+from copy import deepcopy
+from threading import Lock
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import Response
@@ -12,6 +15,11 @@ from ..serialization import evidence_snapshot, jsonable
 from .common import registry
 
 router = APIRouter(prefix="/api/om5", tags=["OM5 — pilotage marketplace"])
+
+
+_REPORT_CACHE: dict[tuple[str | None, str, bool], tuple[float, dict]] = {}
+_CACHE_LOCK = Lock()
+_CACHE_TTL_SECONDS = 300
 
 
 class AskRequest(BaseModel):
@@ -25,11 +33,19 @@ def _agent(request: Request):
 
 
 def _run(request: Request, month: str | None, mode: str, include_agents: bool = True) -> dict:
+    key = (month, mode, include_agents)
+    with _CACHE_LOCK:
+        cached = _REPORT_CACHE.get(key)
+        if cached and time.monotonic() - cached[0] < _CACHE_TTL_SECONDS:
+            return deepcopy(cached[1])
     try:
         with _agent(request) as agent:
             report = agent.run(month, mode, include_agents)
-            return {"agent": "om5", "report": jsonable(report.to_dict()), "markdown": report.to_markdown(),
-                    "evidence": evidence_snapshot(agent.log)}
+            payload = {"agent": "om5", "report": jsonable(report.to_dict()), "markdown": report.to_markdown(),
+                       "evidence": evidence_snapshot(agent.log)}
+            with _CACHE_LOCK:
+                _REPORT_CACHE[key] = (time.monotonic(), deepcopy(payload))
+            return payload
     except (ValueError, KeyError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except FileNotFoundError as exc:

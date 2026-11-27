@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import time
-from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Callable
 
@@ -12,7 +11,6 @@ import pandas as pd
 from .core import ESTIMATE, FACT, DataStore, Evidence, EvidenceLog, Line, Report, Tool, to_native
 from .om5_anomalies import compare_periods as compare_frame, detect_anomalies
 from .om5_kpis import METRIC_META, RATE_SPECS, available_months, monthly_kpis, seller_monitoring, trend_frame
-from .om5_validation import validate_report
 
 
 Collaborator = Callable[[str, str, dict[str, Any]], tuple[Any, list[Evidence] | list[dict[str, Any]]]]
@@ -27,7 +25,7 @@ class ReportingAgent:
     """
 
     def __init__(self, project_dir: str | Path = ".", collaborator: Collaborator | None = None,
-                 max_calls: int = 8) -> None:
+                 max_calls: int = 8, report_generator: Any | None = None) -> None:
         self.store = DataStore(project_dir)
         self.project_dir = Path(project_dir).resolve()
         self.collaborator = collaborator
@@ -36,6 +34,9 @@ class ReportingAgent:
         self.trace: list[dict[str, Any]] = []
         self._seen: set[tuple[str, str]] = set()
         self.partial = False
+        self.report_generator = report_generator
+        from .om5_graph import build_om5_graph
+        self.graph = build_om5_graph(self, report_generator)
 
     def default_month(self) -> str:
         return available_months(self.store)[-1]
@@ -45,7 +46,7 @@ class ReportingAgent:
         if key in self._seen:
             self.trace.append({"tool": tool, "args": args, "status": "deduplicated", "reason": "appel identique déjà exécuté"})
             return None
-        if len([x for x in self.trace if x["status"] != "deduplicated"]) >= self.max_calls:
+        if len([x for x in self.trace if x.get("kind", "tool") == "tool" and x["status"] != "deduplicated"]) >= self.max_calls:
             self.partial = True
             self.trace.append({"tool": tool, "args": args, "status": "skipped", "reason": "budget d'appels atteint"})
             return None
@@ -53,11 +54,11 @@ class ReportingAgent:
         t0 = time.perf_counter()
         try:
             result = fn()
-            self.trace.append({"tool": tool, "args": args, "status": "ok", "duration_ms": round(1000 * (time.perf_counter() - t0), 1)})
+            self.trace.append({"kind": "tool", "tool": tool, "args": args, "status": "ok", "duration_ms": round(1000 * (time.perf_counter() - t0), 1)})
             return result
         except Exception as exc:  # noqa: BLE001
             self.partial = True
-            self.trace.append({"tool": tool, "args": args, "status": "error", "error": f"{type(exc).__name__}: {exc}",
+            self.trace.append({"kind": "tool", "tool": tool, "args": args, "status": "error", "error": f"{type(exc).__name__}: {exc}",
                                "duration_ms": round(1000 * (time.perf_counter() - t0), 1)})
             return None
 
@@ -198,42 +199,28 @@ class ReportingAgent:
     def run(self, month: str | None = None, mode: str = "as_of", include_agents: bool = True) -> Report:
         self.log, self.trace, self._seen, self.partial = EvidenceLog(), [], set(), False
         month = month or self.default_month()
-        kpis = self._record("get_monthly_kpis", {"month": month, "mode": mode}, lambda: self.get_monthly_kpis(month, mode))
-        comparisons = self._record("compare_periods", {"month": month, "mode": mode}, lambda: self.compare_periods(month, mode))
-        detected = self._record("detect_kpi_anomalies", {"month": month, "mode": mode}, lambda: self.detect_kpi_anomalies(month, mode))
-        anomaly_rows = detected["anomalies"] if detected else []
-        active = [x for x in anomaly_rows if x["anomaly"]]
-        segments: dict[str, Any] = {}
-        for anomaly in active[:2]:
-            metric = anomaly["metric_id"]
-            seg = self._record("analyze_segments", {"month": month, "metric": metric, "mode": mode},
-                               lambda metric=metric: self.analyze_segments(month, metric, mode))
-            if seg:
-                segments[metric] = seg
-        insights: dict[str, Any] = {}
-        bad = {x["metric_id"] for x in active}
-        if include_agents and active:
-            plans: list[tuple[str, str, dict[str, Any], str]] = []
-            if bad & {"late_rate", "late_handover_rate", "delivery_duration_mean_days"}:
-                plans.append(("bo1", "triage", {"period": month, "top_k": 10, "audit": False}, "signal logistique"))
-            if bad & {"late_rate", "poor_review_rate", "average_review_score"}:
-                plans.append(("bo2", "report", {"month": month, "focus": "livraison" if "late_rate" in bad else None, "use_llm": False}, "signal client"))
-            if bad & {"late_rate", "poor_review_rate", "late_handover_rate"}:
-                plans.append(("bo3", "marketplace_brief", {"month": month, "top_k": 10}, "signal vendeur"))
-            for agent, method, kwargs, reason in plans:
-                result = self._record(f"collect_{agent}_insights", {"method": method, **kwargs, "reason": reason},
-                                      lambda agent=agent, method=method, kwargs=kwargs: self._collect(agent, method, kwargs))
-                if result:
-                    insights[agent] = result
-        actions = self.prioritize_actions(anomaly_rows, segments)
-        report = self._report(month, mode, kpis, comparisons, anomaly_rows, segments, insights, actions)
-        ok, problems = validate_report(report, self.log)
-        report.meta.update({"evidence_valid": ok, "validation_problems": problems, "partial": self.partial,
-                            "tool_trace": self.trace, "call_budget": self.max_calls, "calls_used": len(self._seen),
-                            "anomalies": anomaly_rows, "comparisons": comparisons, "segments": segments,
-                            "agent_insights": insights, "recommendations": actions,
-                            "evidence": [asdict(x) for x in self.log.with_prefix("")]})
-        return report
+        if mode not in {"as_of", "retrospective"}:
+            raise ValueError("mode doit être 'as_of' ou 'retrospective'")
+        state = self.graph.invoke({"month": month, "mode": mode, "include_agents": include_agents,
+                                   "retry_counter": 0, "partial": False, "generation_mode": "deterministic",
+                                   "validation_errors": [], "fallback_used": False})
+        return state["final_report"]
+
+    def generation_context(self, state: dict[str, Any]) -> dict[str, Any]:
+        """Compact evidence-grounded payload; never sends raw Olist tables."""
+        insights = {name: state.get(f"{name}_results") for name in ("bo1", "bo2", "bo3") if state.get(f"{name}_results")}
+        return to_native({
+            "period": state["month"], "temporal_mode": state["mode"],
+            "historical_dataset": "Olist 2016-2018; replay historique, pas temps réel",
+            "kpis": (state.get("kpi_values") or {}).get("kpis", []),
+            "comparisons": (state.get("historical_comparisons") or {}).get("comparisons", []),
+            "anomalies": state.get("detected_anomalies", []),
+            "segments": state.get("segment_analysis", {}), "collaborators": insights,
+            "priority_scores": state.get("priority_scores", []),
+            "limitations": ["corrélation non causale", "données historiques", "rapport potentiellement partiel" if self.partial else "collaborateurs disponibles"],
+            "evidence_catalog": [{"id": ev.id, "kind": ev.kind, "source": ev.source}
+                                 for ev in self.log.with_prefix("")],
+        })
 
     def _report(self, month: str, mode: str, kpis: dict[str, Any] | None, comparisons: dict[str, Any] | None,
                 anomalies: list[dict[str, Any]], segments: dict[str, Any], insights: dict[str, Any],

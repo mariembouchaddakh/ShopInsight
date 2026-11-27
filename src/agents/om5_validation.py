@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import re
-from typing import Iterable
+from typing import Any, Iterable
 
 from .core import EvidenceLog, Line, Report, verify_narrative
 
@@ -46,5 +46,68 @@ def validate_report(report: Report, log: EvidenceLog) -> tuple[bool, list[str]]:
             problems.append(f"identifiant KPI incohérent : {ev.id}")
         if p.get("denominator") == 0 and p.get("value") is not None:
             problems.append(f"division par zéro dans {ev.id}")
+    return not problems, problems
+
+
+def validate_generated_report(payload: dict[str, Any], log: EvidenceLog, month: str, mode: str,
+                              kpis: dict[str, Any], priorities: list[dict[str, Any]],
+                              available_agents: set[str]) -> tuple[bool, list[str]]:
+    """Reject unsupported Gemini claims before generated text reaches users."""
+    problems: list[str] = []
+    if payload.get("period") != month:
+        problems.append(f"période incohérente: {payload.get('period')} != {month}")
+    if payload.get("temporal_mode") != mode:
+        problems.append(f"mode temporel incohérent: {payload.get('temporal_mode')} != {mode}")
+    known = {ev.id for ev in log.with_prefix("")}
+    allowed_scores = {x["metric_id"]: x["priority_score"] for x in priorities}
+    claims: list[dict[str, Any]] = []
+    sections = payload.get("sections", {})
+    for value in sections.values() if isinstance(sections, dict) else []:
+        if isinstance(value, list):
+            claims.extend(x for x in value if isinstance(x, dict))
+    claims.append({"text": payload.get("executive_summary", ""),
+                   "evidence_ids": payload.get("executive_summary_evidence_ids", [])})
+    unsupported_causal = re.compile(r"\b(cause|causé|provoque|entraîne|responsable de|prouve que)\b", re.I)
+    has_number = re.compile(r"(?<![\w:])[-+]?\d+(?:[.,]\d+)?\s*%?")
+    for idx, item in enumerate(claims):
+        text = str(item.get("text", ""))
+        refs = item.get("evidence_ids", [])
+        if text and not refs:
+            problems.append(f"affirmation générée sans preuve ({idx})")
+        for ref in refs:
+            if ref not in known:
+                problems.append(f"preuve générée inconnue: {ref}")
+        if unsupported_causal.search(text) and not re.search(r"ne (permet|prouve)|hypothèse|association", text, re.I):
+            problems.append(f"assertion causale non étayée: {text[:80]}")
+        if refs and has_number.search(text):
+            cited = EvidenceLog()
+            for ref in refs:
+                ev = log.get(ref)
+                if ev:
+                    cited.add(ev.id, ev.kind, ev.source, ev.payload)
+            cleaned = text.replace(month, "")
+            cleaned = cleaned.replace(month[:4], "")
+            for evidence_id in known:
+                cleaned = cleaned.replace(evidence_id, "")
+            cleaned = re.sub(r"(?:om5:)?(?:kpi|anomaly|comparison|segments|sellers):[\w:.-]+", "", cleaned)
+            cleaned = re.sub(r"(?<=\d)[\s\u00a0\u202f](?=\d{3}(?:\D|$))", "", cleaned)
+            ok, errors = verify_narrative(cleaned, cited)
+            if not ok:
+                problems.extend(f"incohérence numérique: {x}" for x in errors)
+    for rec in payload.get("recommendations", []):
+        refs = rec.get("evidence_ids", [])
+        if not refs or any(x not in known for x in refs):
+            problems.append(f"référence invalide dans recommandation: {rec.get('title', '?')}")
+        metric = rec.get("related_anomaly")
+        if not allowed_scores and metric == "none" and rec.get("priority_score") == 0:
+            pass
+        elif metric not in allowed_scores:
+            problems.append(f"anomalie inconnue dans recommandation: {metric}")
+        elif rec.get("priority_score") != allowed_scores[metric]:
+            problems.append(f"score modifié par le LLM pour {metric}")
+    text_blob = str(payload).lower()
+    for name in {"bo1", "bo2", "bo3"} - available_agents:
+        if re.search(rf"\b{name}\b.*(?:a conclu|confirme|montre|indique)", text_blob):
+            problems.append(f"résultat inventé pour collaborateur indisponible: {name}")
     return not problems, problems
 

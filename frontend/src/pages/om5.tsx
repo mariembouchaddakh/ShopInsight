@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Activity, CheckCircle2, Download, Network, ShieldAlert } from "lucide-react"
+import { Activity, Bot, CheckCircle2, Download, Network, ShieldAlert, Sparkles } from "lucide-react"
 import { useSearchParams } from "react-router-dom"
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { PageHeader } from "@/components/app/shell"
@@ -34,6 +34,7 @@ export function Om5Page() {
   const meta = report.data?.report.meta
   const selected = kpis.data?.kpis.filter((k) => tracked.includes(k.metric_id)) ?? []
   const anomalyRows = meta?.anomalies.filter((x) => x.anomaly) ?? []
+  const contextual = meta?.contextual_recommendations ?? []
 
   return (
     <div className="space-y-6">
@@ -42,6 +43,10 @@ export function Om5Page() {
 
       {report.isLoading || kpis.isLoading ? <LoadingBlock rows={6} /> : (
         <>
+          <Card className={meta?.generation_mode === "gemini" ? "border-amber-300 bg-amber-50/30" : ""}>
+            <CardHeader><div className="flex flex-wrap items-center justify-between gap-2"><CardTitle className="flex items-center gap-2"><Sparkles className="size-4" /> Synthèse exécutive</CardTitle><div className="flex gap-2"><Badge variant={meta?.generation_mode === "gemini" ? "default" : "outline"}>{meta?.generation_mode === "gemini" ? `Gemini · ${meta.llm_model}` : "Rapport déterministe"}</Badge><Badge variant={meta?.validation_status === "valid" ? "default" : "outline"}>Validation: {meta?.validation_status ?? "—"}</Badge>{meta?.partial && <Badge variant="destructive">Partiel</Badge>}</div></div></CardHeader>
+            <CardContent><p className="max-w-5xl leading-7">{report.data?.report.narrative}</p>{meta?.fallback_used && <p className="mt-3 text-xs text-muted-foreground">Repli activé: {meta.fallback_reason}</p>}<p className="mt-3 text-xs text-muted-foreground">Données Olist historiques 2016–2018 · ceci n'est pas un suivi temps réel.</p></CardContent>
+          </Card>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {selected.map((k) => <Card key={k.metric_id} size="sm" className="lift"><CardHeader><CardDescription>{k.label}</CardDescription><CardTitle className="font-display text-2xl">{value(k)}</CardTitle></CardHeader><CardContent className="text-xs text-muted-foreground">n={k.denominator ?? "—"} · {k.quality_status}</CardContent></Card>)}
           </div>
@@ -60,11 +65,11 @@ export function Om5Page() {
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Card><CardHeader><CardTitle>Recommandations prioritaires</CardTitle><CardDescription>Score heuristique documenté, non appris.</CardDescription></CardHeader><CardContent className="space-y-3">
-              {meta?.recommendations.length ? meta.recommendations.map((r) => <div key={r.metric_id} className="rounded-xl bg-muted/50 p-3"><div className="flex justify-between gap-3"><strong>{r.metric_id}</strong><Badge>{r.priority_score}/100</Badge></div><p className="mt-1 text-sm">{r.recommendation}</p><p className="mt-1 text-xs text-muted-foreground">{r.justification}</p></div>) : <EmptyBlock>Surveillance standard recommandée.</EmptyBlock>}
+              {contextual.length ? contextual.map((r, i) => <div key={`${r.related_anomaly}-${i}`} className="rounded-xl bg-muted/50 p-3"><div className="flex justify-between gap-3"><strong>{r.title}</strong><Badge>{r.priority_score}/100</Badge></div><p className="mt-1 text-sm">{r.description}</p><p className="mt-1 text-xs text-muted-foreground">{r.business_justification} · {r.responsible_team} · {r.timeframe}</p><p className="mt-1 truncate text-[11px] text-muted-foreground">{r.evidence_ids.join(" · ")}</p></div>) : meta?.recommendations.length ? meta.recommendations.map((r) => <div key={r.metric_id} className="rounded-xl bg-muted/50 p-3"><div className="flex justify-between gap-3"><strong>{r.metric_id}</strong><Badge>{r.priority_score}/100</Badge></div><p className="mt-1 text-sm">{r.recommendation}</p><p className="mt-1 text-xs text-muted-foreground">{r.justification}</p></div>) : <EmptyBlock>Surveillance standard recommandée.</EmptyBlock>}
             </CardContent></Card>
             <Card><CardHeader><CardTitle className="flex items-center gap-2"><Network className="size-4" /> Workflow agentique</CardTitle><CardDescription>{meta?.calls_used ?? 0}/{meta?.call_budget ?? 0} appels · preuves {meta?.evidence_valid ? "validées" : "à vérifier"}.</CardDescription></CardHeader><CardContent className="space-y-2">
               {meta?.tool_trace.map((t, i) => <div key={`${t.tool}-${i}`} className="flex items-center gap-3 rounded-lg border px-3 py-2 text-sm"><span className={`size-2 rounded-full ${t.status === "ok" ? "bg-emerald-600" : t.status === "error" ? "bg-destructive" : "bg-muted-foreground"}`} /><span className="min-w-0 flex-1 truncate">{t.tool}</span><span className="text-xs text-muted-foreground">{t.status} {t.duration_ms != null ? `· ${t.duration_ms} ms` : ""}</span></div>)}
-              <p className="pt-2 text-xs text-muted-foreground">Agents consultés dynamiquement : {Object.keys(meta?.agent_insights ?? {}).map((x) => x.toUpperCase()).join(", ") || "aucun — aucun appel inutile"}.</p>
+              <p className="pt-2 flex items-center gap-2 text-xs text-muted-foreground"><Bot className="size-3" /> Agents consultés dynamiquement : {Object.keys(meta?.agent_insights ?? {}).map((x) => x.toUpperCase()).join(", ") || "aucun — aucun appel inutile"}.</p>
             </CardContent></Card>
           </div>
 

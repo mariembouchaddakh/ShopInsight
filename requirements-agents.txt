@@ -4,4 +4,5 @@ numpy
 scipy
 scikit-learn>=1.4
 joblib
+langgraph>=1.0,<2
 # Optionnel : un serveur LLM compatible OpenAI (ex. vLLM) — aucune bibliothèque cliente requise

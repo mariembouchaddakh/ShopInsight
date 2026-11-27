@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -20,13 +21,15 @@ from backend.app.serialization import evidence_snapshot  # noqa: E402
 
 
 def build_agent(project_dir: Path, with_agents: bool):
-    if not with_agents:
-        return ReportingAgent(project_dir)
-    from backend.app.config import Settings
+    from backend.app.config import load_settings
+    from backend.app.llm.om5_generator import GeminiOM5Generator
     from backend.app.registry import AgentRegistry
-    settings = Settings(project_dir=project_dir, warmup=False)
+    settings = replace(load_settings(), project_dir=project_dir, warmup=False)
+    generator = GeminiOM5Generator(settings.gemini_api_key, settings.gemini_model) if settings.om5_llm_enabled and settings.gemini_api_key else None
+    if not with_agents:
+        return ReportingAgent(project_dir, report_generator=generator)
     registry = AgentRegistry(settings)
-    agent = ReportingAgent(project_dir, collaborator=registry.call_public)
+    agent = ReportingAgent(project_dir, collaborator=registry.call_public, report_generator=generator)
     return agent
 
 

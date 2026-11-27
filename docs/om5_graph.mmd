@@ -1,0 +1,38 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+  __start__([__start__]):::first
+  kpi(kpi)
+  comparisons(comparisons)
+  anomaly_detection(anomaly_detection)
+  segment_analysis(segment_analysis)
+  planner(planner)
+  agent_execution(agent_execution)
+  consolidation(consolidation)
+  prioritization(prioritization)
+  gemini_generation(gemini_generation)
+  validation(validation)
+  deterministic_fallback(deterministic_fallback)
+  final_report(final_report)
+  __end__([__end__]):::last
+  __start__ --> kpi;
+  kpi --> comparisons;
+  comparisons --> anomaly_detection;
+  anomaly_detection -. no anomaly .-> consolidation;
+  anomaly_detection -. segments .-> segment_analysis;
+  segment_analysis --> planner;
+  planner --> agent_execution;
+  agent_execution --> consolidation;
+  consolidation --> prioritization;
+  prioritization --> gemini_generation;
+  gemini_generation --> validation;
+  validation -. final .-> final_report;
+  validation -. retry .-> gemini_generation;
+  validation -. fallback .-> deterministic_fallback;
+  deterministic_fallback --> final_report;
+  final_report --> __end__;
+  classDef first fill-opacity:0
+  classDef last fill:#bfb6fc

@@ -22,6 +22,7 @@ from agents.bo2_agent import VoiceOfCustomerAgent  # noqa: E402
 from agents.bo3_agent import SellerAuditAgent  # noqa: E402
 from agents.core import EvidenceLog, Report  # noqa: E402
 from agents.om5_agent import ReportingAgent  # noqa: E402
+from .llm.om5_generator import GeminiOM5Generator
 
 FACTORIES: dict[str, Callable[[Path], Any]] = {
     "bo3": lambda p: SellerAuditAgent(p, translate_quotes=True),
@@ -51,7 +52,13 @@ class AgentRegistry:
             self.status[name] = {"state": "loading"}
             t0 = time.time()
             try:
-                agent = FACTORIES[name](self.settings.project_dir)
+                if name == "om5":
+                    generator = None
+                    if self.settings.om5_llm_enabled and self.settings.gemini_api_key:
+                        generator = GeminiOM5Generator(self.settings.gemini_api_key, self.settings.gemini_model)
+                    agent = ReportingAgent(self.settings.project_dir, report_generator=generator)
+                else:
+                    agent = FACTORIES[name](self.settings.project_dir)
                 if name == "om5":
                     agent.collaborator = self.call_public
                 if name == "bo2":

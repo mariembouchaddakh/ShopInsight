@@ -1,5 +1,15 @@
 # Audit technique OM5
 
+## Upgrade LangGraph et Gemini
+
+L'orchestration manuelle a été remplacée par un `StateGraph` compilé, sans modification des détecteurs MAD, tests de proportions, correction BH, Wilson, règles temporelles ou formule de priorité. La validation générative rejette preuves inconnues, nombres non supportés, période ou mode incohérents, scores altérés, causalités non étayées et conclusions attribuées à un collaborateur absent.
+
+Les tests automatisés emploient un faux générateur sans coût. Ils couvrent les chemins sans, avec une ou plusieurs anomalies, les activations BO1/BO2/BO3, les échecs, le budget, le JSON structuré, les références et scores invalides, la correction unique, le timeout/quota, le repli, l'API et le PDF.
+
+Limite: Olist ne fournit ni vérité terrain d'anomalie métier ni mesure d'impact causal. L'évaluation mesure cohérence, routage, grounding et robustesse, pas un gain commercial.
+
+Résultats reproductibles et essai réel Gemini: [`quality/om5_langgraph_evaluation.md`](../quality/om5_langgraph_evaluation.md). L'essai réel n'a pas produit de texte accepté par le garde-fou; le repli déterministe a réussi. Ce résultat est déclaré sans fabrication.
+
 ## Portée de l'audit
 
 Base inspectée : `origin/bo3-seller-platform` au commit `382fd44`, après comparaison avec `origin/main` (`be0ba36`). La branche BO3 est la bonne base car elle contient FastAPI, React, les exports ReportLab, le registre d'agents, la couche LLM facultative et l'agent vendeur. Les sources officielles consultées sont le README, le notebook de préparation, le classeur Phase 2, le dictionnaire des données et le dossier technique PDF.

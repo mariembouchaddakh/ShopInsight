@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-27",
+  "dataset": "Authentic Olist prepared locally",
+  "architecture": {
+    "previous": "manual sequential orchestration in ReportingAgent.run",
+    "upgraded": "compiled LangGraph StateGraph with typed state and conditional edges",
+    "deterministic_analytics_changed": false
+  },
+  "tests": {
+    "python": {"passed": 93, "failed": 0, "warnings": 18, "full_suite_duration_seconds": 299.78, "note": "92-test full run plus the subsequently added numerical-consistency test run separately"},
+    "frontend_build": "passed",
+    "frontend_lint_errors": 0,
+    "npm_runtime_vulnerabilities": 0
+  },
+  "authentic_demo_reports": {
+    "2017-07_as_of": {"anomalies": 0, "analytical_calls": 3, "analytical_latency_ms": 5739.4, "evidence_valid": true, "pdf_pages": 3},
+    "2018-03_as_of": {"anomalies": 3, "analytical_calls": 8, "agents": ["bo1", "bo2", "bo3"], "analytical_latency_ms": 34092.3, "evidence_valid": true, "pdf_pages": 4}
+  },
+  "gemini_real_test": {
+    "executed": true,
+    "model": "gemini-2.5-flash",
+    "accepted_report": false,
+    "observed_outcomes": ["504 deadline exceeded", "truncated invalid JSON", "structured JSON rejected by evidence and numerical validation"],
+    "last_model_latency_ms": 8537.8,
+    "fallback_succeeded": true,
+    "note": "No unsupported generated claim was displayed. Mocked valid structured responses pass automated integration tests."
+  },
+  "comparison": {
+    "evidence_validity": "1.0 before and after for deterministic reports; generated content now has a separate strict gate",
+    "fallback_reliability": "automatic for missing key, timeout/quota/network/model/JSON/validation failures; covered by tests",
+    "workflow_behavior": "now explicit, inspectable and conditionally routed by LangGraph",
+    "latency": "LangGraph overhead is negligible relative to Olist analytics and collaborator calls; Gemini adds network latency only when enabled"
+  },
+  "limitations": [
+    "Olist has no business-anomaly ground truth or causal impact labels.",
+    "The controlled real Gemini outputs did not pass the strict evidence gate; deterministic fallback remained complete.",
+    "The exposed API key must be rotated before durable use."
+  ]
+}

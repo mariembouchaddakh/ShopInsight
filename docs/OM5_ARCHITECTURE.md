@@ -1,5 +1,15 @@
 # Architecture OM5
 
+> Mise à jour LangGraph: le graphe compilé réel est versionné dans [`om5_graph.mmd`](om5_graph.mmd).
+
+## Architecture exécutée
+
+`ReportingAgent.run(month, mode, include_agents)` initialise `OM5State`, puis invoque un `StateGraph` compilé. Les nœuds KPI, comparaisons et détection utilisent les fonctions historiques existantes. Le routeur saute segments et collaborateurs en l'absence d'anomalie. Le planificateur applique les règles BO1/BO2/BO3; les appels passent séquentiellement par `AgentRegistry.call_public`.
+
+Après consolidation, le score `100 × (0,45 × amplitude + 0,35 × confiance + 0,20 × volume)` est figé. `GeminiOM5Generator` reçoit un contexte JSON compact. Le validateur accepte la sortie, la renvoie une fois pour correction ou route vers le repli déterministe.
+
+Fichiers: `om5_state.py` (état), `om5_graph.py` (graphe), `om5_generator.py` (SDK et Pydantic), `om5_prompts.py` (grounding), `om5_validation.py` (contrôles métier), `om5_reports.py` (présentation PDF).
+
 ## Objectif
 
 OM5 transforme les agrégats Olist en un dispositif d'aide à la décision traçable : observer les KPI, détecter un écart inhabituel, choisir les investigations utiles, consolider les agents existants, valider les preuves et produire un rapport global.

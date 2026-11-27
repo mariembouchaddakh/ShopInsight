@@ -441,6 +441,7 @@ export interface Om5Recommendation {
   evidence_id: string
 }
 export interface Om5Trace {
+  kind?: "node" | "tool"
   tool: string
   status: "ok" | "error" | "skipped" | "deduplicated"
   duration_ms?: number
@@ -459,9 +460,41 @@ export interface Om5ReportResponse {
     segments: Record<string, unknown>
     calls_used: number
     call_budget: number
+    generation_mode: "gemini" | "deterministic"
+    llm_provider: string | null
+    llm_model: string | null
+    llm_latency_ms: number | null
+    validation_status: "valid" | "invalid" | "unavailable" | "not_run"
+    validation_errors: string[]
+    fallback_used: boolean
+    fallback_reason: string | null
+    graph_engine: "langgraph"
+    graph_retries: number
+    contextual_recommendations: Om5ContextualRecommendation[]
+    generated_content: Om5GeneratedContent | null
   } }
   markdown: string
   evidence: Evidence[]
+}
+
+export interface Om5ContextualRecommendation {
+  title: string
+  description: string
+  business_justification: string
+  related_anomaly: string
+  relevant_segment_or_seller?: string | null
+  priority_level: "haute" | "moyenne" | "basse"
+  priority_score: number
+  responsible_team: string
+  timeframe: string
+  expected_qualitative_benefit: string
+  evidence_ids: string[]
+}
+export interface Om5GeneratedContent {
+  executive_summary: string
+  executive_summary_evidence_ids: string[]
+  sections: Record<string, { text: string; evidence_ids: string[] }[]>
+  recommendations: Om5ContextualRecommendation[]
 }
 
 export class ApiError extends Error {

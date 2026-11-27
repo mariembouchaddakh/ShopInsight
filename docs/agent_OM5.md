@@ -1,5 +1,13 @@
 # Agent OM5 — Autonomous KPI Monitoring and Multi-Agent Reporting
 
+## Version LangGraph
+
+L'entrée publique reste `ReportingAgent.run(month, mode, include_agents)`. `OM5State` transporte période, mode, KPI, comparaisons, anomalies, segments, plan, résultats BO1–BO3, preuves, trace, priorités, rapport, erreurs, compteur de correction et statut partiel.
+
+Routage: BO1 pour `late_rate`, `late_handover_rate`, `delivery_duration_mean_days`; BO2 pour `late_rate`, `poor_review_rate`, `average_review_score`; BO3 pour `late_rate`, `poor_review_rate`, `late_handover_rate`.
+
+Gemini ne choisit ni outil ni agent. Il rédige à partir du contexte validé et ne peut modifier les tables KPI ni les scores. Une sortie acceptée porte `generation_mode=gemini` et `validation_status=valid`; sinon le rapport déterministe est finalisé avec la cause du repli.
+
 `ReportingAgent` est l'orchestrateur global ShopInsight. Ses calculs restent déterministes; il n'utilise pas de LLM pour calculer, détecter ou décider qu'une anomalie existe.
 
 ## Outils
