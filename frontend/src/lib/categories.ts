@@ -11,3 +11,8 @@ export function catLabel(slug: string | null | undefined): string {
   if (!slug) return "—"
   return LABELS[slug] ?? FALLBACK_LABELS[slug] ?? slug.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase())
 }
+
+/** Liste (slug, nom français) triée par nom, pour les menus déroulants. */
+export function categoryOptions(): [string, string][] {
+  return Object.entries(LABELS).sort((a, b) => a[1].localeCompare(b[1], "fr"))
+}

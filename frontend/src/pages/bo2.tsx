@@ -8,8 +8,8 @@ import { PageHeader } from "@/components/app/shell"
 import { ErrorBlock, LoadingBlock } from "@/components/app/states"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { api } from "@/lib/api"
+import { catLabel, categoryOptions } from "@/lib/categories"
 import { CHART, monthLabel, num, pct } from "@/lib/format"
 import { UF_NAMES, stateName } from "@/lib/geo"
 
@@ -45,7 +45,7 @@ export function Bo2Page() {
   const rep = useQuery({ queryKey: ["bo2", month, applied], queryFn: () => api.bo2Report({ month, ...applied }), enabled: !!month })
   const d = ov.data
   const filtered = !!(applied.state || applied.category)
-  const scope = [applied.state ? stateName(applied.state) : null, applied.category ?? null].filter(Boolean).join(" · ")
+  const scope = [applied.state ? stateName(applied.state) : null, applied.category ? catLabel(applied.category) : null].filter(Boolean).join(" · ")
 
   // aspects affichés dans l'évolution : les 4 plus critiqués ce mois-ci (hors satisfaction globale)
   const topAspects = d
@@ -78,7 +78,14 @@ export function Bo2Page() {
               </option>
             ))}
         </select>
-        <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Catégorie (ex. bed_bath_table)" className="w-64" aria-label="Catégorie" />
+        <select value={category} onChange={(e) => setCategory(e.target.value)} className="h-9 w-64 rounded-md border border-input bg-background px-2 text-sm" aria-label="Catégorie de produit">
+          <option value="">Toutes les catégories</option>
+          {categoryOptions().map(([slug, name]) => (
+            <option key={slug} value={slug}>
+              {name}
+            </option>
+          ))}
+        </select>
         <Button type="submit" variant="outline">
           Appliquer
         </Button>

@@ -3,6 +3,7 @@ import { Search, ShieldCheck, Target, TriangleAlert } from "lucide-react"
 import { useState } from "react"
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip as RTooltip, XAxis, YAxis } from "recharts"
 import { useDecisionMonth } from "@/components/app/month"
+import { Bo1DiagnosisSummary } from "@/components/app/bo1-diagnosis-summary"
 import { ReportView } from "@/components/app/report-view"
 import { PageHeader } from "@/components/app/shell"
 import { ErrorBlock, LoadingBlock } from "@/components/app/states"
@@ -203,7 +204,13 @@ export function Bo1Page() {
           <p className="text-xs text-muted-foreground">Astuce : cliquez sur une commande dans la vue d'ensemble.</p>
           {diag.isLoading && <LoadingBlock rows={8} />}
           {diag.isError && <ErrorBlock error={diag.error} />}
-          {diag.data && <ReportView report={diag.data.report} evidence={diag.data.evidence} />}
+          {diag.data && orderId && (
+            <>
+              <Bo1DiagnosisSummary evidence={diag.data.evidence} orderId={orderId} />
+              <h3 className="pt-2 text-base font-semibold">Rapport détaillé de l'agent</h3>
+              <ReportView report={diag.data.report} evidence={diag.data.evidence} showTitle={false} />
+            </>
+          )}
         </TabsContent>
 
         <TabsContent value="report" className="mt-5 space-y-4">
