@@ -1,8 +1,10 @@
 """Briques NLP de l'agent BO2 (DS2.1 sentiment par aspect, DS2.2 plaintes émergentes, DS4.2-like recherche d'avis).
 
-IMPORTANT — statut : c'est la BASELINE « mots-clés + note » annoncée dans le plan de modélisation (BO2). Aucun échantillon annoté n'existe
-encore ; les F1 par aspect ne peuvent donc pas être calculés. L'interface `AspectModel` permet de brancher le transformeur multilingue
-dès que les 500 avis annotés seront prêts, sans toucher à l'agent.
+IMPORTANT — statut : c'est la BASELINE « mots-clés + note » annoncée dans le plan de modélisation (BO2). Elle est évaluée sur
+500 avis stratifiés (100 par note) annotés à l'aveugle par un LLM selon le guide d'annotation (accord LLM–humain κ ≈ 0,63 sur
+40 avis, contre 0,46 entre deux annotatrices). F1 de détection provisoire : 0,67 en moyenne sur les 9 aspects (objectif 0,70),
+plus faible sur la qualité, les articles manquants et la conformité ; détail dans quality/bo2_aspect_f1.json. L'interface
+`AspectModel` permet de brancher un transformeur multilingue sans toucher à l'agent.
 """
 from __future__ import annotations
 

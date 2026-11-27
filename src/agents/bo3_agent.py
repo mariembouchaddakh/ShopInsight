@@ -1323,7 +1323,7 @@ class SellerAuditAgent:
         if prof.get("descriptive_segment"):
             rep.caveats.append("Le segment (volume, région) est descriptif : il n'a pas amélioré la prédiction du taux futur, la référence reste " + self.ref_name + ".")
         if voice.get("available"):
-            rep.caveats.append("Aspects des avis : baseline par mots-clés non validée ; extraits français = traduction automatique (l'original portugais fait foi).")
+            rep.caveats.append("Aspects des avis : baseline par mots-clés (F1 de détection provisoire 0,67) ; extraits français = traduction automatique (l'original portugais fait foi).")
         if multi["multi_seller_orders_12m"]:
             rep.caveats.append("Commandes multi-vendeurs : comptées à part, sans attribution du retard ni de l'avis.")
         tp = self.card.get("test_summary") or {}

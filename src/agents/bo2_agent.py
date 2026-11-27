@@ -359,7 +359,7 @@ class VoiceOfCustomerAgent:
         try:
             msg = self.llm.chat([
                 {"role": "system", "content": "Tu rédiges en français 3 phrases maximum à partir des seules preuves fournies. Aucun chiffre hors preuves. "
-                                              "Dis que l'analyse par aspect est une baseline non validée. Pas de cause affirmée."},
+                                              "Dis que l'analyse par aspect est une baseline par mots-clés, à F1 provisoire. Pas de cause affirmée."},
                 {"role": "user", "content": "Résume la voix du client.\nPREUVES :\n" + payload}])
             text = (msg.get("content") or "").strip()
         except Exception:
