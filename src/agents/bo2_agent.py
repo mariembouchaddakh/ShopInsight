@@ -102,6 +102,8 @@ class VoiceOfCustomerAgent:
 
     # ------------------------------------------------------------------ outils
     def kpi_context(self, month: str) -> dict:
+      #Récupère les KPI mensuels ,Filtre les données selon le mois,Retourne le nombre de commandes,
+      #les retards, les mauvaises notes et la note moyenne,Enregistre les résultats dans EvidenceLog.
         m = self.store.monthly
         r = m[m["purchase_month"] == month]
         if r.empty:
@@ -130,8 +132,9 @@ class VoiceOfCustomerAgent:
         self.ctx.update({"month": month, "state": state, "category": category})
         self.log.add(f"kpi:reviews:{self._tag(month, state, category)}", FACT, "silver/reviews_text(.fr).jsonl.gz", payload)
         return to_native(payload)
-
+#----------------------------------
     def aspect_profile(self, month: str | None = None, state: str | None = None, category: str | None = None) -> dict:
+      #Pour chaque aspect, il calcule les mentions, les critiques, les éloges et certaines statistiques liées aux retards.
         d = self._subset(month, state, category)
         n = len(d)
         rows = []
@@ -157,7 +160,7 @@ class VoiceOfCustomerAgent:
         self.ctx["month"] = month
         self.log.add(f"mdl:emerging:{month}", ESTIMATE, "bo2_nlp.emerging_aspects / emerging_terms", res)
         return to_native(res)
-
+#---------------------------------------
     def search_reviews(self, query: str, month: str | None = None, state: str | None = None, category: str | None = None,
                        sentiment: str | None = None, aspect: str | None = None, k: int = 4) -> dict:
         idx = self.index
