@@ -1,8 +1,10 @@
 """Briques NLP de l'agent BO2 (DS2.1 sentiment par aspect, DS2.2 plaintes émergentes, DS4.2-like recherche d'avis).
 
-IMPORTANT — statut : c'est la BASELINE « mots-clés + note » annoncée dans le plan de modélisation (BO2). Aucun échantillon annoté n'existe
-encore ; les F1 par aspect ne peuvent donc pas être calculés. L'interface `AspectModel` permet de brancher le transformeur multilingue
-dès que les 500 avis annotés seront prêts, sans toucher à l'agent.
+IMPORTANT — statut : c'est la BASELINE « mots-clés + note » annoncée dans le plan de modélisation (BO2). Elle est évaluée sur
+500 avis stratifiés (100 par note) annotés à l'aveugle par un LLM selon le guide d'annotation (accord LLM–humain κ ≈ 0,63 sur
+40 avis, contre 0,46 entre deux annotatrices). F1 de détection provisoire : 0,67 en moyenne sur les 9 aspects (objectif 0,70),
+plus faible sur la qualité, les articles manquants et la conformité ; détail dans quality/bo2_aspect_f1.json. L'interface
+`AspectModel` permet de brancher un transformeur multilingue sans toucher à l'agent.
 """
 from __future__ import annotations
 
@@ -46,6 +48,7 @@ STOP = set("""a o as os um uma uns umas de do da dos das em no na nos nas por pa
 foi ser sao era eu me meu minha meus minhas voce vc ele ela eles elas isso isto este esta esse essa aquele aquela como quando onde pois entao tambem
 tem ter tinha comprei recebi produto produtos pedido compra loja lojas super mto q pra pro nao sim ate la aqui ainda s""".split())
 
+#avis ->phrase ->norm->detction aspects->polarite->rslt
 
 def _sentences(text: str) -> list[str]:
     parts = re.split(r"[.!?;\n]+|\bmas\b|\bporem\b|\bcontudo\b|\bentretanto\b", norm_text_keep_sep(text))
@@ -80,7 +83,7 @@ def score_polarity(score: int) -> int:
 class AspectModel(Protocol):
     def predict(self, text: str, score: int) -> dict[str, int]: ...
 
-
+#Elle identifie les aspects à partir de mots-clés portugais et détermine leur polarité.
 @dataclass
 class LexiconAspectModel:
     """Baseline DS2.1 : un aspect est détecté par mot-clé ; sa polarité est celle de la phrase (lexique + négation),
@@ -130,7 +133,7 @@ def baseline_months(an: pd.DataFrame, month: str, n_base: int = 12, min_reviews:
     ok = [m for m in sorted(counts.index) if counts[m] >= min_reviews and m < month]
     return ok[-n_base:]
 
-
+#Son principe est de comparer le mois étudié aux douze mois précédents.
 def emerging_aspects(an: pd.DataFrame, month: str, n_base: int = 12, min_base_months: int = 3, min_count: int = 15, q_max: float = 0.05,
                      min_abs_gain: float = 0.02, min_lift: float = 1.3, min_reviews: int = 150) -> dict:
     """Part des avis écrits qui critiquent un aspect, mois cible vs historique robuste.

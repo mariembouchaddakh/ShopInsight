@@ -45,12 +45,14 @@ class LLMResult:
     attempts: int = 1
     model_used: str = ""                                  # modèle qui a réellement servi la réponse (repli compris)
     candidates_tried: list = field(default_factory=list)  # [{"model", "error" | "status"}] dans l'ordre d'essai
+    tool_calls: list = field(default_factory=list)
 
 
 class LLMProvider(Protocol):
     model: str
 
-    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True) -> LLMResult: ...
+    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True,
+                 tools: list[dict] | None = None, tool_choice: str | dict | None = None) -> LLMResult: ...
 
 
 _CATALOG: dict = {"at": 0.0, "models": {}}
@@ -109,14 +111,18 @@ class OpenRouterFreeProvider:
         with self.call_log.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
-    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True) -> LLMResult:
+    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True,
+                 tools: list[dict] | None = None, tool_choice: str | dict | None = None) -> LLMResult:
         if not self._key:
             raise LLMError("no_key", "OPENROUTER_API_KEY absente : couche IA désactivée (l'audit déterministe reste disponible).")
         body = {"model": self.model, "messages": messages, "max_tokens": max_tokens, "temperature": temperature,
                 "provider": {"allow_fallbacks": False},
                 # raisonnement interne désactivé : sinon il consomme tout le budget de jetons (contenu vide, mesuré sur Nemotron)
                 "reasoning": {"enabled": False}}
-        if json_mode:
+        if tools:
+            body["tools"] = tools
+            body["tool_choice"] = tool_choice or "auto"
+        if json_mode and not tools:
             body["response_format"] = {"type": "json_object"}
         h = hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:32]
         cache_file = self.cache_dir / f"{h}.json"
@@ -163,12 +169,14 @@ class OpenRouterFreeProvider:
                 raise LLMError("substituted", f"modèle renvoyé {returned} ≠ demandé {self.model} : réponse rejetée.")
             if cost != 0.0:
                 raise LLMError("not_zero_cost", f"coût déclaré {cost} ≠ 0 : réponse rejetée.")
-            content = ((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
-            if not content.strip():
+            message = ((data.get("choices") or [{}])[0].get("message") or {})
+            content = message.get("content") or ""
+            tool_calls = message.get("tool_calls") or []
+            if not content.strip() and not tool_calls:
                 raise LLMError("bad_response", "réponse vide du modèle.")
             res = LLMResult(content=content, model_requested=self.model, model_returned=returned or self.model, latency_s=round(time.time() - t0, 2),
                             usage={k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens")}, cost=cost, attempts=attempts,
-                            model_used=returned or self.model)
+                            model_used=returned or self.model, tool_calls=tool_calls)
             self.cache_dir.mkdir(parents=True, exist_ok=True)
             cache_file.write_text(json.dumps({k: v for k, v in asdict(res).items() if k not in ("cached", "candidates_tried")}, ensure_ascii=False),
                                   encoding="utf-8")
@@ -209,11 +217,13 @@ class FailoverFreeProvider:
     def _record(self, entry: dict) -> None:
         self._providers[0]._record(entry)
 
-    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True) -> LLMResult:
+    def complete(self, messages: list[dict], *, max_tokens: int = 3000, temperature: float = 0.0, json_mode: bool = True,
+                 tools: list[dict] | None = None, tool_choice: str | dict | None = None) -> LLMResult:
         tried: list[dict] = []
         for p in self._providers:
             try:
-                res = p.complete(messages, max_tokens=max_tokens, temperature=temperature, json_mode=json_mode)
+                res = p.complete(messages, max_tokens=max_tokens, temperature=temperature, json_mode=json_mode,
+                                 tools=tools, tool_choice=tool_choice)
             except LLMError as e:
                 tried.append({"model": p.model, "error": e.kind})
                 if e.kind not in ROTATE_ON:  # no_key, quota_exhausted : inutile d'essayer un autre modèle

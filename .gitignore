@@ -8,6 +8,7 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 venv/
+.runtime/
 # Secrets locaux (clés d'API)
 .env
 .env.*
@@ -15,3 +16,7 @@ venv/
 # Système
 .DS_Store
 Thumbs.db
+# Annotation BO2 : fichiers d'avis et retours des annotateurs (données)
+annotation_BO2/coordination/
+annotation_BO2/fichiers_annotateurs/
+annotation_BO2/retours/*.csv

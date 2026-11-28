@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Activity, Bell, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
+import { Activity, Bell, Bot, Gauge, Map, MessageSquareText, PackageSearch, PhoneCall, Store } from "lucide-react"
 import type { ReactNode } from "react"
 import { NavLink, Outlet, useLocation } from "react-router-dom"
 import { AssistantWidget } from "@/components/assistant/assistant-widget"
@@ -22,15 +22,19 @@ const NAV = [
     ],
   },
   { group: "Commandes & livraisons", items: [{ to: "/bo1", label: "Commandes à risque", icon: PackageSearch }] },
-  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }] },
+  { group: "Clients", items: [{ to: "/bo2", label: "Voix du client", icon: MessageSquareText }, { to: "/bo4", label: "Assistant client", icon: Bot }] },
 ]
 
 function ApiStatus() {
+  const location = useLocation()
   const h = useQuery({ queryKey: ["health"], queryFn: api.health, refetchInterval: (q) => (q.state.data && Object.values(q.state.data.agents).every((a) => a.state === "ready") ? 60_000 : 3_000) })
   const agents = h.data?.agents ?? {}
-  const loading = Object.values(agents).some((a) => a.state === "loading" || a.state === "not_loaded")
-  const errored = h.isError || Object.values(agents).some((a) => a.state === "error")
-  const label = h.isError ? "API injoignable" : errored ? "Agent en erreur" : loading ? "Chargement…" : "En ligne"
+  const current = location.pathname.startsWith("/om5") ? "om5" : location.pathname.startsWith("/bo4") ? "bo4" : location.pathname.startsWith("/bo2") ? "bo2" : location.pathname.startsWith("/bo1") ? "bo1" : "bo3"
+  const state = agents[current]?.state
+  const loading = state === "loading" || state === "not_loaded" || !state
+  const errored = h.isError || state === "error"
+  const otherErrors = Object.entries(agents).filter(([name, value]) => name !== current && value.state === "error").map(([name]) => name.toUpperCase())
+  const label = h.isError ? "API injoignable" : errored ? `${current.toUpperCase()} indisponible` : loading ? `${current.toUpperCase()} en chargement…` : otherErrors.length ? `${current.toUpperCase()} en ligne · ${otherErrors.join(", ")} indisponible` : `${current.toUpperCase()} en ligne`
   return (
     <div className="flex items-center gap-2 rounded-full border bg-card/70 px-2.5 py-1 text-xs text-muted-foreground" title={Object.entries(agents).map(([k, v]) => `${k}: ${v.state}`).join(" · ")}>
       <span className="relative flex size-2">
@@ -95,7 +99,7 @@ export function AppShell() {
           </div>
           <div className="hidden md:block" />
           <div className="flex items-center gap-3">
-            <MonthPicker />
+            {!loc.pathname.startsWith("/bo4") && <MonthPicker />}
             <ApiStatus />
           </div>
         </header>
@@ -103,7 +107,7 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
-      <AssistantWidget />
+      {!loc.pathname.startsWith("/bo4") && <AssistantWidget />}
     </div>
   )
 }

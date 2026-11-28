@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from agents.bo1_agent import PreventiveDiagnosisAgent  # noqa: E402
 from agents.bo2_agent import VoiceOfCustomerAgent  # noqa: E402
 from agents.bo3_agent import SellerAuditAgent  # noqa: E402
+from agents.bo4_agent import CustomerAssistantAgent  # noqa: E402
 from agents.core import EvidenceLog, Report  # noqa: E402
 from agents.om5_agent import ReportingAgent  # noqa: E402
 from .llm.om5_generator import create_generator
@@ -28,9 +29,10 @@ FACTORIES: dict[str, Callable[[Path], Any]] = {
     "bo3": lambda p: SellerAuditAgent(p, translate_quotes=True),
     "bo1": lambda p: PreventiveDiagnosisAgent(p),
     "bo2": lambda p: VoiceOfCustomerAgent(p),
+    "bo4": lambda p: CustomerAssistantAgent(p),
     "om5": lambda p: ReportingAgent(p),
 }
-WARMUP_ORDER = ("bo3", "bo1", "bo2", "om5")
+WARMUP_ORDER = ("bo3", "bo1", "bo2", "bo4", "om5")
 
 
 class AgentUnavailable(RuntimeError):

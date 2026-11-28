@@ -12,6 +12,7 @@ const MarketPage = lazy(() => import("@/pages/bo3-market").then((m) => ({ defaul
 const AlertsPage = lazy(() => import("@/pages/bo3-alerts").then((m) => ({ default: m.AlertsPage })))
 const Bo1Page = lazy(() => import("@/pages/bo1").then((m) => ({ default: m.Bo1Page })))
 const Bo2Page = lazy(() => import("@/pages/bo2").then((m) => ({ default: m.Bo2Page })))
+const Bo4Page = lazy(() => import("@/pages/bo4").then((m) => ({ default: m.Bo4Page })))
 const Om5Page = lazy(() => import("@/pages/om5").then((m) => ({ default: m.Om5Page })))
 
 const page = (el: React.ReactNode) => <Suspense fallback={<LoadingBlock rows={6} />}>{el}</Suspense>
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="bo3/calls" element={page(<CallsPage />)} />
         <Route path="bo1" element={page(<Bo1Page />)} />
         <Route path="bo2" element={page(<Bo2Page />)} />
+        <Route path="bo4" element={page(<Bo4Page />)} />
         <Route path="om5" element={page(<Om5Page />)} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

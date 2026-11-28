@@ -34,14 +34,14 @@ class EvidenceOut(BaseModel):
 
 
 class AgentReportResponse(BaseModel):
-    agent: Literal["bo1", "bo2", "bo3"]
+    agent: Literal["bo1", "bo2", "bo3", "bo4"]
     report: ReportOut
     markdown: str
     evidence: list[EvidenceOut]
 
 
 class ToolResponse(BaseModel):
-    agent: Literal["bo1", "bo2", "bo3"]
+    agent: Literal["bo1", "bo2", "bo3", "bo4"]
     tool: str
     result: Any
     evidence: list[EvidenceOut]
@@ -49,6 +49,29 @@ class ToolResponse(BaseModel):
 
 class AskRequest(BaseModel):
     question: str = Field(min_length=3, max_length=500)
+
+
+class BO4AskRequest(AskRequest):
+    order_id: str = Field(min_length=8, max_length=64)
+    as_of: str | None = Field(None, description="Historical simulation timestamp (ISO-8601)")
+    model: Literal["a", "b"] = "a"
+    history: list["ChatTurnOut"] = Field(default_factory=list, max_length=12)
+
+
+class ChatTurnOut(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=4000)
+
+
+class BO4ChatResponse(BaseModel):
+    agent: Literal["bo4"]
+    answer: str
+    answer_source: Literal["llm_verified", "deterministic_fallback"]
+    language: Literal["fr", "pt", "en"]
+    report: ReportOut
+    markdown: str
+    evidence: list[EvidenceOut]
+    debug: dict[str, Any]
 
 
 class AgentStatus(BaseModel):

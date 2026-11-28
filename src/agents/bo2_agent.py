@@ -102,6 +102,8 @@ class VoiceOfCustomerAgent:
 
     # ------------------------------------------------------------------ outils
     def kpi_context(self, month: str) -> dict:
+      #Récupère les KPI mensuels ,Filtre les données selon le mois,Retourne le nombre de commandes,
+      #les retards, les mauvaises notes et la note moyenne,Enregistre les résultats dans EvidenceLog.
         m = self.store.monthly
         r = m[m["purchase_month"] == month]
         if r.empty:
@@ -130,8 +132,9 @@ class VoiceOfCustomerAgent:
         self.ctx.update({"month": month, "state": state, "category": category})
         self.log.add(f"kpi:reviews:{self._tag(month, state, category)}", FACT, "silver/reviews_text(.fr).jsonl.gz", payload)
         return to_native(payload)
-
+#----------------------------------
     def aspect_profile(self, month: str | None = None, state: str | None = None, category: str | None = None) -> dict:
+      #Pour chaque aspect, il calcule les mentions, les critiques, les éloges et certaines statistiques liées aux retards.
         d = self._subset(month, state, category)
         n = len(d)
         rows = []
@@ -144,7 +147,7 @@ class VoiceOfCustomerAgent:
                          "late_share_among_negative": float((neg_late["is_late"] == 1).mean()) if len(neg_late) >= 10 else None,
                          "n_negative_with_delivery_status": int(len(neg_late))})
         payload = {"month": month, "state": state, "category": category, "n_reviews": int(n), "aspects": rows,
-                   "method": "baseline mots-clés (portugais) + polarité de phrase / note ; NON validée (pas d'échantillon annoté)"}
+                   "method": "baseline mots-clés (portugais) + polarité de phrase / note ; F1 de détection provisoire 0,67 en moyenne (500 avis annotés, quality/bo2_aspect_f1.json)"}
         self.ctx.update({"month": month, "state": state, "category": category})
         self.log.add(f"mdl:aspects:{self._tag(month, state, category)}", ESTIMATE, "bo2_nlp.LexiconAspectModel", payload)
         return to_native(payload)
@@ -157,7 +160,7 @@ class VoiceOfCustomerAgent:
         self.ctx["month"] = month
         self.log.add(f"mdl:emerging:{month}", ESTIMATE, "bo2_nlp.emerging_aspects / emerging_terms", res)
         return to_native(res)
-
+#---------------------------------------
     def search_reviews(self, query: str, month: str | None = None, state: str | None = None, category: str | None = None,
                        sentiment: str | None = None, aspect: str | None = None, k: int = 4) -> dict:
         idx = self.index
@@ -289,7 +292,7 @@ class VoiceOfCustomerAgent:
             rep.actions.append(Line("Une majorité des critiques de livraison vient de commandes réellement en retard : coordonner avec l'agent BO1 (commandes à risque) pour intervenir avant la livraison.", [a_id]))
         # LIMITES
         rep.caveats += [
-            "Analyse par mots-clés portugais + note (baseline DS2.1) : non évaluée faute d'échantillon annoté ; indicatif, à remplacer par le modèle évalué en F1 par aspect.",
+            "Analyse par mots-clés portugais + note (baseline DS2.1) : F1 de détection provisoire de 0,67 en moyenne sur 500 avis annotés (objectif 0,70), plus faible sur la qualité, les articles manquants et la conformité ; indicatif.",
             "Seuls les clients qui écrivent sont représentés (≈ 43 % des avis) et ils sont plus souvent mécontents que l'ensemble.",
             "Les extraits français sont des traductions automatiques ; l'original portugais fait foi. " + (f"{pct(vol['share_to_check'])} des textes de ce périmètre sont marqués « à vérifier »." if vol["share_to_check"] else ""),
             "Associations observées dans des avis historiques (2016–2018), pas de causes.",
@@ -359,7 +362,7 @@ class VoiceOfCustomerAgent:
         try:
             msg = self.llm.chat([
                 {"role": "system", "content": "Tu rédiges en français 3 phrases maximum à partir des seules preuves fournies. Aucun chiffre hors preuves. "
-                                              "Dis que l'analyse par aspect est une baseline non validée. Pas de cause affirmée."},
+                                              "Dis que l'analyse par aspect est une baseline par mots-clés, à F1 provisoire. Pas de cause affirmée."},
                 {"role": "user", "content": "Résume la voix du client.\nPREUVES :\n" + payload}])
             text = (msg.get("content") or "").strip()
         except Exception:

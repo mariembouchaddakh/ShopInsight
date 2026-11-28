@@ -1091,7 +1091,7 @@ class SellerAuditAgent:
         payload = {"seller_id": sid, "decision_month": M, "available": True, "n_written_reviews": int(len(sub)),
                    "share_rated_1_2": _r((sub["score"] <= 2).mean(), 3) if len(sub) else None, "top_negative": neg[:5], "top_positive": pos[:3],
                    "quotes": [],
-                   "method": "baseline mots-clés (portugais) + note, NON validée (DS2.1) ; avis publiés avant la décision, achats des 12 mois précédents"}
+                   "method": "baseline mots-clés (portugais) + note, F1 de détection provisoire 0,67 (DS2.1) ; avis publiés avant la décision, achats des 12 mois précédents"}
         if len(sub) >= 5 and neg:
             idx = self._voc.index
             # Deux extraits par aspect pour les trois aspects les plus critiqués : de quoi croiser opérations et ressenti des clients.
@@ -1323,7 +1323,7 @@ class SellerAuditAgent:
         if prof.get("descriptive_segment"):
             rep.caveats.append("Le segment (volume, région) est descriptif : il n'a pas amélioré la prédiction du taux futur, la référence reste " + self.ref_name + ".")
         if voice.get("available"):
-            rep.caveats.append("Aspects des avis : baseline par mots-clés non validée ; extraits français = traduction automatique (l'original portugais fait foi).")
+            rep.caveats.append("Aspects des avis : baseline par mots-clés (F1 de détection provisoire 0,67) ; extraits français = traduction automatique (l'original portugais fait foi).")
         if multi["multi_seller_orders_12m"]:
             rep.caveats.append("Commandes multi-vendeurs : comptées à part, sans attribution du retard ni de l'avis.")
         tp = self.card.get("test_summary") or {}

@@ -22,7 +22,7 @@ const pages = [
   { name: "alerts", path: "/bo3/alerts?month=2018-06", expect: ["Alertes vendeurs", "2eb70248"] },
   { name: "calls", path: "/bo3/calls?month=2018-06", expect: ["À appeler cette semaine", "Script d'appel", "Marquer contacté"] },
   { name: "market", path: "/bo3/market?month=2018-06", expect: ["Carte du marché", "Famille", "Ce qu'il faut retenir", "Portrait des 5 familles", "Positionnement de tous les vendeurs"] },
-  { name: "bo1", path: "/bo1?month=2018-06", expect: ["BO1", "Commandes à surveiller en priorité"] },
+  { name: "bo1", path: "/bo1?month=2018-06", expect: ["BO1", "Commandes à risque"] },
   { name: "bo2", path: "/bo2?month=2018-03", expect: ["BO2", "Voix du client"] },
   { name: "om5", path: "/om5?month=2018-03", expect: ["Centre de pilotage intelligent", "Synthèse exécutive", "Centre d'alertes", "Plan d'action"] },
 ]

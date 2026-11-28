@@ -20,7 +20,7 @@ from fastapi.responses import JSONResponse
 from .config import load_settings
 from .logging_setup import setup_logging
 from .registry import AgentRegistry
-from .routers import bo1, bo2, bo3, health, llm, om5, reports
+from .routers import bo1, bo2, bo3, bo4, health, llm, om5, reports
 
 log = setup_logging()
 
@@ -61,5 +61,5 @@ async def access_log(request: Request, call_next):
     return response
 
 
-for r in (health.router, bo1.router, bo2.router, bo3.router, om5.router, llm.router, reports.router):
+for r in (health.router, bo1.router, bo2.router, bo3.router, bo4.router, om5.router, llm.router, reports.router):
     app.include_router(r)

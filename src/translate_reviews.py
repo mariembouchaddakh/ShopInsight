@@ -8,9 +8,19 @@
 Traitement 100 % local : aucun avis n'est envoyé à un service en ligne. Les modèles sont
 téléchargés une seule fois depuis Hugging Face, puis exécutés sur l'ordinateur.
 
-Modèles (pivot par l'anglais, comme préparé dans la phase précédente) :
-  portugais -> anglais : Helsinki-NLP/opus-mt-ROMANCE-en
-  anglais  -> français : Helsinki-NLP/opus-mt-en-fr
+Modèles disponibles (--model) :
+  opus        (défaut, V3) pivot par l'anglais : Helsinki-NLP/opus-mt-ROMANCE-en puis opus-mt-en-fr
+  nllb-600m   traduction directe portugais -> français : facebook/nllb-200-distilled-600M
+  nllb-1.3b   idem, plus grand modèle : facebook/nllb-200-distilled-1.3B (GPU conseillé)
+  tower-2b / tower-9b              Unbabel/Tower-Plus (LLM de traduction, licence CC BY-NC-SA)
+  milmmt-1b / milmmt-4b / milmmt-12b  xiaomi-research/MiLMMT-46 (LLM de traduction basé sur Gemma 3, licence Gemma)
+     -> pour les LLM, GPU conseillé, idéalement avec --engine vllm
+  opus --split  le modèle actuel, mais phrase par phrase (corrige les phrases perdues, rapide sur CPU)
+
+Avec NLLB, chaque texte est découpé en phrases (option --split, activée par défaut pour NLLB) :
+les avis sur plusieurs lignes ne perdent plus de phrases, et une phrase répétée n'est traduite qu'une fois.
+Le modèle par défaut écrit reviews_text_fr.jsonl.gz ; un autre modèle écrit reviews_text_fr_<modele>.jsonl.gz,
+sauf avec --set-default (il remplace alors le fichier utilisé par les agents).
 """
 from __future__ import annotations
 
@@ -28,6 +38,18 @@ from typing import Protocol
 PT_EN_MODEL = "Helsinki-NLP/opus-mt-ROMANCE-en"
 EN_FR_MODEL = "Helsinki-NLP/opus-mt-en-fr"
 MODEL_LABEL = f"{PT_EN_MODEL} + {EN_FR_MODEL} (pivot anglais)"
+NLLB_MODELS = {"nllb-600m": "facebook/nllb-200-distilled-600M", "nllb-1.3b": "facebook/nllb-200-distilled-1.3B"}
+# LLM spécialisés en traduction (consigne propre à chaque modèle, décodage glouton, une phrase à la fois)
+LLM_MODELS = {
+    "tower-2b": ("Unbabel/Tower-Plus-2B", "chat",
+                 "Translate the following Portuguese (Brazilian) source text to French:\nPortuguese (Brazilian): {src}\nFrench: "),
+    "tower-9b": ("Unbabel/Tower-Plus-9B", "chat",
+                 "Translate the following Portuguese (Brazilian) source text to French:\nPortuguese (Brazilian): {src}\nFrench: "),
+    "milmmt-1b": ("xiaomi-research/MiLMMT-46-1B-v0.1", "raw", "Translate this from Portuguese to French:\nPortuguese: {src}\nFrench:"),
+    "milmmt-4b": ("xiaomi-research/MiLMMT-46-4B-v0.1", "raw", "Translate this from Portuguese to French:\nPortuguese: {src}\nFrench:"),
+    "milmmt-12b": ("xiaomi-research/MiLMMT-46-12B-v0.1", "raw", "Translate this from Portuguese to French:\nPortuguese: {src}\nFrench:"),
+}
+ALL_MODELS = ["opus", *NLLB_MODELS, *LLM_MODELS]
 
 
 class Translator(Protocol):
@@ -65,6 +87,116 @@ class MarianPivotTranslator:
         english = self._run(self.tok_pt_en, self.mod_pt_en, texts)
         french = self._run(self.tok_en_fr, self.mod_en_fr, english)
         return list(zip(english, french))
+
+
+class NLLBTranslator:
+    """Traduction directe portugais -> français avec NLLB-200 (Meta). Pas d'étape anglaise : le champ `en` reste vide."""
+
+    def __init__(self, model_name: str, batch_size: int = 32, device: str = "auto", num_beams: int = 4) -> None:
+        import torch
+        from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
+        if device == "auto":
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device, self.batch_size, self.num_beams, self.torch = device, batch_size, num_beams, torch
+        self.label = f"{model_name} (direct portugais -> français, phrase par phrase)"
+        print(f"Chargement de {model_name} sur {device}…", flush=True)
+        self.tok = AutoTokenizer.from_pretrained(model_name, src_lang="por_Latn")
+        dtype = torch.float16 if device == "cuda" else torch.float32
+        try:
+            model = AutoModelForSeq2SeqLM.from_pretrained(model_name, dtype=dtype)
+        except TypeError:  # transformers < 4.56
+            model = AutoModelForSeq2SeqLM.from_pretrained(model_name, torch_dtype=dtype)
+        self.model = model.to(device).eval()
+        self.model.generation_config.max_length = None  # évite l'avertissement « max_new_tokens / max_length »
+        self.fr_id = self.tok.convert_tokens_to_ids("fra_Latn")
+
+    def translate(self, texts: list[str]) -> list[tuple[str, str]]:
+        out: list[str] = []
+        for i in range(0, len(texts), self.batch_size):
+            batch = texts[i : i + self.batch_size]
+            enc = self.tok(batch, return_tensors="pt", padding=True, truncation=True, max_length=256).to(self.device)
+            with self.torch.inference_mode():
+                gen = self.model.generate(**enc, forced_bos_token_id=self.fr_id, num_beams=self.num_beams,
+                                          max_new_tokens=min(256, int(enc["input_ids"].shape[1] * 2.5) + 10))
+            out.extend(self.tok.batch_decode(gen, skip_special_tokens=True))
+        return [("", f) for f in out]
+
+
+class LLMTranslator:
+    """Traduction par un LLM spécialisé (Tower+, MiLMMT-46). Moteur `hf` (transformers) ou `vllm` (GPU, bien plus rapide).
+    Chaque phrase est traduite seule ; on ne garde que la première ligne de la réponse (le modèle ne doit rien ajouter)."""
+
+    def __init__(self, model_id: str, batch_size: int = 16, device: str = "auto", engine: str = "hf") -> None:
+        import torch
+
+        self.name, self.mode, self.template = LLM_MODELS[model_id]
+        if device == "auto":
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device, self.batch_size, self.engine, self.torch = device, batch_size, engine, torch
+        self.label = f"{self.name} (LLM de traduction, direct portugais -> français, phrase par phrase, décodage glouton)"
+        print(f"Chargement de {self.name} sur {device} (moteur {engine})…", flush=True)
+        if engine == "vllm":
+            from vllm import LLM, SamplingParams
+
+            self.llm = LLM(model=self.name, max_model_len=2048, gpu_memory_utilization=0.85)
+            self.params = SamplingParams(temperature=0, max_tokens=256)
+            return
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        self.tok = AutoTokenizer.from_pretrained(self.name, padding_side="left")
+        if self.tok.pad_token is None:
+            self.tok.pad_token = self.tok.eos_token
+        dtype = torch.bfloat16
+        try:
+            model = AutoModelForCausalLM.from_pretrained(self.name, dtype=dtype)
+        except TypeError:
+            model = AutoModelForCausalLM.from_pretrained(self.name, torch_dtype=dtype)
+        self.model = model.to(device).eval()
+
+    def _prompts(self, texts: list[str]) -> list[str]:
+        if self.mode == "chat":
+            return [self.tok.apply_chat_template([{"role": "user", "content": self.template.format(src=t)}], tokenize=False,
+                                                 add_generation_prompt=True) for t in texts]
+        return [self.template.format(src=t) for t in texts]
+
+    @staticmethod
+    def _first_line(text: str) -> str:
+        lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
+        return lines[0] if lines else ""
+
+    def translate(self, texts: list[str]) -> list[tuple[str, str]]:
+        if self.engine == "vllm":
+            if self.mode == "chat":
+                outs = self.llm.chat([[{"role": "user", "content": self.template.format(src=t)}] for t in texts], self.params, use_tqdm=False)
+            else:
+                outs = self.llm.generate([self.template.format(src=t) for t in texts], self.params, use_tqdm=False)
+            return [("", self._first_line(o.outputs[0].text)) for o in outs]
+        out: list[str] = []
+        for i in range(0, len(texts), self.batch_size):
+            batch = texts[i : i + self.batch_size]
+            enc = self.tok(self._prompts(batch), return_tensors="pt", padding=True, add_special_tokens=self.mode != "chat").to(self.device)
+            with self.torch.inference_mode():
+                gen = self.model.generate(**enc, do_sample=False, max_new_tokens=min(256, 3 * max(len(t) for t in batch) // 2 + 20),
+                                          pad_token_id=self.tok.pad_token_id)
+            out.extend(self._first_line(t) for t in self.tok.batch_decode(gen[:, enc["input_ids"].shape[1]:], skip_special_tokens=True))
+        return [("", f) for f in out]
+
+
+def make_translator(model_id: str, batch_size: int = 32, device: str = "auto", engine: str = "hf"):
+    if model_id in NLLB_MODELS:
+        return NLLBTranslator(NLLB_MODELS[model_id], batch_size=batch_size, device=device)
+    if model_id in LLM_MODELS:
+        return LLMTranslator(model_id, batch_size=batch_size, device=device, engine=engine)
+    return MarianPivotTranslator(batch_size=batch_size, device=device)
+
+
+_SENT = re.compile(r"(?<=[.!?…])\s+|\s*\n+\s*")
+
+
+def split_sentences(text: str) -> list[str]:
+    """Découpe un avis en phrases (ponctuation forte ou retour à la ligne). Les fragments vides sont ignorés."""
+    return [p.strip() for p in _SENT.split(text or "") if p and p.strip()]
 
 
 def key(text: str) -> str:
@@ -105,20 +237,28 @@ def load_cache(path: Path) -> dict[str, dict[str, str]]:
     return cache
 
 
-def run(project_dir: Path, translator: Translator | None, limit: int | None = None, chunk: int = 256) -> dict:
+def run(project_dir: Path, translator: Translator | None, limit: int | None = None, chunk: int = 256,
+        model_id: str = "opus", split: bool = False, set_default: bool = False, model_label: str = MODEL_LABEL) -> dict:
     silver = project_dir / "data" / "silver"
     quality = project_dir / "quality"
     quality.mkdir(parents=True, exist_ok=True)
     source_path = silver / "reviews_text.jsonl.gz"
-    cache_path = silver / "translation_cache_fr.jsonl"
-    output_path = silver / "reviews_text_fr.jsonl.gz"
+    if model_id == "opus" and split:
+        model_id = "opus-split"  # même modèle, phrase par phrase : le cache opus est réutilisé, la sortie est séparée
+    suffix = "" if model_id == "opus" else f"_{model_id}"
+    cache_path = silver / ("translation_cache_fr.jsonl" if model_id.startswith("opus") else f"translation_cache_fr{suffix}.jsonl")
+    output_path = silver / ("reviews_text_fr.jsonl.gz" if (model_id == "opus" or set_default) else f"reviews_text_fr{suffix}.jsonl.gz")
+    report_path = quality / f"translation_report{suffix}.json"
+    sample_path = quality / f"translation_sample_for_review{suffix}.csv"
 
     with gzip.open(source_path, "rt", encoding="utf-8") as stream:
         docs = [json.loads(line) for line in stream]
     if limit:
         docs = docs[:limit]
 
-    segments = {clean(d.get(f)) for d in docs for f in ("text", "title")} - {""}
+    fields = {clean(d.get(f)) for d in docs for f in ("text", "title")} - {""}
+    # unité de traduction : le texte entier (opus, comportement V3) ou chaque phrase (NLLB, --split)
+    segments = {p for t in fields for p in split_sentences(t)} if split else fields
     cache = load_cache(cache_path)
     todo = sorted((s for s in segments if key(s) not in cache), key=len)
     print(f"{len(docs)} avis, {len(segments)} textes uniques, {len(segments) - len(todo)} déjà en cache, {len(todo)} à traduire.", flush=True)
@@ -153,14 +293,15 @@ def run(project_dir: Path, translator: Translator | None, limit: int | None = No
             if not source:
                 record[f"{field}_fr"] = None
                 continue
-            french = cache[key(source)]["fr"]
+            parts = split_sentences(source) if split else [source]
+            french = " ".join(cache[key(p)]["fr"].strip() for p in parts if p)
             record[f"{field}_fr"] = french
             translated_any = True
             flags += [f"{field}:{f}" for f in check_translation(source, french)]
         status = "à vérifier" if flags else ("traduit" if translated_any else "vide")
         record["translation_status"] = status
         record["translation_flags"] = flags
-        record["translation_model"] = MODEL_LABEL
+        record["translation_model"] = model_label
         status_counts[status] += 1
         for f in flags:
             name = f.split(":", 1)[1].split("_")[0] if f.split(":", 1)[1].startswith("longueur") else f.split(":", 1)[1]
@@ -173,7 +314,7 @@ def run(project_dir: Path, translator: Translator | None, limit: int | None = No
 
     rng = random.Random(42)
     sample = rng.sample(out_docs, min(200, len(out_docs)))
-    with (quality / "translation_sample_for_review.csv").open("w", encoding="utf-8-sig", newline="") as stream:
+    with sample_path.open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.writer(stream, delimiter=";")
         writer.writerow(["review_id", "review_score", "statut", "texte_pt", "texte_fr", "titre_pt", "titre_fr", "correct (oui/non)", "commentaire"])
         for r in sample:
@@ -192,11 +333,13 @@ def run(project_dir: Path, translator: Translator | None, limit: int | None = No
             (r["text_fr"] is not None) == bool(clean(r["text_original_pt"])) and (r["title_fr"] is not None) == bool(clean(r["title_original_pt"]))
             for r in out_docs
         ),
-        "model": MODEL_LABEL,
+        "model": model_label,
+        "translation_unit": "phrase" if split else "texte entier",
+        "output": str(output_path.relative_to(project_dir)),
         "minutes": round((time.time() - started) / 60, 1),
-        "manual_review_sample": "quality/translation_sample_for_review.csv (200 avis, graine 42)",
+        "manual_review_sample": f"{sample_path.relative_to(project_dir)} (200 avis, graine 42)",
     }
-    (quality / "translation_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return report
 
@@ -207,10 +350,24 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--device", default="auto", help="auto, cpu ou cuda")
     parser.add_argument("--limit", type=int, help="Traduire seulement les N premiers avis (test rapide)")
+    parser.add_argument("--model", choices=ALL_MODELS, default="opus",
+                        help="opus (défaut, V3), nllb-600m, nllb-1.3b, tower-2b, tower-9b, milmmt-1b, milmmt-4b, milmmt-12b")
+    parser.add_argument("--engine", choices=["hf", "vllm"], default="hf", help="pour les LLM : vllm sur GPU est bien plus rapide")
+    parser.add_argument("--split", action=argparse.BooleanOptionalAction, default=None,
+                        help="traduire phrase par phrase (défaut : oui pour NLLB, non pour opus)")
+    parser.add_argument("--set-default", action="store_true", help="écrire reviews_text_fr.jsonl.gz (fichier lu par les agents)")
+    parser.add_argument("--checkpoint-rows", type=int, default=256,
+                        help="Nombre de textes traduits entre deux écritures durables du cache")
     args = parser.parse_args()
     project_dir = args.project_dir.resolve()
-    translator = MarianPivotTranslator(batch_size=args.batch_size, device=args.device)
-    run(project_dir, translator, limit=args.limit)
+    split = args.split if args.split is not None else args.model != "opus"
+    if args.model == "opus":
+        translator = MarianPivotTranslator(batch_size=args.batch_size, device=args.device)
+        label = MODEL_LABEL + (", phrase par phrase" if split else "")
+    else:
+        translator = make_translator(args.model, batch_size=args.batch_size, device=args.device, engine=args.engine)
+        label = translator.label
+    run(project_dir, translator, limit=args.limit, chunk=args.checkpoint_rows, model_id=args.model, split=split, set_default=args.set_default, model_label=label)
 
 
 if __name__ == "__main__":

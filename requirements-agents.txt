@@ -2,7 +2,9 @@
 pandas>=2.2
 numpy
 scipy
-scikit-learn>=1.4
+# scikit-learn 1.9.1, trop récent, est bloqué par la stratégie de contrôle des applications de Windows
+# (« DLL load failed while importing _hashing_fast ») ; on fixe une version reconnue.
+scikit-learn==1.8.0
 joblib
 langgraph>=1.0,<2
 # Optionnel : un serveur LLM compatible OpenAI (ex. vLLM) — aucune bibliothèque cliente requise

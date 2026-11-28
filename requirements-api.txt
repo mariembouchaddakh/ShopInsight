@@ -1,7 +1,9 @@
 # Dépendances de l'API (en plus de requirements.txt et requirements-agents.txt)
 fastapi>=0.110
 uvicorn>=0.29
-pydantic>=2.6
+# pydantic 2.14.4 (pydantic-core 2.50.5), trop récent, est bloqué par la stratégie de contrôle des applications
+# de Windows (« DLL load failed while importing _pydantic_core ») ; on fixe une version reconnue.
+pydantic==2.12.5
 httpx>=0.27   # client de test (fastapi.testclient)
 reportlab>=4.0   # export PDF des audits
 google-genai>=1.68,<2
