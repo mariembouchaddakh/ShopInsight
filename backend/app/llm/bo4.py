@@ -48,6 +48,11 @@ ORDER_FACT_LANGUAGE = re.compile(r"\b(?:order is|commande est|pedido est|deliver
 CUSTOMER_TOOL_NAMES = {"get_order_context", "get_order_timeline", "predict_delivery_interval", "find_similar_orders", "retrieve_similar_reviews"}
 
 
+def _looks_complete(text: str) -> bool:
+    """Reject visibly cut-off generations before citations can hide the cutoff."""
+    return bool(re.search(r"[.!?](?:[\"'\u00bb”)]*)\s*$", text.strip()))
+
+
 def _social_only(question: str, intent: str) -> bool:
     return intent == "general" and bool(SOCIAL.search(question)) and not bool(ORDER_QUESTION.search(question))
 
@@ -220,7 +225,7 @@ def converse(agent: CustomerAssistantAgent, provider: LLMProvider | None, order_
     validation = {"valid": False, "problems": ["aucune réponse finale"], "attempts": validation_attempts}; repairs = 0
     try:
         for _ in range(5):
-            completion = provider.complete(messages, max_tokens=360, temperature=0.0, json_mode=False, tools=tools, tool_choice="auto")
+            completion = provider.complete(messages, max_tokens=720, temperature=0.0, json_mode=False, tools=tools, tool_choice="auto")
             model = getattr(completion, "model_used", "") or completion.model_returned or model
             if completion.tool_calls:
                 messages.append({"role": "assistant", "content": completion.content or None, "tool_calls": completion.tool_calls})
@@ -244,7 +249,8 @@ def converse(agent: CustomerAssistantAgent, provider: LLMProvider | None, order_
                 messages.append({"role": "system", "content": "Answer the customer's question concisely. Every sentence MUST end with an exact evidence ID in brackets before the final period. Available IDs: " + ", ".join(sorted(agent.log.ids())) + ". Do not mention median, quantiles, coverage, model names or raw tool fields."})
                 continue
             raw = (completion.content or "").strip()
-            if social_only and not calls and raw and detect_language(raw) == language and not ORDER_FACT_LANGUAGE.search(raw) and not CUSTOMER_TECHNICAL.search(raw):
+            complete = _looks_complete(raw)
+            if social_only and not calls and raw and complete and detect_language(raw) == language and not ORDER_FACT_LANGUAGE.search(raw) and not CUSTOMER_TECHNICAL.search(raw):
                 report = agent.report_from_tools(order_id, question, as_of, results)
                 return {"text": raw, "source": "llm_verified", "language": language, "evidence": [], "report": report,
                         "debug": {"intent": intent, "intent_source": "python_classifier_llm_routing", "selected_tools": [],
@@ -258,10 +264,11 @@ def converse(agent: CustomerAssistantAgent, provider: LLMProvider | None, order_
             if not calls: problems.append("aucun outil exécuté")
             if not refs: problems.append("aucune preuve citée")
             if CUSTOMER_TECHNICAL.search(raw): problems.append("détails techniques exposés au client")
+            if not complete: problems.append("réponse potentiellement tronquée")
             valid = valid and not problems
             validation_attempts.append({"response": raw, "valid": valid, "problems": list(problems)})
             validation = {"valid": valid, "problems": problems, "attempts": validation_attempts}
-            if not valid and calls:
+            if not valid and calls and complete:
                 partial = _verified_excerpt(raw, agent.log, intent)
                 if partial:
                     candidate, refs, rejected = partial

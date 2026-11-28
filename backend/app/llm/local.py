@@ -39,6 +39,8 @@ class LocalHermesProvider:
             response = httpx.post("http://127.0.0.1:11434/api/chat", json=body, timeout=180)
             response.raise_for_status()
             data = response.json()
+            if data.get("done_reason") == "length":
+                raise LLMError("output_truncated", f"Ollama a atteint la limite de {max_tokens} jetons")
             message = data["message"]
             calls = message.get("tool_calls") or []
             for index, call in enumerate(calls):

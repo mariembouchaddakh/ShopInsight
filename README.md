@@ -285,7 +285,7 @@ Documentation d'origine conservée : [docs/data_dictionary.md](docs/data_diction
 
 ## BO4 : assistant client historique
 
-BO4 ajoute des intervalles de livraison P10/P50/P90 conformalisés, une recherche hybride d'expériences (TF-IDF, BM25, BGE-M3, FAISS, RRF) et un assistant dont chaque affirmation renvoie à une preuve. Toutes les fonctions acceptent `as_of` et masquent jalons, issues et avis futurs. La page **BO4 — Assistant client** et l'API `/api/bo4` sont intégrées à la plateforme.
+BO4 ajoute des intervalles de livraison P10/P50/P90 conformalisés, une recherche hybride d'expériences (BM25, BGE-M3, FAISS, RRF) et un assistant dont chaque affirmation renvoie à une preuve. Toutes les fonctions acceptent `as_of` et masquent jalons, issues et avis futurs. La page **BO4 — Assistant client** et l'API `/api/bo4` sont intégrées à la plateforme.
 
 Le protocole CRISP-DM, l'architecture, l'audit de fuite et les commandes sont dans [docs/agents_BO4.md](docs/agents_BO4.md). Les artefacts volumineux restent hors Git, mais les rapports `quality/bo4_*` consignent désormais une exécution complète sur les données Olist originales. Gradient Boosting est sélectionné (test : MAE 3,846 jours, RMSE 5,923, PICP 0,762, MPIW 11,908 et Winkler 18,576). Les métriques de pertinence retrieval restent volontairement vides tant que les 1 464 candidats n'ont pas reçu de jugements humains.
 

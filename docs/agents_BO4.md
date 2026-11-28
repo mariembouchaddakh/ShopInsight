@@ -9,7 +9,7 @@ flowchart LR
   A[Commande + as_of] --> B[Jalons observables]
   A --> C[ETA P10/P50/P90]
   A --> D[Commandes terminées comparables]
-  Q[Question client] --> E[TF-IDF + BM25 + BGE-M3]
+  Q[Question client] --> E[BM25 + BGE-M3]
   E --> F[RRF + filtres temporels]
   B --> G[EvidenceLog]
   C --> G
@@ -69,11 +69,11 @@ Sur la sélection chronologique, Gradient Boosting obtient le meilleur critère 
 
 ## 5. Recherche hybride
 
-`HistoricalReviewIndex` reconstruit le corpus disponible à `as_of`, recalcule TF-IDF et BM25 sur ce snapshot, ajoute facultativement BGE-M3, puis fusionne par RRF. Les filtres région/catégorie sont relâchés progressivement. Un résultat sans pertinence minimale n'est pas ajouté pour remplir `top-k`. Les commandes comparables doivent être livrées avant `as_of` et la cible est exclue.
+`HistoricalReviewIndex` reconstruit le corpus disponible à `as_of`, recalcule BM25 sur ce snapshot, ajoute facultativement BGE-M3, puis fusionne leurs classements par RRF. Sans index dense disponible, l'hybride se replie sur BM25 seul. Les filtres région/catégorie sont relâchés progressivement. Un résultat sans score BM25 positif ni similarité dense minimale n'est pas ajouté pour remplir `top-k`. Les commandes comparables doivent être livrées avant `as_of` et la cible est exclue.
 
-`evaluate_bo4.py` produit 100 questions bilingues et un gabarit d'annotation. Precision@5, Recall@5, MRR et nDCG@5 ne doivent être calculés qu'après jugements humains ; le résultat reste explicitement en attente jusque-là.
+`evaluate_bo4.py` compare BM25, BGE-M3 dense et leur fusion hybride sur 100 questions bilingues, puis produit un gabarit d'annotation. Precision@5, Recall@5, MRR et nDCG@5 ne doivent être calculés qu'après jugements humains ; le résultat reste explicitement en attente jusque-là.
 
-L'exécution réelle indexe 42 687 avis en 1 024 dimensions avec BGE-M3 et FAISS. Sur 100 questions et avec le modèle en cache local, les latences moyennes du dernier rapport sont 84,4 ms (TF-IDF), 81,7 ms (BM25), 198,8 ms (dense) et 199,8 ms (hybride). Le pool contient 1 464 couples question–document à annoter ; aucune pertinence humaine n'a été inventée.
+L'exécution réelle indexe 42 687 avis en 1 024 dimensions avec BGE-M3 et FAISS. Le rapport conservé dans `quality/bo4_retrieval_results.json` est un résultat historique antérieur à la suppression de TF-IDF : sur 100 questions et avec le modèle en cache local, ses latences moyennes sont 84,4 ms (TF-IDF), 81,7 ms (BM25), 198,8 ms (dense) et 199,8 ms (ancien hybride à trois classements). Son pool contient 1 464 couples question–document à annoter ; aucune pertinence humaine n'a été inventée. Un nouveau benchmark n'est produit qu'en relançant explicitement l'évaluation avec les trois systèmes actuels.
 
 ## 6. Déploiement et sécurité
 

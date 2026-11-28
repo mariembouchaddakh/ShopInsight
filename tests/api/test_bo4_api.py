@@ -39,6 +39,12 @@ class TestBO4API(unittest.TestCase):
         self.assertEqual(body["answer_source"],"deterministic_fallback");self.assertEqual(body["debug"]["intent"],"delivery_eta")
         self.assertEqual(body["debug"]["selected_tools"],["get_order_context","predict_delivery_interval"])
         self.assertEqual(self.client.get("/api/bo4/orders/"+"0"*32+"/context").status_code,404)
+    def test_conversation_exposes_answer_source_and_model(self):
+        b={"session_id":"00000000-0000-0000-0000-000000000001",
+           "question":f"Commande {self.row.order_id}, le {self.row.order_approved_at.date().isoformat()} : où est-elle ?"}
+        r=self.client.post("/api/bo4/conversation",json=b);self.assertEqual(r.status_code,200,r.text);body=r.json()
+        self.assertEqual(body["answer_source"],"deterministic_fallback")
+        self.assertEqual(body["provider"],"indisponible");self.assertIsNone(body["model"])
     def test_openapi_and_health(self):
         self.assertIn("/api/bo4/ask",self.client.get("/openapi.json").json()["paths"])
         self.assertIn("bo4",self.client.get("/api/health").json()["agents"])

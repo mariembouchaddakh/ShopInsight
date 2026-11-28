@@ -8,11 +8,23 @@ ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT),str(ROOT/"src")
 from agents.bo4_agent import CustomerAssistantAgent, detect_intent, verify_customer_narrative
 from agents.bo4_eta import interval_metrics, repair_quantiles
 from agents.bo4_retrieval import HistoricalReviewIndex
+from backend.app.llm.bo4 import _looks_complete
 
 class TestMath(unittest.TestCase):
     def test_quantile_order_and_nonnegative(self): self.assertEqual(repair_quantiles(-2,8,4),(0.,8.,8.))
     def test_metrics(self):
         m=interval_metrics(np.array([2.,4.]),np.array([1.,3.]),np.array([2.,4.]),np.array([3.,5.]));self.assertEqual(m["picp"],1.);self.assertEqual(m["mae"],0.)
+    def test_truncated_llm_output_is_detected(self):
+        self.assertFalse(_looks_complete("Voici les détails de la commande :"))
+        self.assertTrue(_looks_complete("Voici les détails de la commande."))
+    def test_local_provider_rejects_token_limited_output(self):
+        from backend.app.llm.local import LocalHermesProvider
+        from backend.app.llm.provider import LLMError
+        response=types.SimpleNamespace(raise_for_status=lambda:None,json=lambda:{"done_reason":"length"})
+        with mock.patch("backend.app.llm.local.httpx.post",return_value=response):
+            with self.assertRaises(LLMError) as caught:
+                LocalHermesProvider().complete([{"role":"user","content":"test"}],max_tokens=12)
+        self.assertEqual(caught.exception.kind,"output_truncated")
 
 class TestBO4(unittest.TestCase):
     @classmethod
@@ -34,6 +46,22 @@ class TestBO4(unittest.TestCase):
     def test_reviews_obey_asof_and_exclude_target(self):
         r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False);items=idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5)
         self.assertTrue(all(x["order_id"]!=self.oid and x["published_at"]<=r.order_approved_at.isoformat() for x in items))
+    def test_hybrid_falls_back_to_bm25_without_dense_index(self):
+        r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False)
+        bm25=idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5,system="bm25")
+        hybrid=idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5,system="hybrid")
+        self.assertEqual([x["review_id"] for x in hybrid],[x["review_id"] for x in bm25])
+    def test_tfidf_is_not_a_supported_retrieval_system(self):
+        r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False)
+        with self.assertRaises(ValueError): idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5,system="tfidf")
+    def test_bm25_does_not_fill_results_without_lexical_relevance(self):
+        r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False)
+        self.assertEqual(idx.search("zzznomatchtokenzzz",r.order_approved_at,self.oid,None,5,system="bm25"),[])
+    def test_dense_only_results_must_meet_dense_relevance_threshold(self):
+        r=self.ag._order(self.oid);idx=HistoricalReviewIndex(self.root,dense=False)
+        idx.encoder=types.SimpleNamespace(encode=lambda *args,**kwargs: np.ones((1,1)))
+        idx.embeddings=np.zeros((len(idx.df),1))
+        self.assertEqual(idx.search("entrega atrasada",r.order_approved_at,self.oid,None,5,system="dense"),[])
     def test_dense_encoder_uses_cached_public_model_without_implicit_token(self):
         reviews = self.ag.store.reviews()
         joblib.dump({"model": "BAAI/bge-m3", "embeddings": np.zeros((len(reviews), 4), dtype="float32")},

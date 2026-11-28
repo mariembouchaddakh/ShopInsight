@@ -16,7 +16,7 @@ from agents.core import DataStore
 
 QUERIES={"fr":["retard de livraison","article manquant","produit incorrect","emballage abîmé","mauvaise qualité","vendeur sans réponse","client satisfait"],
          "pt":["entrega atrasada","item faltando","produto errado","embalagem danificada","qualidade ruim","vendedor não respondeu","cliente satisfeito"]}
-SYSTEMS=("tfidf","bm25","dense","hybrid")
+SYSTEMS=("bm25","dense","hybrid")
 
 def metrics(rows:pd.DataFrame)->dict:
     labelled=rows[pd.to_numeric(rows.relevance_0_1_2,errors="coerce").notna()].copy()

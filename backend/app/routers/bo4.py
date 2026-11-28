@@ -76,7 +76,9 @@ def conversation(body: ConversationRequest, request: Request, reg: AgentRegistry
             provider, provider_name = customer_provider(request)
             result = converse(agent, provider, candidate, body.question, as_of, state["history"], provider_name=provider_name)
             state["history"] = [*state["history"], {"role": "user", "content": body.question}, {"role": "assistant", "content": result["text"]}][-12:]
-            return {"answer": result["text"], "limited": result["source"] == "deterministic_fallback"}
+            return {"answer": result["text"], "limited": result["source"] == "deterministic_fallback",
+                    "answer_source": result["source"], "provider": result["debug"].get("provider"),
+                    "model": result["debug"].get("model")}
     return _errors("bo4", go)
 
 @router.get("/orders/{order_id}/context", response_model=ToolResponse)

@@ -11,7 +11,6 @@ from typing import Any
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from .core import DataStore
 
@@ -31,8 +30,8 @@ def rrf(rankings: list[list[int]], k: int = 60) -> dict[int, float]:
 class HistoricalReviewIndex:
     """Queries only the corpus observable at ``as_of``.
 
-    Lexical statistics are fitted on that snapshot at query time, so future
-    documents cannot alter IDF/BM25 or ranking in historical simulations.
+    BM25 statistics are fitted on that snapshot at query time, so future
+    documents cannot alter IDF or ranking in historical simulations.
     """
     def __init__(self, project_dir: str | Path, dense: bool = True):
         self.root = Path(project_dir); self.store = DataStore(self.root); self.df = self.store.reviews().copy()
@@ -77,7 +76,7 @@ class HistoricalReviewIndex:
 
     def search(self, query: str, as_of: Any, order_id: str | None = None, context: dict | None = None, k: int = 5,
                system: str = "hybrid") -> list[dict]:
-        if system not in {"tfidf", "bm25", "dense", "hybrid"}: raise ValueError(f"Système de recherche inconnu: {system}")
+        if system not in {"bm25", "dense", "hybrid"}: raise ValueError(f"Système de recherche inconnu: {system}")
         snapshots = [
             ("region_and_category", self._eligible(as_of, order_id, context)),
             ("region", self._eligible(as_of, order_id, {"customer_state": (context or {}).get("customer_state")})),
@@ -87,11 +86,9 @@ class HistoricalReviewIndex:
         d = selected.copy()
         d = d[d.text_search.str.strip().str.len() > 0]
         if d.empty: return []
-        texts = d.text_search.tolist(); vec = TfidfVectorizer(lowercase=True, ngram_range=(1, 2), min_df=1).fit(texts)
-        tf = np.asarray((vec.transform(texts) @ vec.transform([query]).T).toarray()).ravel()
+        texts = d.text_search.tolist()
         bm = self._bm25([tokens(x) for x in texts], tokens(query))
         rankings = []
-        if system in {"tfidf", "hybrid"}: rankings.append(np.argsort(-tf).tolist())
         if system in {"bm25", "hybrid"}: rankings.append(np.argsort(-bm).tolist())
         dense_scores = None
         if system in {"dense", "hybrid"} and self.encoder is not None and self.embeddings is not None:
@@ -101,8 +98,11 @@ class HistoricalReviewIndex:
         fused = rrf(rankings); order = sorted(fused, key=fused.get, reverse=True)
         out = []
         for pos in order:
-            # Never fill top-k with zero-relevance lexical/dense results.
-            if tf[pos] <= 0 and bm[pos] <= 0 and (dense_scores is None or dense_scores[pos] < .25): continue
+            # Each standalone system must meet its own relevance threshold;
+            # hybrid accepts evidence from either active retriever.
+            bm25_relevant = system in {"bm25", "hybrid"} and bm[pos] > 0
+            dense_relevant = system in {"dense", "hybrid"} and dense_scores is not None and dense_scores[pos] >= .25
+            if not (bm25_relevant or dense_relevant): continue
             r = d.iloc[pos]
             out.append({"review_id": r.review_id, "order_id": r.order_id, "score": int(r.score), "text_pt": r.full_pt,
                         "text_fr": r.full_fr, "translation_status": r.translation_status, "published_at": r.available_at.isoformat(),
