@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { ArrowUp, Globe2, Store, X } from "lucide-react"
+import { ArrowUp, Globe2, MessageSquareText, Store, X } from "lucide-react"
 import { Mascot } from "@/components/brand/logo"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { matchPath, useLocation } from "react-router-dom"
@@ -30,6 +30,7 @@ export function useAiSlot(): "a" | "b" {
 type Turn = { role: "user"; content: string } | { role: "assistant"; items: AiItem[]; questions: AiQuestion[]; follow: string[]; evidence: Evidence[]; notice?: string }
 
 const SELLER_CHIPS = ["Pourquoi ce vendeur baisse-t-il ?", "Que disent les avis clients ?", "Comment rattraper ses concurrents ?"]
+const BO2_CHIPS = ["Quelles plaintes augmentent ce mois-ci ?", "De quoi se plaignent le plus les clients ?", "Montre-moi des avis sur la livraison", "Que faut-il faire en priorité ?"]
 const MARKET_CHIPS = ["Quels vendeurs nécessitent une action urgente ce mois-ci ?", "Quelles catégories ont le plus de retards ?", "Quelles catégories concentrent le plus de vendeurs en alerte ?"]
 
 function Avatar({ mood = "happy" }: { mood?: "happy" | "thinking" }) {
@@ -79,6 +80,7 @@ export function AssistantWidget() {
   const isBo4 = loc.pathname.startsWith("/bo4")
   const match = matchPath("/bo3/sellers/:sellerId", loc.pathname)
   const seller = match?.params.sellerId
+  const isBo2 = !seller && loc.pathname.startsWith("/bo2")
   const [month] = useDecisionMonth()
   const status = useAiStatus()
   const slot = useAiSlot()
@@ -87,7 +89,7 @@ export function AssistantWidget() {
   const [convs, setConvs] = useState<Record<string, Turn[]>>({})
   const [input, setInput] = useState("")
   const [openId, setOpenId] = useState<string | null>(null)
-  const key = seller ? `seller:${seller}:${month}` : `market:${month}`
+  const key = seller ? `seller:${seller}:${month}` : isBo2 ? `bo2:${month}` : `market:${month}`
   const turns = convs[key] ?? []
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -101,13 +103,14 @@ export function AssistantWidget() {
     mutationFn: ({ q, k }: { q: string; k: string }) => {
       const history = (convs[k] ?? []).map((t) => (t.role === "user" ? { role: t.role, content: t.content } : { role: t.role, content: t.items.map((i) => i.texte).join(" ") }))
       const body = { month, model: slot, question: q, history }
+      if (k.startsWith("bo2:")) return api.bo2Chat({ question: q, month })
       return k.startsWith("seller:") ? api.aiChat(seller!, body) : api.marketChat(body)
     },
     onMutate: ({ q, k }) => setConvs((c) => ({ ...c, [k]: [...(c[k] ?? []), { role: "user", content: q }] })),
     onSuccess: (d: AiChatAnswer, { k }) => {
       setConvs((c) => ({
         ...c,
-        [k]: [...(c[k] ?? []), { role: "assistant", items: d.items, questions: d.questions ?? [], follow: d.follow_up, evidence: d.evidence ?? [], notice: d.mode === "sans_ia" ? d.notice : undefined }],
+        [k]: [...(c[k] ?? []), { role: "assistant", items: d.items, questions: d.questions ?? [], follow: d.follow_up, evidence: d.evidence ?? [], notice: d.mode === "sans_ia" && !k.startsWith("bo2:") ? d.notice : undefined }],
       }))
       if (!open) setUnread((u) => u + 1)
     },
@@ -142,8 +145,9 @@ export function AssistantWidget() {
     return [...m.values()]
   }, [audit.data, turns])
 
-  const usable = status.data?.usable
-  const chips = seller ? SELLER_CHIPS : MARKET_CHIPS
+  // L'assistant BO2 ne dépend d'aucun LLM : il reste disponible même sans clé.
+  const usable = isBo2 ? true : status.data?.usable
+  const chips = seller ? SELLER_CHIPS : isBo2 ? BO2_CHIPS : MARKET_CHIPS
   const lastFollow = [...turns].reverse().find((t) => t.role === "assistant") as Extract<Turn, { role: "assistant" }> | undefined
   const b = brief.data?.result
   const hint = seller && alerts > 0 && turns.length === 0
@@ -183,8 +187,10 @@ export function AssistantWidget() {
               <div className="min-w-0">
               <p className="font-display text-base leading-tight font-bold">Assistant ShopInsight</p>
               <p className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-white/85">
-                {seller ? <Store className="size-3 shrink-0" /> : <Globe2 className="size-3 shrink-0" />}
-                {seller
+                {seller ? <Store className="size-3 shrink-0" /> : isBo2 ? <MessageSquareText className="size-3 shrink-0" /> : <Globe2 className="size-3 shrink-0" />}
+                {isBo2
+                  ? `Voix du client (agent BO2) · ${month ? monthLabel(month) : ""}`
+                  : seller
                   ? `Vendeur ${seller.slice(0, 8)} · ${month ? monthLabel(month) : ""}${audit.data ? ` · ${audit.data.evidence.length} sources jointes` : " · chargement des sources…"}`
                   : `Marketplace · ${month ? monthLabel(month) : ""}${b ? ` · ${num(b.overview.summary.n_with_any_alert)} vendeurs en alerte` : ""}`}
               </p>
@@ -206,7 +212,9 @@ export function AssistantWidget() {
                   <div className="pop-in space-y-3 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.07] to-transparent p-4 text-sm leading-relaxed">
                     <p className="font-display text-base font-semibold">Bonjour 👋</p>
                     <p className="text-muted-foreground">
-                      {seller
+                      {isBo2
+                        ? "Je réponds à partir des avis clients analysés par l'agent BO2 : plaintes en hausse, sujets les plus critiqués, extraits d'avis, actions. Chaque phrase renvoie à sa source."
+                        : seller
                         ? "Je connais la performance de ce vendeur, ses alertes, son historique, ses concurrents directs, les avis de ses clients et ses commandes récentes. Que voulez-vous comprendre ?"
                         : "Je vous aide à prioriser le mois : vendeurs à traiter en urgence, catégories les plus touchées, tendances de la marketplace."}
                     </p>
@@ -292,7 +300,7 @@ export function AssistantWidget() {
                   }}
                   rows={1}
                   maxLength={600}
-                  placeholder={seller ? "Posez une question sur ce vendeur…" : "Posez une question sur la marketplace…"}
+                  placeholder={seller ? "Posez une question sur ce vendeur…" : isBo2 ? "Ex. : quelles plaintes augmentent en mars 2018 ?" : "Posez une question sur la marketplace…"}
                   aria-label="Votre question"
                   className="max-h-28 min-h-9 flex-1 resize-none rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                 />
@@ -320,7 +328,9 @@ export function AssistantWidget() {
             </button>
             <p className="font-display font-semibold">Besoin d'un coup de main ?</p>
             <p className="mt-0.5 text-muted-foreground">
-              {seller
+              {isBo2
+                ? "Demandez-moi quelles plaintes augmentent ce mois-ci, ou montrez-moi des avis clients."
+                : seller
                 ? alerts > 0
                   ? "Ce vendeur est en alerte : je peux vous expliquer pourquoi, en croisant ses commandes et ses avis."
                   : "Je connais ses avis clients, ses concurrents et son historique. Posez-moi une question !"

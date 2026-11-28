@@ -636,6 +636,8 @@ export const api = {
     request<AiAnalysis>(`/api/llm/sellers/${seller}/analysis`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ month, model }) }),
   aiChat: (seller: string, body: ChatBody) =>
     request<AiChatAnswer>(`/api/llm/sellers/${seller}/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
+  bo2Chat: (body: { question: string; month?: string }) =>
+    request<AiChatAnswer>("/api/bo2/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
   marketChat: (body: ChatBody) =>
     request<AiChatAnswer>("/api/llm/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
   geography: (seller: string, month?: string) => request<ToolResponse<SellerGeography>>(`/api/bo3/sellers/${seller}/geography`, undefined, { month }),
